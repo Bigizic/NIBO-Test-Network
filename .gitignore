@@ -1,0 +1,3 @@
+/NIBO_env/*
+/NIBO/__pycache__/*
+db.sqlite3
