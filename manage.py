@@ -8,7 +8,7 @@ import dotenv
 def main():
     """Run administrative tasks."""
     dotenv.load_dotenv()  # Loads all environment variables
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'NIBO.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'NIBO_builder.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
