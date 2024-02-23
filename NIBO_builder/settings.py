@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base_model',
-    'nibo_test_network',
+    'examiner',
+    'exams',
+    'exams_attempt',
+    'questions',
+    'students',
 ]
 
 MIDDLEWARE = [

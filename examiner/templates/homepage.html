@@ -1,0 +1,80 @@
+{%  load static  %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <head>
+            <title>Examiner Panel</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.5">
+
+            <link rel="icon" type="image/png" href="{% static 'images/nibo_test_network.png' %}">
+            <link rel="stylesheet" type="text/css" href="{% static 'css/examiner_panel.css' %}">
+            <script src="{% static 'js/examiner_panel.js' %}"></script>
+            </head>
+    </head>
+    <body>
+        <div class="body_wrapper">
+            <section class="signin">
+                <form class="signin_form validate_form" action="{% url 'admin_login' %}" method="post">
+                        <span class="welcome">
+                        Examiner Login
+                        </span>
+                        <div class="wrap_input">
+                        <input class="new_input" type="text" name="email">
+                        <span class="new_input_span" data-placeholder="Username"></span>
+                        </div>
+                        <div class="wrap_input password-validate">
+                        <input class="new_input" type="password" name="password">
+                        <span class="new_input_span" data-placeholder="Password"></span>
+                        </div>
+                        <div class="wrap_login">
+                        <div class="wrap_login_2">
+                        <div class="wrap_login_3"></div>
+                        {% csrf_token %}
+                        <button class="login_btn" type="submit">
+                        Login
+                        </button>
+                        </div>
+                        </div>
+                </form>
+            </section>
+
+            <section class="signup">
+                <form id="signupForm" class="signup_form validate_form" action="{% url 'create_admin_account' %}" method="post">
+                    <span class="welcome">
+                        Examiner Sign Up
+                        </span>
+                        <div class="wrap_input">
+                        <input class="new_input" type="text" name="fullname">
+                        <span class="new_input_span" data-placeholder="Full Name"></span>
+                        </div>
+                        <div class="wrap_input">
+                        <input class="new_input" type="text" name="username">
+                        <span class="new_input_span" data-placeholder="Username"></span>
+                        </div>
+                        <div class="wrap_input password-validate">
+                        <input class="new_input" type="password" name="password">
+                        <span class="new_input_span" data-placeholder="Password"></span>
+                        </div>
+                        <div class="wrap_input password-validate">
+                        <input class="new_input" type="password" name="password">
+                        <span class="new_input_span" data-placeholder="Confirm Password"></span>
+                        </div>
+                        <div style="margin-top: 15%;" class="check_wrap_input">
+                        <input class="two_factor_checkbox" type="checkbox" name="two_factor">
+                        <span style="font-size: small;">Click here to enable 2 factor authentication </span>
+                        </div>
+                        <div class="wrap_login">
+                        <div class="wrap_login_2">
+                        <div class="wrap_login_3"></div>
+                        {% csrf_token %}
+                        <button class="signup_btn" type="submit">
+                        Sign Up
+                        </button>
+                        </div>
+                        </div>
+                    </form>
+            </section>
+        </div>
+    </body>
+</html>
