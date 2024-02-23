@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from os import environ
-from nibo_test_network.views import Examiner, Student, Exam
 
 
 if environ.get('ADMIN_ROUTE'):
@@ -27,10 +26,5 @@ else:
 
 urlpatterns = [
     path('django_admin/', admin.site.urls),
-    path('', Student.as_view(), name="student_login"),
-    path(ADMIN_ROUTE, Examiner.as_view(), name="admin_login"),
-    path('{}create_account/'.format(ADMIN_ROUTE), Examiner.as_view(), name="create_admin_account"),
-    path('examiner_dashboard/', Examiner.as_view(), name="examiner_dashboard"),
-    path('student/login/', Student.as_view(), name="student_login"),
-    path('exam/<exam_id>/', Exam.as_view(), name="exam_id"),
+    path(ADMIN_ROUTE, include('examiner.urls')),
 ]
