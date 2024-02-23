@@ -3,6 +3,7 @@
 db.sqlite3
 .env
 /Admin/__pycache__/*
+
 /exams/__pycache__/*
 /questions/__pycache__/*
 /students/__pycache__/*
