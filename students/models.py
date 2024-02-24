@@ -47,10 +47,11 @@ class StudentModel(BaseModel, models.Model):
                     'logout_time': 12-02-2024-14:30, 12-02-2024-16:00,
                 }
         """
-        return f'[Student: {self.fullname}] {
+        data = {
             'grade_level': self.grade_level,
             'exam_numbers': self.exam_numbers,
             'number_of_exams_registered': self.number_of_exams_registered,
             'login_time': self.login_time,
             'logout_time': self.logout_time
         }
+        return f"[Student: {self.fullname}]{data}"
