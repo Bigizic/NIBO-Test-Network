@@ -1,8 +1,28 @@
+import base64
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import json
+from io import BytesIO
 from .models import ExaminerModel
+import pyotp
+import qrcode
+
+
+def generate_qr_code(data: str):
+    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+    qr.add_data(data)
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+
+    # Convert image to BytesIO object
+    img_buffer = BytesIO()
+    qr_img.save(img_buffer)
+
+    # Encode image as Base64 string
+    img_str = base64.b64encode(img_buffer.getvalue()).decode()
+
+    return img_str
 
 
 class ExaminerView():
@@ -19,20 +39,30 @@ class ExaminerView():
         
     def homepage(self, request) -> HttpResponse:
         """Displays Examiner web page """
-        return render(request, 'homepage.html')
+        random_pyotp = pyotp.random_base32()
+        su = pyotp.totp.TOTP(random_pyotp).provisioning_uri(name='Examiner',
+                                               issuer_name='Nibo-Test-Network')
+        qr_image = generate_qr_code(su)
+        context = {
+            'su': random_pyotp,
+            'qr_image': qr_image,
+        }
+        return render(request, 'homepage.html', context)
 
     def create_account(self, request) -> HttpResponse:
         """ Handles account creation for admin """
         if request.method == 'POST':
             if request.body:
                 # data = json.loads(request.body.decode())
+                print(request.body)
                 bytes_data = request.body.decode()
+                print(bytes_data)
                 datas = bytes_data.split('&')
                 data = {item.split('=')[0]: item.split('=')[1] for item in datas}
                 newExaminer = {
                     'fullname': data.get('fullname'),
                     'username': data.get('username'),
-                    'password': data.get('password'),
+                    'password': data.get('signupPassword'),
                     'login_time': datetime.utcnow(),
                 }
                 if None in newExaminer.values():
@@ -54,5 +84,5 @@ class ExaminerView():
     def login(self, request) -> HttpResponse:
         """ Handles admin login """
         if request.method == 'POST':
-            return HttpResponse("<h1>Examiner dashboard</h1>")
+            return redirect('examiner_dashboard')
 

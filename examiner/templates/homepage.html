@@ -9,13 +9,14 @@
 
             <link rel="icon" type="image/png" href="{% static 'images/nibo_test_network.png' %}">
             <link rel="stylesheet" type="text/css" href="{% static 'css/examiner_panel.css' %}">
-            <script src="{% static 'js/examiner_panel.js' %}"></script>
+            <script src="{% static 'js/jquery.3.7.1.js' %}" type="text/JavaScript"></script>
+            <script src="{% static 'js/examiner_panel.js' %}" type="text/JavaScript"></script>
             </head>
     </head>
     <body>
         <div class="body_wrapper">
             <section class="signin">
-                <form class="signin_form validate_form" action="{% url 'admin_login' %}" method="post">
+                <form id="signinForm" class="signin_form validate_form" action="{% url 'admin_login' %}" method="post">
                         <span class="welcome">
                         Examiner Login
                         </span>
@@ -40,7 +41,7 @@
             </section>
 
             <section class="signup">
-                <form id="signupForm" class="signup_form validate_form" action="{% url 'create_admin_account' %}" method="post">
+                <form id="signupForm" class="signup_form validate_form">
                     <span class="welcome">
                         Examiner Sign Up
                         </span>
@@ -53,13 +54,14 @@
                         <span class="new_input_span" data-placeholder="Username"></span>
                         </div>
                         <div class="wrap_input password-validate">
-                        <input class="new_input" type="password" name="password">
+                        <input id="firstPassword" class="new_input" type="password" name="signupPassword">
                         <span class="new_input_span" data-placeholder="Password"></span>
                         </div>
                         <div class="wrap_input password-validate">
-                        <input class="new_input" type="password" name="password">
+                        <input id="secondPassword" class="new_input" type="password">
                         <span class="new_input_span" data-placeholder="Confirm Password"></span>
                         </div>
+                        <span style="display: none; color: red; font-size: small;" id="p_status"></span>
                         <div style="margin-top: 15%;" class="check_wrap_input">
                         <input class="two_factor_checkbox" type="checkbox" name="two_factor">
                         <span style="font-size: small;">Click here to enable 2 factor authentication </span>
@@ -75,6 +77,34 @@
                         </div>
                     </form>
             </section>
+        </div>
+
+        <div style="display: none;" class="authy_form">
+            <form style="box-sizing: content-box;" method="POST" class="authy_f" data-group-name="digits" data-autosubmit="false">
+            	<h3 style="text-align: center;">Protect your account with 2-Step Verification</h3>
+            	<p>Add additional layer of security when you sign in, 2-Step verification adds a quick, second setup to verify that it's you.</p>
+            	<p>Copy and paste this manual secret key in your authenticator app or scan the qr code to enable </p>
+            	<div style="display: flex; justify-content: end;" id="authy_qr_code_container">
+            	<div id="authy_qr_code">
+                    <img style="width: 30%;" src="data:image/png;base64,{{ qr_image }}" alt="QR Code">
+                </div>
+            	</div>
+            	<p data-name="{{qr_authy}}" id="user_secret_key">{{ su }} &nbsp;&nbsp;&nbsp;<span style="cursor: pointer;" class="secret_key_copy">Click to copy</span></p>
+            	<p>Enter 6 digit code from authenticator app to enable 2-FA</p>
+            	<div class="authy_input">
+            	    <input autofocus="true" type="text" id="digit-1" name="digit-1" data-next="digit-2"/>
+                    <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" />
+                    <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" />
+                    <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" />
+                    <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" />
+                    <input type="text" id="digit-6" name="digit-6" data-next="digit-7" data-previous="digit-5" />
+                </div>
+            
+            	<div class="authy_submit_and_cancel">
+                    <input id="authy_cancel" type="button" value="Cancel">
+            		<input id="authy_save" type="submit" value="Create Account">
+            	</div>
+            </form>
         </div>
     </body>
 </html>

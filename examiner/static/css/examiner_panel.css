@@ -26,6 +26,7 @@ body {
     gap: 45%;
 }
 
+
 .signin_form, .signup_form {
     top: 0;
 }
@@ -138,4 +139,16 @@ input {
 
 .has-val.new_input+.new_input_span::before {
     width: 100%
+}
+
+.authy_form {
+  background-color: #fff;
+  position: absolute;
+  top: 10%;
+  height: fit-content;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 40px;
+  border-radius: 8px;
+  display: block;
 }
