@@ -10,7 +10,9 @@ import qrcode
 
 
 def generate_qr_code(data: str):
-    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+    qr = qrcode.QRCode(version=1,
+                       error_correction=qrcode.constants.ERROR_CORRECT_L,
+                       box_size=10, border=4)
     qr.add_data(data)
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="black", back_color="white")
@@ -29,19 +31,20 @@ class ExaminerView():
     def __init__(self):
         pass
 
-    def page_warning(self, message:str) -> HttpResponse:
+    def page_warning(self, message: str) -> HttpResponse:
         """ Renders examiner homepage with a warning """
         return HttpResponse("<h1>You've incomplete fields</h1>")
 
     def dashboard(self, request) -> HttpResponse:
         """ Dashboard view for examiner """
         return HttpResponse("<h1>Examiner dashboard</h1>")
-        
+
     def homepage(self, request) -> HttpResponse:
         """Displays Examiner web page """
         random_pyotp = pyotp.random_base32()
-        su = pyotp.totp.TOTP(random_pyotp).provisioning_uri(name='Examiner',
-                                               issuer_name='Nibo-Test-Network')
+        su = pyotp.totp.TOTP(random_pyotp).provisioning_uri(
+                             name='Examiner',
+                             issuer_name='Nibo-Test-Network')
         qr_image = generate_qr_code(su)
         context = {
             'su': random_pyotp,
@@ -58,7 +61,7 @@ class ExaminerView():
                 bytes_data = request.body.decode()
                 print(bytes_data)
                 datas = bytes_data.split('&')
-                data = {item.split('=')[0]: item.split('=')[1] for item in datas}
+                data = {x.split('=')[0]: x.split('=')[1] for x in datas}
                 newExaminer = {
                     'fullname': data.get('fullname'),
                     'username': data.get('username'),
@@ -85,4 +88,3 @@ class ExaminerView():
         """ Handles admin login """
         if request.method == 'POST':
             return redirect('examiner_dashboard')
-
