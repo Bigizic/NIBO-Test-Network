@@ -9,11 +9,11 @@ db.sqlite3
 /students/__pycache__/*
 /examiner/__pycache__/*
 /examiner/migrations/*
-/exam_attempt/__pycache__/*
+/exams_attempt/__pycache__/*
 
 /Admin/migrations/*
 /exams/migrations/*
 /questions/migrations/*
 /students/migrations/*
 /examiner/migrations/*
-/exam_attempt/migrations/*
+/exams_attempt/migrations/*
