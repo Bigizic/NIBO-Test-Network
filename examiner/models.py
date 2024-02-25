@@ -13,6 +13,8 @@ class ExaminerModel(BaseModel, models.Model):
     two_factor = models.CharField(max_length=300, default=None, null=True)
     login_time = models.DateTimeField()
     logout_time = models.DateTimeField(default=None, null=True)
+    logout_records = models.TextField(null=True)
+    login_records = models.TextField(null=True)
 
     class Meta:
         db_table = 'examiner'

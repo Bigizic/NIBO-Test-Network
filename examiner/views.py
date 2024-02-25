@@ -59,9 +59,9 @@ class ExaminerView():
             status = self.check_logged_in_status(request)
             tmp_examiner_id = request.session.get('examiner_id')
             decrypt_id = ExaminerModel().id_decryption(tmp_examiner_id)
-
             fetch_examiner = EXOP().get(uuid.UUID(decrypt_id))
-            if fetch_examiner['id'] != examiner_id and status:
+            if fetch_examiner['id'] != decrypt_id and status:
+                print("BUTXH")
                 raise Http404("Examiner not found")
             if fetch_examiner and status:
                 context = {'success': GREEN}
@@ -158,6 +158,8 @@ class ExaminerView():
                     two_factor=newExaminer['two_factor'],
                     login_time=newExaminer['login_time'],
                 )
+                # for login_records update
+                EXOP().update_records(examiner.to_dict(), 'login')
                 examiner = examiner.id
                 examiner_id = ExaminerModel().id_encryption(str(examiner))
                 request.session['examiner_logged_in'] = True
@@ -202,6 +204,10 @@ class ExaminerView():
                         GREEN = 'signed in'
                         request.session['examiner_logged_in'] = True
                         request.session['examiner_id'] = examiner_id
+                        EXOP().update(fetch_examiner,
+                                      login_time=datetime.utcnow())
+                        tmp_fetch_examiner = EXOP().get(fetch_examiner['id'])
+                        EXOP().update_records(tmp_fetch_examiner, 'login')
                         url = reverse('examiner_dashboard', kwargs={
                             'examiner_id': examiner_id
                         })
@@ -214,10 +220,20 @@ class ExaminerView():
 
     def logout(self, request):
         """Logs out a logged in examiner """
-        request.session['examiner_logged_in'] = False
-        request.session['examiner_id'] = None
-        global GREEN
-        global NOTIFICATION
-        GREEN = None
-        NOTIFICATION = None
+        if self.check_logged_in_status(request):
+            examiner_id = request.session.get('examiner_id')
+            decoded_examiner_id = ExaminerModel().id_decryption(examiner_id)
+            fetch_examiner = EXOP().get(decoded_examiner_id)
+            if fetch_examiner:
+                EXOP().update(fetch_examiner, logout_time=datetime.utcnow())
+                temp_fetch_examiner = EXOP().get(decoded_examiner_id)
+                # for logout_records update
+                EXOP().update_records(temp_fetch_examiner, 'logout')
+            request.session['examiner_logged_in'] = False
+            request.session['examiner_id'] = None
+            global GREEN
+            global NOTIFICATION
+            GREEN = None
+            NOTIFICATION = None
+            return redirect('examiner_homepage')
         return redirect('examiner_homepage')
