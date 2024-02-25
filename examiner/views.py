@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, JsonResponse
+from django.http import Http404
 import json
 from io import BytesIO
 from .models import ExaminerModel
@@ -11,6 +12,7 @@ from students.models import StudentModel
 import pyotp
 from typing import Union
 import urllib.parse
+import uuid
 from .utils import ExaminerOperations as EXOP
 import qrcode
 
@@ -54,10 +56,15 @@ class ExaminerView():
         """ Dashboard view for examiner """
         global GREEN
         if request.method == 'GET':
-            if self.check_logged_in_status(request):
-                context = {
-                    'success': GREEN
-                }
+            status = self.check_logged_in_status(request)
+            tmp_examiner_id = request.session.get('examiner_id')
+            decrypt_id = ExaminerModel().id_decryption(tmp_examiner_id)
+
+            fetch_examiner = EXOP().get(uuid.UUID(decrypt_id))
+            if fetch_examiner['id'] != examiner_id and status:
+                raise Http404("Examiner not found")
+            if fetch_examiner and status:
+                context = {'success': GREEN}
                 return render(request, 'dashboard.html', context)
             return redirect('examiner_homepage')
 
@@ -67,8 +74,7 @@ class ExaminerView():
         to dashboard route with their session id
         """
         if self.check_logged_in_status(request):
-            examiner = request.session.get('examiner_id')
-            examiner_id = ExaminerModel().id_encryption(examiner)
+            examiner_id = request.session.get('examiner_id')
             url = reverse('examiner_dashboard', kwargs={
                 'examiner_id': examiner_id
             })
@@ -79,8 +85,7 @@ class ExaminerView():
         """Displays Examiner web page """
         global NOTIFICATION
         if self.check_logged_in_status(request):
-            examiner = request.session.get('examiner_id')
-            examiner_id = ExaminerModel().id_encryption(examiner)
+            examiner_id = request.session.get('examiner_id')
             url = reverse('examiner_dashboard', kwargs={
                 'examiner_id': examiner_id
             })
@@ -106,8 +111,7 @@ class ExaminerView():
         global NOTIFICATION
         global GREEN
         if self.check_logged_in_status(request):
-            examiner = request.session.get('examiner_id')
-            examiner_id = ExaminerModel().id_encryption(examiner)
+            examiner_id = request.session.get('examiner_id')
             url = reverse('examiner_dashboard', kwargs={
                 'examiner_id': examiner_id
             })
@@ -173,8 +177,7 @@ class ExaminerView():
         global NOTIFICATION
         global GREEN
         if self.check_logged_in_status(request):
-            examiner = request.session.get('examiner_id')
-            examiner_id = ExaminerModel().id_encryption(examiner)
+            examiner_id = request.session.get('examiner_id')
             url = reverse('examiner_dashboard', kwargs={
                 'examiner_id': examiner_id
             })

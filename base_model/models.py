@@ -20,6 +20,7 @@ class BaseModel(models.Model):
                 "%Y-%m-%dT%H:%M:%S.%f")
 
         del my_dict['_state']
+        my_dict['id'] = str(my_dict['id'])
         return my_dict
 
     def id_encryption(self, text: str) -> str:
@@ -52,4 +53,4 @@ class BaseModel(models.Model):
                 encrypted += new_digit
             else:
                 encrypted += char
-        return encrypted 
+        return encrypted

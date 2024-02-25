@@ -11,13 +11,13 @@ class ExaminerOperations():
     def __init__(self):
         pass
 
-    def get(self, exmainer_id: str) -> ExaminerModel:
+    def get(self, examiner_id: str) -> ExaminerModel:
         """gets an examiner via id from the examiner database
         Returns:
             - Examiner object
         """
-        obj = ExaminerModel.objects.get(pk=exmainer_id).first()
-        return obj if obj else None
+        obj = ExaminerModel.objects.get(pk=examiner_id)
+        return obj.to_dict() if obj else None
 
     def delete(self, examiner_id: str) -> True:
         """Deletes an examiner if there's a match in the database

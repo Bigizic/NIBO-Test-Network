@@ -1,6 +1,12 @@
 from django.contrib import admin
 from django.urls import path
 from .views import ExaminerView
+from base_model.views import error_404, error_500
+from django.conf.urls import handler404, handler500
+
+handler404 = error_404
+handler500 = error_500
+
 
 urlpatterns = [
     path('', ExaminerView().homepage, name="examiner_homepage"),
