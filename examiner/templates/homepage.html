@@ -15,24 +15,27 @@
     </head>
     <body>
         <div class="body_wrapper">
+            {% if error %}
+            <p class="notification"> {{ error }} </p>
+            {% endif %}
             <section class="signin">
                 <form id="signinForm" class="signin_form validate_form" action="{% url 'admin_login' %}" method="post">
                         <span class="welcome">
                         Examiner Login
                         </span>
                         <div class="wrap_input">
-                        <input class="new_input" type="text" name="email">
+                        <input class="new_input" minlength="3" required="true" type="text" name="signinUsername">
                         <span class="new_input_span" data-placeholder="Username"></span>
                         </div>
                         <div class="wrap_input password-validate">
-                        <input class="new_input" type="password" name="password">
+                        <input class="new_input" minlength="8" required="true" type="password" name="signinPassword">
                         <span class="new_input_span" data-placeholder="Password"></span>
                         </div>
                         <div class="wrap_login">
                         <div class="wrap_login_2">
                         <div class="wrap_login_3"></div>
                         {% csrf_token %}
-                        <button class="login_btn" type="submit">
+                        <button class="login_btn">
                         Login
                         </button>
                         </div>
@@ -46,19 +49,19 @@
                         Examiner Sign Up
                         </span>
                         <div class="wrap_input">
-                        <input class="new_input" type="text" name="fullname">
+                        <input class="new_input" minlength="6" required="true" type="text" name="fullname">
                         <span class="new_input_span" data-placeholder="Full Name"></span>
                         </div>
                         <div class="wrap_input">
-                        <input class="new_input" type="text" name="username">
+                        <input class="new_input" minlength="3" required="true" type="text" name="username">
                         <span class="new_input_span" data-placeholder="Username"></span>
                         </div>
                         <div class="wrap_input password-validate">
-                        <input id="firstPassword" class="new_input" type="password" name="signupPassword">
+                        <input id="firstPassword" minlength="8" required="true" class="new_input" type="password" name="signupPassword">
                         <span class="new_input_span" data-placeholder="Password"></span>
                         </div>
                         <div class="wrap_input password-validate">
-                        <input id="secondPassword" class="new_input" type="password">
+                        <input id="secondPassword" minlength="8" required="true" class="new_input" type="password">
                         <span class="new_input_span" data-placeholder="Confirm Password"></span>
                         </div>
                         <span style="display: none; color: red; font-size: small;" id="p_status"></span>
@@ -70,7 +73,7 @@
                         <div class="wrap_login_2">
                         <div class="wrap_login_3"></div>
                         {% csrf_token %}
-                        <button class="signup_btn" type="submit">
+                        <button class="signup_btn">
                         Sign Up
                         </button>
                         </div>

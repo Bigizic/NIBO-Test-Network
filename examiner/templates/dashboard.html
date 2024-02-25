@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examiner Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Dashboard</h1>
+    </header>
+    <main>
+        {% if success %}
+        <p>{{ success }}</p>
+        {% endif %}
+        <p>This is a dashboard content.</p>
+    </main>
+    <footer>
+        <form id="logoutForm" action="{% url 'examiner_logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </footer>
+</body>
+</html>

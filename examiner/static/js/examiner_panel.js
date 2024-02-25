@@ -20,7 +20,7 @@ $(document).ready(function() {
     $('#authy_cancel').click(() => {
         $('.authy_form').hide();
     })
-
+    // sign up action
     $('.signup_btn').click(function(e) {
         e.preventDefault();
         const newPassword = $('#firstPassword').val();
@@ -37,6 +37,18 @@ $(document).ready(function() {
             username: $('input[name=username]').val(),
             password: $('input[name=signupPassword]').val(),
         };
+        if (formData.fullname.length < 6) {
+            alert("fullname must be greater than 6");
+            return;
+        }
+        if (formData.username.length < 3) {
+            alert("Username is too short and must be greater than 3");
+            return;
+        }
+        if (formData.password.length < 8) {
+            alert("Password is too short and must be greater than 8");
+            return;
+        }
 
         const encodedData = btoa(JSON.stringify(formData));
 
@@ -47,9 +59,57 @@ $(document).ready(function() {
             headers: {
                 'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
             },
+            success: function(response) {
+                window.location.replace(window.location.href);
+            },
             error: function(xhr, errmsg, err) {
-                console.log(errmsg);
+                console.log(err);
             }
         });
     });
+
+    // sign in action
+    $('.login_btn').click(function(e) {
+        e.preventDefault();
+
+        const formData = {
+            username: $('input[name=signinUsername]').val(),
+            password: $('input[name=signinPassword]').val(),
+        };
+        if (formData.username.length < 3) {
+            alert("Username is too short");
+            return;
+        }
+        if (formData.password.length < 8) {
+            alert("Password is too short");
+            return;
+        }
+
+        const encodedData = btoa(JSON.stringify(formData));
+
+        $.ajax({
+            url: 'http://localhost:8000/admin/login/',
+            type: 'POST',
+            data: { Basic: encodedData },
+            headers: {
+                'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                window.location.replace(window.location.href);
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(err);
+            }
+        });
+    });
+
+    // error message temporary view
+    if ($('.notification').length) {
+        setTimeout(function () {
+          $('.notification').slideUp();
+        }, 2000);
+    };
+
+    // passwordf and username and fullname validation
+
 });

@@ -152,3 +152,24 @@ input {
   border-radius: 8px;
   display: block;
 }
+
+.notification {
+    position: absolute;
+  top: 10px;
+  background: #ffc3c3;
+  color: red;
+  padding: 15px 10px;
+  border: 1px solid red;
+}
+
+@media (min-width: 10px) and (max-width: 767px) {
+    .body_wrapper {
+        height: 200vh;
+        gap: 5%;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    .signin {
+        margin-top: 20%;
+    }
+}

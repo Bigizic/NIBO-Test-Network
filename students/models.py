@@ -2,21 +2,19 @@ from base_model.models import BaseModel
 from examiner.models import ExaminerModel
 import bcrypt
 from django.db import models
-import uuid
 
 
 class StudentModel(BaseModel, models.Model):
-    """ Examiner database
-    """
+    """ Student database """
     fullname = models.CharField(max_length=300)
-    student_number = models.CharField(max_length=200)
+    student_number = models.CharField(max_length=300)
     password = models.CharField(max_length=300)
-    grade_level = models.CharField(max_length=200, default=None, null=True)
+    grade_level = models.CharField(max_length=300, default=None, null=True)
     admin_id = models.CharField(max_length=300)
     exam_numbers = models.JSONField(null=True)
     number_of_exams_registered = models.IntegerField(default=0)
-    login_time = models.TextField()
-    logout_time = models.TextField(null=True)
+    login_time = models.DateTimeField(null=True)
+    logout_time = models.DateTimeField(null=True)
 
     class Meta:
         db_table = 'students'
@@ -51,7 +49,7 @@ class StudentModel(BaseModel, models.Model):
             'grade_level': self.grade_level,
             'exam_numbers': self.exam_numbers,
             'number_of_exams_registered': self.number_of_exams_registered,
-            'login_time': self.login_time,
-            'logout_time': self.logout_time
+            'login_time': self.login_time.strftime('%a %b %Y at %H:%M'),
+            'logout_time': self.logout_time.strftime('%a %b %Y at %H:%M'),
         }
         return f"[Student: {self.fullname}]{data}"
