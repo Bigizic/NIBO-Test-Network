@@ -3,7 +3,9 @@ examiner database
 """
 from .models import ExaminerModel
 import bcrypt
+from datetime import datetime
 from typing import Union
+import uuid
 
 class ExaminerOperations():
     """ Implementation """
@@ -38,6 +40,56 @@ class ExaminerOperations():
             exists = ExaminerModel.objects.filter(username=username).first()
             return exists.to_dict() if exists else False
         return False
+
+    def update(self, model, **kwargs):
+        """Updates an Examiner model based on the key word arguments
+        """
+        allowed_args = [
+            'password',
+            'logout_time',
+            'login_time',
+        ]
+        pk = model['id']
+        try:
+            ins = ExaminerModel.objects.get(pk=pk)
+        except ExaminerModel.DoesNotExist:
+            return False
+        for k, v in kwargs.items():
+            if k in allowed_args:
+                setattr(ins, k, v)
+        ins.save()
+        return True
+
+    def update_records(self, model, command):
+        """Update certain records """
+        pk = model['id']
+        try:
+            ins = ExaminerModel.objects.get(pk=pk)
+        except ExaminerModel.DoesNotExist:
+            return False
+        logout_time = model.get('logout_time')
+        login_time = model.get('login_time')
+
+        if logout_time and logout_time is not None:
+            # handles logout
+            if command == 'logout':
+                logout_records = model['logout_records']
+                if logout_records:
+                    logout_records += ", {}".format(str(logout_time))
+                else:
+                    logout_records = str(logout_time)
+                setattr(ins, 'logout_records', logout_records)
+        if login_time and login_time is not None:
+            # handles login
+            if command == 'login':
+                login_records = model['login_records']
+                if login_records:
+                    login_records += ", {}".format(str(login_time))
+                else:
+                    login_records = str(login_time)
+                setattr(ins, 'login_records', login_records)
+        ins.save()
+        return True
 
     def setpassword(self, value: str) -> str:
         """ return a bcrypt encoded hash of a value
