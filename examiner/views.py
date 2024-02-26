@@ -54,17 +54,27 @@ class ExaminerView():
 
     def dashboard(self, request, examiner_id: str) -> Union[render, redirect]:
         """ Dashboard view for examiner """
+        global NOTIFICATION
         global GREEN
         if request.method == 'GET':
             status = self.check_logged_in_status(request)
             tmp_examiner_id = request.session.get('examiner_id')
+            if not tmp_examiner_id:
+                NOTIFICATION = "Login again"
+                return redirect('examiner_homepage')
             decrypt_id = ExaminerModel().id_decryption(tmp_examiner_id)
             fetch_examiner = EXOP().get(uuid.UUID(decrypt_id))
             if fetch_examiner['id'] != decrypt_id and status:
                 print("BUTXH")
                 raise Http404("Examiner not found")
             if fetch_examiner and status:
-                context = {'success': GREEN}
+                fetch_examiner['fullname'] = fetch_examiner['fullname'].title()
+                fetch_examiner['id'] = ExaminerModel().id_encryption(
+                                       fetch_examiner['id'])
+                context = {
+                    'success': GREEN,
+                    'examiner': fetch_examiner,
+                }
                 return render(request, 'dashboard.html', context)
             return redirect('examiner_homepage')
 
@@ -102,9 +112,29 @@ class ExaminerView():
         }
         return render(request, 'homepage.html', context)
 
-    def create_student(self, request) -> HttpResponse:
+    def students(self, request, examiner_id: str) -> HttpResponse:
+        """Contains information about students relating to an admin
+        """
+        if request.method == 'GET':
+            if self.check_logged_in_status(request):
+                return HttpResponse("<h1>Your Students</h1>")
+
+    def create_student(self, request, examiner_id: str) -> HttpResponse:
         """ Creates a student account linked with logged in examiner """
         pass
+
+    def exams(self, request, examiner_id: str) -> HttpResponse:
+        """Contains information about exams relating to an admin
+        """
+        if request.method == 'GET':
+            if self.check_logged_in_status(request):
+                return HttpResponse('<h1>Your exams</h1>')
+
+    def create_exam(self, request, examiner_id: str) -> HttpResponse:
+        """Creteas an exam linked with logged in examine """
+        if request.method == 'POST':
+            if self.check_logged_in_status(request):
+                return HttpResponse('<h1>Exams Created</h1>')
 
     def create_account(self, request):
         """ Handles account creation for admin """
