@@ -1,0 +1,309 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.success_notification {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  background: #b2f8b2;
+  border: 2px solid #b2f8b2;
+  padding: 10px 20px;
+  color: #006400;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body{
+  background: #dfe9f5;
+}
+.container{
+  display: flex;
+}
+nav{
+  position: relative;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  left: 0;
+  background: #e4fd32;
+  background: -webkit-linear-gradient(top,#e4fd32,#c6fd21,#111111);
+  background: -o-linear-gradient(top,#e4fd32,#c6fd21,#111111);
+  background: -moz-linear-gradient(top,#e4fd32,#c6fd21,#111111);
+  background: linear-gradient(top,#e4fd32,#c6fd21,#111111);
+  width: 280px;
+  box-shadow: 20px 20px 0px 1px rgba(0, 0, 0, 0.1);
+}
+.logo{
+  display: flex;
+  margin: 10px 0 0 10px;
+}
+.logo img{
+    width: 65px;
+    height: 50px;
+    border-radius: 50%;
+}
+.logo span{
+    font-weight: bold;
+    padding-left: 15px;
+    font-size: 18px;
+    text-transform: uppercase;
+    top: 5px !important;
+}
+a{
+  position: relative;
+  color: black;
+  font-size: large;
+  font-weight: 600;
+  display: table;
+  width: 280px;
+  padding: 10px;
+  margin-left: 5%;
+  margin-bottom: 2%;
+}
+nav .fas{
+  position: relative;
+  width: 70px;
+  height: 40px;
+  top: 14px;
+  font-size: 20px;
+  text-align: center;
+}
+.nav-item{
+  position: relative;
+  top: 12px;
+  margin-left: 10px;
+  font-size: small;
+}
+a:hover{
+  background: #eee;
+}
+.nav_img {
+  display: flex;
+}
+
+.nav_list:hover {
+  background: black !important;
+  border-radius: 4px;
+  color: azure;
+}
+
+/* Main Section */
+.main{
+  position: relative;
+  padding: 20px;
+  width: 100%;
+  background: #fff;
+}
+.main-top{
+  display: flex;
+  width: 100%;
+}
+.main-top i{
+  position: absolute;
+  right: 0;
+  margin: 10px 30px;
+  color: rgb(110, 109, 109);
+  cursor: pointer;
+}
+.main-skills{
+  display: flex;
+  margin-top: 20px;
+}
+.main-skills .card{
+  width: 25%;
+  margin: 10px;
+  background: #fff;
+  text-align: center;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.26);
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  gap: 25%;
+}
+.main-skills .card h3{
+  margin: 10px;
+  text-transform: capitalize;
+  font-size: x-large;
+}
+.main-skills .card p{
+  font-size: 10px;
+}
+.main-skills .card a[type=button] {
+  background: #e4fd32;
+  background: -webkit-linear-gradient(left,#c6fd21,#565656);
+  background: -o-linear-gradient(left,#c6fd21,#565656);
+  background: -moz-linear-gradient(left,#c6fd21,#565656);
+  background: linear-gradient(left,#c6fd21,#565656);
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.43);
+  color: black;
+  padding: 5px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: fit-content;
+  font-size: medium;
+  align-self: center;
+}
+.main-skills .card a[type=button]:hover{
+  background: black;
+  color: #fff;
+}
+.main-skills .card i{
+  font-size: 22px;
+  padding: 10px;
+}
+
+/* Exams */
+.main-exam{
+  margin-top:20px ;
+  text-transform: capitalize;
+}
+.exam-box{
+  width: 100%;
+  height: 300px;
+  padding: 10px 10px 30px 10px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+.exam-box ul{
+  list-style: none;
+  display: flex;
+}
+.exam-box ul li{
+  margin: 10px;
+  color: gray;
+  cursor: pointer;
+  position: relative;
+}
+
+.wrap_input {
+  position: relative;
+}
+
+.active input, .future input, .completed input, .cancelled input {
+  width: 100%;
+  background: 0 0;
+  color: black;
+  cursor: pointer;
+}
+
+.new_input_span {
+  position: absolute;
+  display: block;
+  width: 0;
+  left: 0;
+  pointer-events: none;
+  bottom: -2px;
+  height: 3px;
+  transition: width 0.7s ease;
+  background: #e4fd32;
+  background: -webkit-linear-gradient(left,#c6fd21,#000000);
+  background: -o-linear-gradient(left,#c6fd21,#000000);
+  background: -moz-linear-gradient(left,#c6fd21,#000000);
+  background: linear-gradient(left,#c6fd21,#000000);
+}
+
+.exam-box .active_exam {
+  display: flex;
+  width: 0;
+  transition: width 1s ease;
+}
+.exam-box .future_exam, .exam-box .completed_exam, .exam-box .cancelled_exam {
+  width: 0;
+  transition: width 1s ease;
+}
+
+
+.box{
+  width: 33%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  background: #e4fd32;
+  background: -webkit-linear-gradient(left,#c6fd21,#565656);
+  background: -o-linear-gradient(left,#c6fd21,#565656);
+  background: -moz-linear-gradient(left,#c6fd21,#565656);
+  background: linear-gradient(left,#c6fd21,#565656);
+  box-shadow: 7px 8px 9px rgb(0, 0, 0);
+}
+
+.box:hover {
+  color: #fff;
+  background: black;
+}
+
+.box:hover button {
+  background: #fff;
+  color: black;
+}
+
+.box h3 {
+  overflow: hidden;
+}
+
+.box p{
+  font-size: 12px;
+  margin-top: 5px;
+}
+.box button{
+  background: #000;
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: 10px;
+  margin-top: 3rem;
+  cursor: pointer;
+}
+
+.box i{
+  font-size: 7rem;
+  float: right;
+  margin: -20px 20px 20px 0;
+}
+.html{
+  color: rgb(25, 94, 54);
+}
+.css{
+  color: rgb(104, 179, 35);
+}
+.js{
+  color: rgb(28, 98, 179);
+}
+
+.scroll_information {
+  display: flex;
+  overflow-y: clip;
+}
+
+.scroll_information_words {
+  width: 40%;
+  overflow: scroll;
+}
+
+.scroll_information_img {
+  background: url('../images/students.png');
+}
+.scroll_information_img2 {
+  background: url('../images/exams.png');
+}
+.scroll_information_img3 {
+  background: url('../images/report.png');
+}
+
+.scroll_information_img, .scroll_information_img2, .scroll_information_img3 {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 60px;
+  height: 60px;
+}

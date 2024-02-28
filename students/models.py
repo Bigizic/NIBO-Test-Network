@@ -13,6 +13,7 @@ class StudentModel(BaseModel, models.Model):
     admin_id = models.CharField(max_length=300)
     exam_numbers = models.JSONField(null=True)
     number_of_exams_registered = models.IntegerField(default=0)
+    profile_pic = models.CharField(max_length=1000, default=None, null=True)
     login_time = models.DateTimeField(null=True)
     logout_time = models.DateTimeField(null=True)
 

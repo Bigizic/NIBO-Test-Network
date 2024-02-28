@@ -110,6 +110,11 @@ $(document).ready(function() {
         }, 2000);
     };
 
-    // passwordf and username and fullname validation
+    // signup trigger
+    $('.signup_trigger').click((e) => {
+        $('.body_wrapper').css('gap', '45%').css('justify-content', 'center');
+        $('signin').css('margin-lef', '0');
+        $('.signup').show();
+    })
 
 });
