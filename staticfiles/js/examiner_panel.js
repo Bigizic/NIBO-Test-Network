@@ -84,7 +84,7 @@ $(document).ready(function() {
             alert("Password is too short");
             return;
         }
-        console.log($('input[name=csrfmiddlewaretoken]').val())
+
         const encodedData = btoa(JSON.stringify(formData));
 
         $.ajax({
@@ -109,5 +109,12 @@ $(document).ready(function() {
           $('.notification').slideUp();
         }, 2000);
     };
+
+    // signup trigger
+    $('.signup_trigger').click((e) => {
+        $('.body_wrapper').css('gap', '45%').css('justify-content', 'center');
+        $('signin').css('margin-lef', '0');
+        $('.signup').show();
+    })
 
 });

@@ -51,7 +51,7 @@ class ExaminerView():
         if status and e_id:
             return True
         return False
-
+        
     def dashboard(self, request, examiner_id: str) -> Union[render, redirect]:
         """ Dashboard view for examiner """
         global NOTIFICATION
@@ -65,12 +65,12 @@ class ExaminerView():
             decrypt_id = ExaminerModel().id_decryption(tmp_examiner_id)
             fetch_examiner = EXOP().get(uuid.UUID(decrypt_id))
             if fetch_examiner['id'] != decrypt_id and status:
-                print("BUTXH")
                 raise Http404("Examiner not found")
             if fetch_examiner and status:
                 fetch_examiner['fullname'] = fetch_examiner['fullname'].title()
                 fetch_examiner['id'] = ExaminerModel().id_encryption(
                                        fetch_examiner['id'])
+                fetch_examiner['template_title'] = 'Examiner Dashboard'
                 context = {
                     'success': GREEN,
                     'examiner': fetch_examiner,
@@ -112,23 +112,55 @@ class ExaminerView():
         }
         return render(request, 'homepage.html', context)
 
-    def students(self, request, examiner_id: str) -> HttpResponse:
+    def students(self, request, examiner_id: str) -> render:
         """Contains information about students relating to an admin
         """
         if request.method == 'GET':
             if self.check_logged_in_status(request):
-                return HttpResponse("<h1>Your Students</h1>")
+                tmp_examiner_id = request.session.get('examiner_id')
+            if not tmp_examiner_id:
+                NOTIFICATION = "Login again"
+                return redirect('examiner_homepage')
+            decrypt_id = ExaminerModel().id_decryption(tmp_examiner_id)
+            fetch_examiner = EXOP().get(uuid.UUID(decrypt_id))
+            if fetch_examiner['id'] != decrypt_id and status:
+                raise Http404("Examiner not found")
+            if fetch_examiner:
+                fetch_examiner['fullname'] = fetch_examiner['fullname'].title()
+                fetch_examiner['id'] = ExaminerModel().id_encryption(
+                                       fetch_examiner['id'])
+                fetch_examiner['template_title'] = 'My Students'
+                context = {
+                    'examiner': fetch_examiner,
+                }
+                return render(request, 'students.html', context)
 
     def create_student(self, request, examiner_id: str) -> HttpResponse:
         """ Creates a student account linked with logged in examiner """
         pass
 
-    def exams(self, request, examiner_id: str) -> HttpResponse:
+    def exams(self, request, examiner_id: str) -> render:
         """Contains information about exams relating to an admin
         """
         if request.method == 'GET':
             if self.check_logged_in_status(request):
-                return HttpResponse('<h1>Your exams</h1>')
+                tmp_examiner_id = request.session.get('examiner_id')
+            if not tmp_examiner_id:
+                NOTIFICATION = "Login again"
+                return redirect('examiner_homepage')
+            decrypt_id = ExaminerModel().id_decryption(tmp_examiner_id)
+            fetch_examiner = EXOP().get(uuid.UUID(decrypt_id))
+            if fetch_examiner['id'] != decrypt_id and status:
+                raise Http404("Examiner not found")
+            if fetch_examiner:
+                fetch_examiner['fullname'] = fetch_examiner['fullname'].title()
+                fetch_examiner['id'] = ExaminerModel().id_encryption(
+                                       fetch_examiner['id'])
+                fetch_examiner['template_title'] = 'My Exams'
+                context = {
+                    'examiner': fetch_examiner,
+                }
+                return render(request, 'exams.html', context)
 
     def create_exam(self, request, examiner_id: str) -> HttpResponse:
         """Creteas an exam linked with logged in examine """

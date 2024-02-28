@@ -14,6 +14,9 @@ urlpatterns = [
     path('login/', ExaminerView().login, name="admin_login"),
     path('dashboard/', ExaminerView().dashboard_helper, name="examiner_dashboard_helper"),
     path('dashboard/<examiner_id>/', ExaminerView().dashboard, name="examiner_dashboard"),
-    path('create_student/', ExaminerView().create_student, name="examiner_create_student"),
-    path('logout', ExaminerView().logout, name="examiner_logout")
+    path('student/<examiner_id>/', ExaminerView().students, name="examiner_students"),
+    path('create_student/<examiner_id>/', ExaminerView().create_student, name="examiner_create_student"),
+    path('exam/<examiner_id>/', ExaminerView().exams, name="examiner_exams"),
+    path('create_exam/<examiner_id>/', ExaminerView().create_exam, name="examiner_create_exam"),
+    path('logout', ExaminerView().logout, name="examiner_logout"),
 ]

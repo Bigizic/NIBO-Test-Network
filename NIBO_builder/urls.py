@@ -25,6 +25,7 @@ else:
     ADMIN_ROUTE = 'admin/'
 
 urlpatterns = [
+    path('', include('examiner.urls')),
     path('django_admin/', admin.site.urls),
     path(ADMIN_ROUTE, include('examiner.urls')),
     path('student/', include('students.urls')),
