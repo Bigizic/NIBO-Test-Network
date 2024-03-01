@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Gelion, Helvetica, "Helvetica Neue", Arial;
+  line-height: 1.5;
+  font-size: 1.4rem;
+  color: rgb(3, 3, 3);
+  font-variant-ligatures: no-common-ligatures;
+  letter-spacing: -0.1px;
+}
+
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /*width: 100%;*/
+  height: 110px;
+  opacity: 1;
+  background-color: #fff;
+  border-bottom: 1px solid rgb(240, 240, 240);
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 0px;
+  margin: 0% 8% 8% 8%;
+  gap: 7%;
+}
+.main_div {
+  background: rgb(240, 240, 240);
+}
+.header_h1 {
+  font-family: Poppins;
+  margin-left: 5%;
+  font-size: large;
+}
+.header_h1 span {
+  font-size: x-small;
+}
+header ul {
+  list-style-type: none;
+  display: flex;
+  gap: 10%;
+  font-size: 15px;
+  width: 41%;
+}
+header ul li a {
+  text-decoration: none;
+  color: black;
+}
+.header_login_signup {
+  margin-left: 10%;
+  display: flex;
+  margin-right: 5%;
+}
+.header_login_signup button {
+  padding: 15px;
+  background: #fff;
+  border: 5px solid yellow;
+  cursor: pointer;
+  width: max-content;
+}
+.header_login_signup .two {
+  background: yellow;
+}
+.header_login_signup .one:hover {
+  background-color: yellow;
+}
+.header_login_signup .two:hover {
+  background-color: #fff;
+}
+.header_login_signup button a {
+  text-decoration: none;
+
+}
+
+
+.main {
+  display: flex;
+}
+.main_img {
+  background: url('');
+}
