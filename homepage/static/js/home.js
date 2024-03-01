@@ -3,7 +3,7 @@ import React from 'react'
 import FeatureCard from './feature-card'
 import Question1 from './question1'
 import projectStyles from '.style.module.css'
-import styles from './home.module.css'
+import styles from '../css/home.css'
 
 const Home = (props) => {
   return (
