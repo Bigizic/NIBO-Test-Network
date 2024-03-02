@@ -10,6 +10,8 @@ db.sqlite3
 /examiner/__pycache__/*
 /examiner/migrations/*
 /exams_attempt/__pycache__/*
+/homepage/__pycache__/*
+/report/__pycache__/*
 
 /Admin/migrations/*
 /exams/migrations/*
@@ -17,3 +19,5 @@ db.sqlite3
 /students/migrations/*
 /examiner/migrations/*
 /exams_attempt/migrations/*
+/homepage/migrations/*
+/report/migrations/*
