@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 # bash script to create mysql database 'NIBO_TEST_NETWORK' for user entered by client
 
 DB_HOST="localhost"
