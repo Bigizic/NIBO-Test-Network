@@ -1,6 +1,6 @@
 from base_model.models import BaseModel
 from django.db import models
-from examiner.utils import ExaminerOperations
+from educator.utils import EducatorOperations
 
 
 class ExamModel(BaseModel, models.Model):

@@ -22,11 +22,11 @@ from os import environ
 if environ.get('ADMIN_ROUTE'):
     ADMIN_ROUTE = '{}/'.format(environ.get('ADMIN_ROUTE'))
 else:
-    ADMIN_ROUTE = 'admin/'
+    ADMIN_ROUTE = 'educator/'
 
 urlpatterns = [
     path('', include('homepage.urls')),
-    path('django_admin/', admin.site.urls),
-    path(ADMIN_ROUTE, include('examiner.urls')),
+    # path('django_admin/', admin.site.urls),
+    path(ADMIN_ROUTE, include('educator.urls')),
     path('student/', include('students.urls')),
 ]

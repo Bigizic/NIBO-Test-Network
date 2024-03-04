@@ -1,5 +1,5 @@
 from base_model.models import BaseModel
-from examiner.models import ExaminerModel
+from educator.models import EducatorModel
 import bcrypt
 from django.db import models
 
@@ -9,8 +9,8 @@ class StudentModel(BaseModel, models.Model):
     fullname = models.CharField(max_length=300)
     student_number = models.CharField(max_length=300)
     password = models.CharField(max_length=300)
-    grade_level = models.CharField(max_length=300, default=None, null=True)
-    admin_id = models.CharField(max_length=300)
+    # grade_level = models.CharField(max_length=300, default=None, null=True)
+    educator_id = models.CharField(max_length=300)
     exam_numbers = models.JSONField(null=True)
     number_of_exams_registered = models.IntegerField(default=0)
     profile_pic = models.CharField(max_length=1000, default=None, null=True)

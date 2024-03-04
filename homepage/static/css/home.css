@@ -84,7 +84,7 @@ header ul li a {
   padding-bottom: 15%;
 }
 .main_img_cover {
-  border-start-start-radius: 100%;
+  padding: 0px 50px 0px 50px !important;
 }
 .main_img_cover, .body_img_cover, .features_img_cover {
   background-color: yellow;
@@ -95,13 +95,14 @@ header ul li a {
   padding: 0px 100px 0px 0px;
 }
 .main_image {
-  background: url('../images/group.png');
+  background: url('../images/with_background/home_page_first.JPG');
   background-repeat: no-repeat;
   background-size: 100%;
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 250px;
   position: absolute;
-  bottom: -50px;
+  box-shadow: 5px 5px 10px 0px #93939380;
+  top: -50px;
 }
 .main_words {
   width: 20%;
@@ -269,7 +270,6 @@ header ul li a {
 footer ul {
   list-style-type: none;
 }
-
 footer ul li {
   font-size: 12px;
   margin-bottom: 10%;

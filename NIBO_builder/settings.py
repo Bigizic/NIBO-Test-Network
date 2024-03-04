@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base_model',
     'homepage',
-    'examiner',
+    'educator',
     'exams',
     'exams_attempt',
     'questions',

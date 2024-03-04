@@ -8,8 +8,8 @@ db.sqlite3
 /exams/__pycache__/*
 /questions/__pycache__/*
 /students/__pycache__/*
-/examiner/__pycache__/*
-/examiner/migrations/*
+/educator/__pycache__/*
+/educator/migrations/*
 /exams_attempt/__pycache__/*
 /homepage/__pycache__/*
 /report/__pycache__/*
@@ -18,7 +18,7 @@ db.sqlite3
 /exams/migrations/*
 /questions/migrations/*
 /students/migrations/*
-/examiner/migrations/*
+/educator/migrations/*
 /exams_attempt/migrations/*
 /homepage/migrations/*
 /report/migrations/*
