@@ -1,0 +1,157 @@
+*{
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+.success_notification {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  background: #b2f8b2;
+  border: 2px solid #b2f8b2;
+  padding: 10px 20px;
+  color: #006400;
+}
+body{
+  background: #dadada88;
+}
+.container{
+  display: flex;
+}
+.left {
+  margin: 3% 0.5% 0% 2%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.pp_cover {
+  background: #fff;
+  padding: 5px 0px 5px 15px;
+  display: flex;
+  align-items: center;
+  width: 150%;
+}
+.pp_cover_img {
+  background: #8888;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}.pp_cover p {
+  margin-left: 5%;
+}
+.right {
+  background: white;
+  margin: 1.5% 0% 0% 6%;
+}
+.first_ul {
+  margin: 25% 0% 40% 0%;
+}
+.second_ul {
+  margin: 40% 0% 0% 0%;
+}
+ul li {
+  margin-bottom: 15%;
+  display: flex;
+  align-items: center;
+  gap: 10%;
+}
+.ico {
+  background-repeat: no-repeat !important;
+  background-size: 100% !important;
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+}
+a { color: black; }
+
+.one { background: url('../images/dashboard.png'); }
+.two { background: url('../images/exams.png'); }
+.three { background: url('../images/students.png'); }
+.four { background: url('../images/notification.png' ); }
+.five { background: url('../images/report.png'); }
+.six { background: url('../images/settings.png'); width: 25px; height: 25px; }
+.seven { background: url('../images/exit.png'); width: 20px; height: 20px; margin-left: 3%; }
+
+.left_background {
+  background: #fff;
+  padding: 5px 150px 5px 15px;
+}
+.slider { background: #fff; position: absolute; }
+
+.main-skills{
+  display: flex;
+  margin-top: 20px;
+}
+.main-skills .card{
+  margin: 10px;
+  background: #fff;
+  text-align: center;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.26);
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  gap: 25%;
+  width: 250px;
+  position: relative;
+}
+.main-skills .card h3{
+  margin: 10px;
+  text-transform: capitalize;
+  font-size: x-large;
+}
+.main-skills .card p{
+  font-size: 10px;
+}
+.main-skills .card a[type=button] {
+  background: yellow;
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.43);
+  color: black;
+  padding: 5px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: fit-content;
+  font-size: medium;
+  align-self: center;
+  position: absolute;
+  bottom: 15px;
+}
+.main-skills .card a[type=button]:hover{
+  background: black;
+  color: #fff;
+}
+
+.scroll_information {
+  display: flex;
+  overflow-y: clip;
+}
+
+.scroll_information_words {
+  width: 40%;
+  overflow: scroll;
+}
+
+.scroll_information_img {
+  background: url('../images/students.png');
+}
+.scroll_information_img2 {
+  background: url('../images/exams.png');
+}
+.scroll_information_img3 {
+  background: url('../images/report.png');
+}
+
+.scroll_information_img, .scroll_information_img2, .scroll_information_img3 {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 60px;
+  height: 60px;
+}

@@ -18,6 +18,7 @@ class ExamModel(BaseModel, models.Model):
     # active, inactive
     status = models.CharField(default='inactive', max_length=20)
     exam_session = models.CharField(max_length=10)  # 2020/2021
+    categories = models.CharField(max_length=300, null=True)
 
     class Meta:
         db_table = 'exams'

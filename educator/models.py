@@ -12,6 +12,7 @@ class EducatorModel(BaseModel, models.Model):
     password = models.CharField(max_length=500)
     two_factor = models.CharField(max_length=300, default=None, null=True)
     login_time = models.DateTimeField()
+    profile_pic = models.TextField(null=True)
     logout_time = models.DateTimeField(default=None, null=True)
     logout_records = models.TextField(null=True)
     login_records = models.TextField(null=True)
