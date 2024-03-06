@@ -49,6 +49,9 @@ body{
 .right {
   background: white;
   margin: 1.5% 0% 0% 6%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 1fr;
 }
 .first_ul {
   margin: 25% 0% 40% 0%;
@@ -65,14 +68,14 @@ ul li {
 .ico {
   background-repeat: no-repeat !important;
   background-size: 100% !important;
-  width: 28px;
-  height: 28px;
+  width: 25px;
+  height: 25px;
   display: inline-block;
 }
 a { color: black; }
 
 .one { background: url('../images/dashboard.png'); }
-.two { background: url('../images/exams.png'); }
+.twoo { background: url('../images/exams.png'); }
 .three { background: url('../images/students.png'); }
 .four { background: url('../images/notification.png' ); }
 .five { background: url('../images/report.png'); }
@@ -88,19 +91,21 @@ a { color: black; }
 .main-skills{
   display: flex;
   margin-top: 20px;
+  margin-left: 5%;
+  grid-row: 2;
 }
 .main-skills .card{
   margin: 10px;
-  background: #fff;
+  background: #dadada88;
   text-align: center;
   border-radius: 20px;
   padding: 10px;
-  box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.26);
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.17);
   height: 20vh;
   display: flex;
   flex-direction: column;
   gap: 25%;
-  width: 250px;
+  width: 220px;
   position: relative;
 }
 .main-skills .card h3{
@@ -113,20 +118,20 @@ a { color: black; }
 }
 .main-skills .card a[type=button] {
   background: yellow;
-  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.43);
+  /*box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.43);*/
   color: black;
-  padding: 5px 15px;
-  border-radius: 10px;
+  padding: 5px 30px;
   cursor: pointer;
   width: fit-content;
   font-size: medium;
   align-self: center;
   position: absolute;
   bottom: 15px;
+  border-radius: 10px;
 }
 .main-skills .card a[type=button]:hover{
-  background: black;
-  color: #fff;
+  background: #fff;
+  color: black;
 }
 
 .scroll_information {
@@ -145,13 +150,379 @@ a { color: black; }
 .scroll_information_img2 {
   background: url('../images/exams.png');
 }
-.scroll_information_img3 {
-  background: url('../images/report.png');
-}
 
-.scroll_information_img, .scroll_information_img2, .scroll_information_img3 {
+.scroll_information_img, .scroll_information_img2 {
   background-repeat: no-repeat;
   background-size: 100%;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
+}
+
+.main-exam{
+  margin-top:20px ;
+  text-transform: capitalize;
+  margin-left: 5%;
+  grid-row: 3;
+}
+.exam-box{
+  width: 100%;
+  padding: 10px 10px 30px 10px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+.exam-box ul{
+  list-style: none;
+  display: flex;
+}
+.exam-box ul li{
+  margin: 10px;
+  color: gray;
+  cursor: pointer;
+  position: relative;
+}
+
+.wrap_input {
+  position: relative;
+}
+
+.active input, .future input, .completed input, .cancelled input {
+  width: 100%;
+  background: 0 0;
+  color: black;
+  cursor: pointer;
+}
+
+.new_input_span {
+  position: absolute;
+  display: block;
+  width: 0;
+  left: 0;
+  pointer-events: none;
+  bottom: -2px;
+  height: 3px;
+  transition: width 0.3s ease;
+  background: #dadada88;
+}
+
+.exam-box .active_exam {
+  display: flex;
+  width: 0;
+  transition: width 1s ease;
+}
+.exam-box .future_exam, .exam-box .completed_exam, .exam-box .cancelled_exam {
+  width: 0;
+  transition: width 1s ease;
+}
+
+
+.box{
+  width: 90%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  background: #dadada88;
+  height: fit-content;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.17);
+}
+
+.box:hover {
+  color: #fff;
+  background: black;
+}
+
+.box:hover button {
+  background: #fff;
+  color: black;
+}
+
+.box h3 {
+  overflow: hidden;
+}
+
+.box p{
+  font-size: 12px;
+  margin-top: 5px;
+  word-wrap: break-word;
+  white-space: break-spaces;
+}
+.box button{
+  background: yellow;
+  color: black;
+  padding: 7px 10px;
+  border-radius: 10px;
+  margin-top: 3rem;
+  cursor: pointer;
+}
+
+.box i{
+  font-size: 7rem;
+  float: right;
+  margin: -20px 20px 20px 0;
+}
+.html{
+  color: rgb(25, 94, 54);
+}
+.css{
+  color: rgb(104, 179, 35);
+}
+.js{
+  color: rgb(28, 98, 179);
+}
+.exam_progress_cover {
+  width: 430px;
+  overflow: scroll;
+  white-space: nowrap;
+}
+
+
+
+/* Calender */
+
+.calendar-base {
+  width: 900px;
+  height: fit-content;
+  border-radius: 20px;
+  background-color: white;
+  position: relative;
+  z-index: -1;
+  color: black;
+}
+
+.year {
+  color: #E8E8E8;
+  font-size: 30px;
+  float: right;
+  position: relative;
+  right: 75px;
+  top: 20px;
+  font-weight: bold;
+}
+
+.triangle-left {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-right: 10px solid #E8E8E8;
+  border-bottom: 5px solid transparent;
+  float: right;
+  position: relative;
+  right: 90px;
+  top: 36px;
+}
+
+.triangle-right {
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-left: 10px solid #E8E8E8;
+  border-bottom: 5px solid transparent;
+  float: right;
+  position: relative;
+  left: 20px;
+  top: 36px;
+}
+.triangle-left:hover{
+  border-right: 10px solid#2ECC71;
+}
+.triangle-right:hover{
+  border-left: 10px solid#2ECC71;
+}
+
+.month-color {
+  color: #27AE60;
+}
+.month-hover:hover{
+  color:#27e879 !important;
+}
+
+.months {
+  color: #AAAAAA;
+  position: relative;
+  left: 350px;
+  top: 90px;
+  word-spacing: 10px;
+}
+
+.month-line {
+  border-color: #E8E8E8;
+  position: relative;
+  top: 85px;
+  width: 57%;
+  left: 178px;
+}
+
+.days {
+  color: #AAAAAA;
+  position: relative;
+  font-size: 18px;
+  left: 355px;
+  top: 80px;
+  word-spacing: 35px;
+  font-weight: 600;
+}
+
+.num-dates {
+  float: right;
+  position: relative;
+  top: 110px;
+  right: 50px;
+  z-index: 1;
+}
+
+.first-week {
+  margin-bottom: 25px;
+  word-spacing: 55px;
+}
+
+.second-week {
+  margin-bottom: 25px;
+  word-spacing: 53px;
+}
+
+.third-week {
+  margin-bottom: 25px;
+  word-spacing: 58px;
+}
+
+.fourth-week {
+  margin-bottom: 25px;
+  word-spacing: 58px;
+}
+
+.fifth-week {
+  margin-bottom: 25px;
+  word-spacing: 56px;
+}
+
+.sixth-week {
+  margin-bottom: 25px;
+  word-spacing: 55px;
+}
+
+.active-day {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: yellow;
+  position: relative;
+  top: 295px;
+  left: 661px;
+}
+
+.white {
+  color: white;
+}
+
+.event-indicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #2980B9;
+  position: relative;
+  top: 304px;
+  left: 695px;
+}
+
+.two {
+  position: relative;
+  top: 168px;
+  left: 535px;
+}
+
+.grey {
+  color: #AAAAB1;
+}
+
+.calendar-left {
+  width: 300px;
+  height: fit-content;
+  border-radius: 20px 0px 0px 20px;
+  background-color: yellow;
+  position: relative;
+  z-index: -1;
+  bottom: 86px;
+  color: white;
+}
+
+.hamburger {
+  position: relative;
+  top: 25px;
+  left: 25px;
+}
+
+.burger-line:hover, .hamburger:hover{
+  background-color:#27e879 !important;
+}
+
+.burger-line {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 15%;
+  margin-bottom: 3px;
+}
+
+.num-date {
+  font-size: 150px;
+  width: 50%;
+  margin: 0 auto;
+  font-weight: 700;
+}
+
+.day {
+  width: 50%;
+  margin: 0px auto;
+  font-size: 30px;
+  position: relative;
+  bottom: 60px;
+}
+
+.current-events {
+  font-size: 15px;
+  position: relative;
+  margin-left: 25px;
+  bottom: 30px;
+}
+
+.posts {
+  text-decoration: underline dotted;
+}
+.posts:hover{
+  color:yellow !important;
+}
+
+.create-event {
+  font-size: 18px;
+  position: relative;
+  margin-top: 30px;
+  margin-left: 25px;
+}
+
+.event-line {
+  width: 90%;
+}
+
+.add-event {
+  width: 20px;
+  height: 20px;
+  padding: 0px;
+  border-radius: 50%;
+  border: solid white 2px;
+  position: relative;
+  bottom: 42px;
+  left: 260px;
+}
+
+.add {
+  font-size: 25px;
+  position: relative;
+  left: 4px;
+  bottom: 10px;
+}
+
+.add:hover, .create-event:hover, .add-event:hover{
+  color:yellow !important;
+  border-color: yellow!important;
 }

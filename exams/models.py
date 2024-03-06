@@ -8,7 +8,7 @@ class ExamModel(BaseModel, models.Model):
     """
     exam_title = models.CharField(max_length=300)
     admin_id = models.CharField(max_length=300)
-    exam_description = models.CharField(max_length=3000, null=True)
+    exam_description = models.CharField(max_length=700, null=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     duration = models.IntegerField()  # Duration in minutes
