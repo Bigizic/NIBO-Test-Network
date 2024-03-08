@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/educator_dashboard.css' %}">
     <script src="{% static 'js/jquery.3.7.1.js' %}" type="text/JavaScript"></script>
     <script src="{% static 'js/educator_dashboard.js' %}" type="text/JavaScript"></script>
+    <script src="https://unpkg.com/htmx.org@1.5.0/dist/htmx.js"></script>
   </head>
   <body>
     <div class="container">
@@ -25,9 +26,8 @@
           <p>{{ educator.fullname }}</p>
         </div>
         <ul style="list-style-type: none;" class="first_ul">
-          <li><span class="ico one"></span><a href="{}">Dashboard</a></li>
-          <li><span class="ico twoo"></span><a href="{}">Exams</a></li>
-          <li><span class="ico three"></span><a href="{}">Students</a></li>
+          <li><span class="ico one"></span><a href="{% url 'educator_dashboard' educator_id=educator.id %}">Dashboard</a></li>
+          <li><span class="ico twoo" hx-get="{% url 'educator_exams' educator_id=educator.id %}"></span><a href="{% url 'educator_exams' educator_id=educator.id %}">Exams</a></li>          <li><span class="ico three"></span><a href="{% url 'educator_students' educator_id=educator.id %}">Students</a></li>
           <li><span class="ico four"></span><a href="{}">Notifications</a></li>
           <li><span class="ico five"></span><a href="{}">Records</a></li>
           <li><button class="menu-button">&#9776;</button></li>
@@ -40,6 +40,7 @@
       </section>
 
 
+      {% block content %}
       <section class="right">
         <h1 style="margin: 5% 0% 0% 5%; grid-row: 1;">Educator dashboard</h1>
         <div class="main-skills">
@@ -209,6 +210,7 @@
           </div>
         </div>
       </section>
+      {% endblock %}
     </div>
   </body>
 </html>

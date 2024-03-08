@@ -75,6 +75,7 @@ body{
   gap: 10%;
   margin-left: 22px;
 }
+.first_ul span, .second_ul span { cursor: pointer; }
 .ico {
   background-repeat: no-repeat !important;
   background-size: 100% !important;
