@@ -166,15 +166,18 @@ input {
 
 /*buttons*/
 .login_btn, .signup_btn {
-    border: 2px solid black;
-    background: #fff;
+    border: none;
+    background: black;
     padding: 20px 100px;
     margin-bottom: 10%;
     cursor: pointer;
+    color: #fff;
+    border-radius: 50px;
 }
 .login_btn:hover, .signup_btn:hover {
     background-position: right bottom;
     background: yellow;
+    color: black;
 }
 
 /* form wrapper */

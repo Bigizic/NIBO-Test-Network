@@ -1,5 +1,70 @@
 {% extends  'dashboard.html' %}
 
 {% block content %}
-<p style="color: red;">Exams</p>
+<div style="display: flex;" class="exams_container">
+<section style="margin: 2% 5%;" class="exams_left">
+    <div  style="position: relative;" class="exams_search_container">
+        <input placeholder="search by name or categories" style="background: #fff; border: none; box-shadow: 1px 2px 5px #00000057; border-radius: 20px; padding: 15px 320px 15px 30px; font-size: 16px;" type="search">
+        <button style="position: absolute; right: 140px; top: 10px; "></button>
+    </div>
+
+    <div style="margin-top: 40px;" class="exams_my_exams">
+        <h3>Create and manage your exams</h3>
+        <h3 style="margin-top: 100px;">My exams</h3>
+        <div style="box-shadow: 1px 2px 5px #00000057; border-radius: 10px; margin-top: 20px; padding: 20px 30px;">
+            <p style="font-size: small;">10 Exams Created</p>
+            <ul style="list-style-type: none;">
+                <li style="margin: 20px 0px;">Elementry Maths 20 questions Start-date: 12-02-2024 / End-date: 12-02-2024 <button>More Details</button></li>
+                <li style="margin: 20px 0px;">Social Science 30 Questions Start-date: 14-02-2024 / End-date: 14-02-2024 <button>More Details</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; width: max-content;" class="exams_create_an_exam">
+        <h3>Create Exam</h3>
+        <form style="box-shadow: 1px 2px 5px #00000057; border-radius: 10px; margin-top: 20px; padding: 20px 30px;">
+            <div style="padding: 0;" class="pp_cover">
+                {% if educator.profile_pic %}
+                <div><img src="{}"></div>
+                {% else %}
+                <div class="pp_cover_img"><p>{{ educator.pp }}</p></div>
+                {% endif %}
+              </div>
+              <div class="exams_wrap_input">
+                <input class="exams_new_input" minlength="6" type="text" name="title">
+                <span class="exams_new_input_span" data-placeholder="Title"></span>
+                </div>
+                <div class="exams_wrap_input">
+                <input class="exams_new_input" minlength="3" type="email" name="email">
+                <span class="exams_new_input_span" data-placeholder="Email"></span>
+                </div>
+                <div class="exams_wrap_input password-validate">
+                <input id="firstPassword" minlength="8" class="exams_new_input" type="password" name="signupPassword">
+                <span class="exams_new_input_span" data-placeholder="Password"></span>
+                </div>
+                <div class="exams_wrap_input password-validate">
+                <input id="secondPassword" minlength="8" class="exams_new_input" type="password">
+                <span class="exams_new_input_span" data-placeholder="Confirm Password"></span>
+                </div>
+                <span style="display: none; color: red; font-size: small;" id="p_status"></span>
+                <div class="wrap_login">
+                <div class="wrap_login_2">
+                <div class="wrap_login_3"></div>
+                {% csrf_token %}
+                <button class="signup_btn"> Create </button>
+                </div>
+                </div>
+        </form>
+    </div>
+</section>
+
+<section class="exams_right">
+    <div class="exams_upcoming">
+        <ul style="list-style-type: none;">
+            <li><span></span>Science <span></span></li>
+            <li><span></span>Agriculture <span></span></li>
+        </ul>
+    </div>
+</section>
+</div>
 {% endblock %}

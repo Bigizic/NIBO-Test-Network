@@ -1,3 +1,5 @@
+const URLS = 'http://localhost:8000'
+
 $(document).ready(function() {
     'use strict';
 
@@ -49,7 +51,6 @@ $(document).ready(function() {
   $('.scroll_information').css('gap',  `${gapWidth}px`);
 
   // left side bar toogle
-
   $(document).on('click', '.menu-button', function () {
     const closeBUtton = $('<span class="close-button">&times;</span>');
     $('.right').css('margin-left', '14%');
@@ -64,5 +65,21 @@ $(document).ready(function() {
     $('.first_ul a').css('display', 'none');
     $('.second_ul a').css('display', 'none');
     $(this).replaceWith(menuBUtton);
+  });
+
+  // left side icons click ajax requests
+  $('.first_ul li').click(function(e) {
+    const aLink = $(this).find('a').attr('href');
+    const aLinkURL = `${URLS}${aLink}`;
+    $.ajax({
+      url: aLinkURL,
+      method: 'GET',
+      success: function(response) {
+        window.location.replace(aLinkURL);
+    },
+      error: function(xhr, errmsg, err) { 
+        throw err; 
+      }
+    });
   });
 })

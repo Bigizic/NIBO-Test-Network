@@ -1,3 +1,5 @@
+const URLS = 'http://localhost:8000'
+
 $(document).ready(function() {
     'use strict';
     // Input Fields span slide
@@ -76,7 +78,7 @@ $(document).ready(function() {
         const encodedData = btoa(JSON.stringify(formData));
 
         $.ajax({
-            url: 'http://localhost:8000/educator/create_account/',
+            url: `${URLS}/educator/create_account/`,
             type: 'POST',
             data: { Basic: encodedData },
             headers: {
@@ -111,7 +113,7 @@ $(document).ready(function() {
         const encodedData = btoa(JSON.stringify(formData));
 
         $.ajax({
-            url: 'http://localhost:8000/educator/login/',
+            url: `${URLS}/educator/login/`,
             type: 'POST',
             data: { Basic: encodedData },
             headers: {

@@ -134,6 +134,12 @@ class EducatorView():
                 fetch_educator['id'] = EducatorModel().id_encryption(
                                        fetch_educator['id'])
                 fetch_educator['template_title'] = 'My Students'
+                if fetch_educator['fullname'].split(' '):
+                    fpp = fetch_educator['fullname'].split(' ')[1][0]
+                else:
+                    fpp = fetch_educator['fullname'][1]
+                fetch_educator['pp'] = '{}{}'.format(
+                                       fetch_educator['fullname'][0], fpp)
                 context = {
                     'educator': fetch_educator,
                 }
