@@ -5,6 +5,7 @@ db.sqlite3
 /Admin/__pycache__/*
 
 /base_model/__pycache__*
+/base_model/caching/__pycache__/*
 /exams/__pycache__/*
 /questions/__pycache__/*
 /students/__pycache__/*
