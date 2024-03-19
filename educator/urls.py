@@ -9,7 +9,7 @@ handler500 = error_500
 
 
 urlpatterns = [
-    path('', EducatorView().homepage, name="educator_homepage"),
+    path('', EducatorView().signin_signup, name="educator_signin_signup"),
 
     path('create_account/', EducatorView().create_account,
          name="create_educator_account"),

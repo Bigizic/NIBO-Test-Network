@@ -1,24 +1,23 @@
+from .utils import EducatorOperations as EXOP
+from .models import EducatorModel
+from base_model.models import BaseModel as BDM
+from base_model.caching import FIFO as CACHE
 import base64
 from datetime import datetime
 from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, JsonResponse
 from django.http import Http404
-import json
+from exams.models import ExamModel as EXMOD
+from exams.utils import ExamOperations as EXMODOP
 from io import BytesIO
-from .models import EducatorModel
-from base_model.models import BaseModel as BDM
-from students.models import StudentModel
+import json
 import pyotp
+import qrcode
+from students.models import StudentModel
 from typing import Union
 import urllib.parse
 import uuid
-from .utils import EducatorOperations as EXOP
-import qrcode
-
-
-NOTIFICATION = None
-GREEN = None
 
 
 def generate_qr_code(data: str):
@@ -52,37 +51,60 @@ class EducatorView():
             return True
         return False
 
-    def dashboard(self, request, educator_id: str) -> Union[render, redirect]:
-        """ Dashboard view for educator """
-        global NOTIFICATION
-        global GREEN
-        if request.method == 'GET':
-            status = self.check_logged_in_status(request)
+    def educator_exams(self, request) -> dict:
+        """fetch exams related to an educator
+        """
+        status = self.check_logged_in_status(request)
+        if status:
             tmp_educator_id = request.session.get('educator_id')
             if not tmp_educator_id:
-                NOTIFICATION = "Login again"
-                return redirect('educator_homepage')
+                return False
             decrypt_id = EducatorModel().id_decryption(tmp_educator_id)
-            fetch_educator = EXOP().get(uuid.UUID(decrypt_id))
-            if fetch_educator['id'] != decrypt_id and status:
-                raise Http404("educator not found")
-            if fetch_educator and status:
-                fetch_educator['fullname'] = fetch_educator['fullname'].title()
-                fetch_educator['id'] = EducatorModel().id_encryption(
-                                       fetch_educator['id'])
-                fetch_educator['template_title'] = 'Educator Dashboard'
-                if fetch_educator['fullname'].split(' '):
-                    fpp = fetch_educator['fullname'].split(' ')[1][0]
-                else:
-                    fpp = fetch_educator['fullname'][1]
-                fetch_educator['pp'] = '{}{}'.format(
-                                       fetch_educator['fullname'][0], fpp)
-                context = {
-                    'success': GREEN,
-                    'educator': fetch_educator,
-                }
-                return render(request, 'dashboard.html', context)
-            return redirect('educator_homepage')
+            fetch_exams = EXOP().get_exams(decrypt_id)
+            return fetch_exams
+
+    def educator_details(self, request) -> dict:
+        """ Returns a dictionary of the logged in examiner """
+        status = self.check_logged_in_status(request)
+        tmp_educator_id = request.session.get('educator_id')
+        if not tmp_educator_id:
+            return False
+        decrypt_id = EducatorModel().id_decryption(tmp_educator_id)
+        fetch_educator = EXOP().get(uuid.UUID(decrypt_id))
+        if fetch_educator['id'] != decrypt_id and status:
+            raise Http404("educator not found")
+        if fetch_educator and status:
+            fetch_educator['fullname'] = fetch_educator['fullname'].title()
+            fetch_educator['id'] = EducatorModel().id_encryption(
+                                    fetch_educator['id'])
+            fetch_educator['template_title'] = 'Educator Dashboard'
+            if fetch_educator['fullname'].split(' '):
+                fpp = fetch_educator['fullname'].split(' ')[1][0]
+            else:
+                fpp = fetch_educator['fullname'][1]
+            fetch_educator['pp'] = '{}{}'.format(
+                                    fetch_educator['fullname'][0], fpp)
+            fetch_educator['logout_records'] = ''
+            fetch_educator['login_records'] = ''
+            return fetch_educator
+        return False
+
+    def dashboard(self, request, educator_id: str) -> Union[render, redirect]:
+        """ Dashboard view for educator """
+        if self.check_logged_in_status(request):
+            tmp_educator_details = self.educator_details(request)
+            tmp_exams_details = self.educator_exams(request)
+            if not tmp_educator_details:
+                CACHE.put('error', 'login again')
+                return redirect('educator_signin_signup')
+            CACHE.get('redirect')
+            context = {
+                'educator': tmp_educator_details,
+                'exams': tmp_exams_details,
+                'redirect': CACHE.get('redirect'),
+            }
+            return render(request, 'dashboard.html', context)
+        return render(request, 'signupSignin.html', context)
 
     def dashboard_helper(self, request):
         """Dashboard helper incase a user eneter
@@ -95,26 +117,25 @@ class EducatorView():
                 'educator_id': educator_id
             })
             return redirect(url)
-        return redirect('educator_homepage')
+        return redirect('educator_signin_signup')
 
-    def homepage(self, request, message: str = None) -> render:
+    def signin_signup(self, request, message: str = None) -> render:
         """Displays educator web page """
-        global NOTIFICATION
-        if self.check_logged_in_status(request):
-            educator_id = request.session.get('educator_id')
-            url = reverse('educator_dashboard', kwargs={
-                'educator_id': educator_id
-            })
-            return redirect(url)
-        """su = pyotp.totp.TOTP(random_pyotp).provisioning_uri(
-                             name='educator',
-                             issuer_name='Nibo-Test-Network')
-        qr_image = generate_qr_code(su)"""
-        context = {
-            'error': NOTIFICATION,
-            'title': 'Welcome Educator',
-        }
-        return render(request, 'signupSignin.html', context)
+        if request.method == 'GET':
+            if self.check_logged_in_status(request):
+                educator_id = request.session.get('educator_id')
+                CACHE.put('redirect', "you're redirected")
+                url = reverse('educator_dashboard', kwargs={
+                    'educator_id': educator_id,
+                })
+                return redirect(url)
+            CACHE.get('redirect')
+            context = {
+                'error': CACHE.get('error'),
+                'title': 'Welcome Educator',
+                'rediret': CACHE.get('redirect'),
+            }
+            return render(request, 'signupSignin.html', context)
 
     def students(self, request, educator_id: str) -> render:
         """Contains information about students relating to an admin
@@ -124,26 +145,15 @@ class EducatorView():
                 tmp_educator_id = request.session.get('educator_id')
             if not tmp_educator_id:
                 NOTIFICATION = "Login again"
-                return redirect('educator_homepage')
-            decrypt_id = EducatorModel().id_decryption(tmp_educator_id)
-            fetch_educator = EXOP().get(uuid.UUID(decrypt_id))
-            if fetch_educator['id'] != decrypt_id and status:
-                raise Http404("educator not found")
-            if fetch_educator:
-                fetch_educator['fullname'] = fetch_educator['fullname'].title()
-                fetch_educator['id'] = EducatorModel().id_encryption(
-                                       fetch_educator['id'])
-                fetch_educator['template_title'] = 'My Students'
-                if fetch_educator['fullname'].split(' '):
-                    fpp = fetch_educator['fullname'].split(' ')[1][0]
-                else:
-                    fpp = fetch_educator['fullname'][1]
-                fetch_educator['pp'] = '{}{}'.format(
-                                       fetch_educator['fullname'][0], fpp)
-                context = {
-                    'educator': fetch_educator,
-                }
-                return render(request, 'students.html', context)
+                return redirect('educator_signin_signup')
+            educator_details = self.educator_details(request)
+            educator_details['template_title'] = 'My Students'
+            CACHE.get('redirect')
+            context = {
+                'educator': educator_details,
+                'rediret': CACHE.get('redirect'),
+            }
+            return render(request, 'students.html', context)
 
     def create_student(self, request, educator_id: str) -> HttpResponse:
         """ Creates a student account linked with logged in educator """
@@ -156,45 +166,101 @@ class EducatorView():
             if self.check_logged_in_status(request):
                 tmp_educator_id = request.session.get('educator_id')
             if not tmp_educator_id:
-                NOTIFICATION = "Login again"
-                return redirect('educator_homepage')
-            decrypt_id = EducatorModel().id_decryption(tmp_educator_id)
-            fetch_educator = EXOP().get(uuid.UUID(decrypt_id))
-            if fetch_educator['id'] != decrypt_id and status:
-                raise Http404("educator not found")
-            if fetch_educator:
-                fetch_educator['fullname'] = fetch_educator['fullname'].title()
-                fetch_educator['id'] = EducatorModel().id_encryption(
-                                       fetch_educator['id'])
-                fetch_educator['template_title'] = 'Manage Exams'
-                if fetch_educator['fullname'].split(' '):
-                    fpp = fetch_educator['fullname'].split(' ')[1][0]
-                else:
-                    fpp = fetch_educator['fullname'][1]
-                fetch_educator['pp'] = '{}{}'.format(
-                                       fetch_educator['fullname'][0], fpp)
-                context = {
-                    'educator': fetch_educator,
-                }
-                return render(request, 'exams.html', context)
+                CACHE.put('error', "Login again")
+                return redirect('educator_signin_signup')
+            educator_details = self.educator_details(request)
+            educator_exams = self.educator_exams(request)
+            educator_details['template_title'] = 'Manage exams'
+            CACHE.get('redirect')
+            context = {
+                'warning': CACHE.get('warning'),
+                'educator': educator_details,
+                'rediret': CACHE.get('redirect'),
+                'exams': educator_exams,
+            }
+            return render(request, 'exams.html', context)
 
     def create_exam(self, request, educator_id: str) -> HttpResponse:
         """Creteas an exam linked with logged in examine """
         if request.method == 'POST':
+            educator_details = self.educator_details(request)
+            if not educator_details:
+                CACHE.put('error', "Login again")
+                return redirect('educator_signin_signup')
+            educator_details['template_title'] = 'Manage exams'
+
             if self.check_logged_in_status(request):
-                return HttpResponse('<h1>Exams Created</h1>')
+                if request.body:
+                    url_decoded_data = urllib.parse.unquote(
+                                       request.body.decode().split('EX')[1])
+                    bytes_data = base64.b64decode(url_decoded_data)
+                    data = json.loads(bytes_data.decode())
+                    allowed_inputs = ['durations', 'no_of_students',
+                                      'no_of_questions', 'grade',
+                                      'time_limit']
+                    for k, v in data.items():
+                        if len(v) > 650:
+                            request.method = 'GET'
+                            CACHE.put('warning', 'inputs too long')
+                            return self.exams(request, educator_details['id'])
+                        if len(v) < 1:
+                            request.method = 'GET'
+                            CACHE.put('warning', 'Error missing fields')
+                            return self.exams(request, educator_details['id'])
+                        if k in allowed_inputs:
+                            data[k] = int(v)
+                    data['start_date'] = datetime.strptime(data['start_date'], "%Y-%m-%d")
+                    data['end_date'] = datetime.strptime(data['end_date'], '%Y-%m-%d')
+                    tmp_e_id = request.session.get('educator_id')
+                    new_data = {
+                        'exam_title': data['title'],
+                        'admin_id': EducatorModel().id_decryption(tmp_e_id),
+                        'exam_description': data['description'],
+                        'start_date': data['start_date'],
+                        'end_date': data['end_date'],
+                        'duration': data['duration'],
+                        'number_of_students': data['no_of_students'],
+                        'number_of_questions': data['no_of_questions'],
+                        'grade': data['grade'],
+                        'time_limit': data['time_limit'],
+                    }
+                    # check exam exists before creating
+                    exists = EXMODOP().exists(new_data)
+                    if exists:
+                        request.method = 'GET'
+                        CACHE.put('warning', 'Exam exists')
+                        return self.exams(request, educator_details['id'])
+                    else:
+                        new_exam = EXMOD.objects.create(**new_data)
+                        educator_details = self.educator_details(request)
+                        educator_exams = self.educator_exams(request)
+                        educator_details['template_title'] = 'Manage exams'
+                        CACHE.get('redirect')
+                        context = {
+                            'warning': CACHE.get('warning'),
+                            'educator': educator_details,
+                            'rediret': CACHE.get('redirect'),
+                            'exams': educator_exams,
+                        }
+                        return render(request, 'exams.html', context)
 
     def create_account(self, request):
         """ Handles account creation for admin """
-        global NOTIFICATION
-        global GREEN
-        if self.check_logged_in_status(request):
-            educator_id = request.session.get('educator_id')
-            url = reverse('educator_dashboard', kwargs={
-                'educator_id': educator_id
-            })
-            return redirect(url)
+        if request.method == 'GET':
+            if self.check_logged_in_status(request):
+                educator_id = request.session.get('educator_id')
+                url = reverse('educator_dashboard', kwargs={
+                    'educator_id': educator_id
+                })  
+                return redirect(url)
         if request.method == 'POST':
+            if self.check_logged_in_status(request):
+                educator_id = request.session.get('educator_id')
+                url = reverse('educator_dashboard', kwargs={
+                    'educator_id': educator_id
+                })
+                CACHE.put('redirect', "you're redirected")
+                return redirect(url)
             if request.body:
                 # data = json.loads(request.body.decode())
                 url_decoded_data = urllib.parse.unquote(
@@ -213,19 +279,19 @@ class EducatorView():
                         v = None
                     neweducator[k] = v
                 if not neweducator:
-                    NOTIFICATION = "Missing Fields"
-                    return redirect('educator_homepage')
+                    CACHE.put('error', "Missing Fields")
+                    return redirect('educator_signin_signup')
                 if None in neweducator.values():
-                    NOTIFICATION = "Missing Fields or input is too short"
-                    return redirect('educator_homepage')
+                    CACHE.put('error', "Missing Fields or input is too short")
+                    return redirect('educator_signin_signup')
                 neweducator['login_time'] = datetime.utcnow()
                 if all(len(x) > 500 for x in neweducator.values()):
-                    NOTIFICATION = "Data too long"
-                    return redirect('educator_homepage')
+                    CACHE.put('error', "Data too long")
+                    return redirect('educator_signin_signup')
                 # check if educator with such username exist
                 if EXOP().exist(neweducator['email']):
-                    NOTIFICATION = "Email has been used"
-                    return redirect('educator_homepage')
+                    CACHE.put('error', "Email has been used")
+                    return redirect('educator_signin_signup')
                 # create new educator
                 hashed_password = EXOP().setpassword(neweducator['password'])
                 educator = EducatorModel.objects.create(
@@ -248,20 +314,27 @@ class EducatorView():
                     'educator_id': str(educator_id)
                 })
                 return redirect(url)
-        NOTIFICATION = 'An error occured try again later'
-        return redirect('educator_homepage')
+        CACHE.put('error', 'An error occured try again later')
+        return redirect('educator_signin_signup')
 
     def login(self, request):
         """ Handles admin login """
-        global NOTIFICATION
-        global GREEN
-        if self.check_logged_in_status(request):
-            educator_id = request.session.get('educator_id')
-            url = reverse('educator_dashboard', kwargs={
-                'educator_id': educator_id
-            })
-            return redirect(url)
+        if request.method == 'GET':
+            if self.check_logged_in_status(request):
+                educator_id = request.session.get('educator_id')
+                url = reverse('educator_dashboard', kwargs={
+                    'educator_id': educator_id
+                })  
+                return redirect(url)
+
         if request.method == 'POST':
+            if self.check_logged_in_status(request):
+                educator_id = request.session.get('educator_id')
+                url = reverse('educator_dashboard', kwargs={
+                    'educator_id': educator_id
+                })  
+                return redirect(url)
+
             if request.body:
                 # data = json.loads(request.body.decode())
                 url_decoded_data = urllib.parse.unquote(
@@ -290,10 +363,12 @@ class EducatorView():
                         })
                         return redirect(url)
                     else:
-                        NOTIFICATION = 'Incorrect details'
-                        return redirect('educator_homepage')
-        NOTIFICATION = 'An error occured try again later'
-        return redirect('educator_homepage')
+                        CACHE.put('error', 'Incorrect details')
+                        return redirect('educator_signin_signup')
+                CACHE.put('error', 'No educator found')
+                return redirect('educator_signin_signup')
+        CACHE.put('error', 'An error occured try again later')
+        return redirect('educator_signin_signup')
 
     def logout(self, request):
         """Logs out a logged in educator """
@@ -308,9 +383,5 @@ class EducatorView():
                 EXOP().update_records(temp_fetch_educator, 'logout')
             request.session['educator_logged_in'] = False
             request.session['educator_id'] = None
-            global GREEN
-            global NOTIFICATION
-            GREEN = None
-            NOTIFICATION = None
-            return redirect('educator_homepage')
-        return redirect('educator_homepage')
+            return redirect('educator_signin_signup')
+        return redirect('educator_signin_signup')

@@ -4,7 +4,10 @@ educator database
 from .models import EducatorModel
 import bcrypt
 from datetime import datetime
-from typing import Union
+from dateutil.parser import isoparse
+from django.core.serializers import serialize
+import json
+from typing import Union, List
 import uuid
 
 
@@ -105,3 +108,24 @@ class EducatorOperations():
             - bool
         """
         return bcrypt.checkpw(user_password.encode(), db_password.encode())
+
+    def get_exams(self, educator_id: str) -> List[dict]:
+        """ Fetch exams based on decrypted educator id
+        """
+        # Exam model declaration
+        from exams.models import ExamModel
+
+        exam_obj = ExamModel.objects.filter(admin_id=educator_id)
+        someData = serialize('json', exam_obj)
+        someData = json.loads(someData)
+        new_list = []
+        for items in someData:
+            ids = items['pk']
+            fields = items['fields']
+            fields['id'] = ids
+            fields['start_date'] = isoparse(fields['start_date'])
+            fields['end_date'] = isoparse(fields['end_date'])
+            fields['educator_name'] = self.get(fields['admin_id'])['fullname']
+            new_list.append({k: v for k, v in fields.items()})
+
+        return new_list if exam_obj else None

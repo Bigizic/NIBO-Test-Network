@@ -15,6 +15,12 @@
     <!--<script src="https://unpkg.com/htmx.org@1.5.0/dist/htmx.js"></script>-->
   </head>
   <body>
+        <!-- Warning -->
+        <p class="warning" style="display: none;"></p>
+        <!-- End warning -->
+        {% if warning %}
+        <p class="warningg">{{ warning }}</p>
+        {% endif %}
     <div class="container">
       <section class="left">
         <div class="pp_cover">
@@ -25,9 +31,12 @@
           {% endif %}
           <h5>{{ educator.fullname }}</h5>
         </div>
+        {% if redirect %}
+        <p class="redirect">{{ redirect }}</p>
+        {% endif %}
         <ul style="list-style-type: none;" class="first_ul">
           <li><span class="ico one"></span><a href="{% url 'educator_dashboard' educator_id=educator.id %}">Dashboard</a></li>
-          <li><span class="ico twoo"></span><a href="{% url 'educator_exams' educator_id=educator.id %}">Exams</a></li>
+          <li><span class="ico twoo"></span><a id="a_educator_id" href="{% url 'educator_exams' educator_id=educator.id %}">Exams</a></li>
           <li><span class="ico three"></span><a href="{% url 'educator_students' educator_id=educator.id %}">Students</a></li>
           <li><span class="ico four"></span><a href="{}">Notifications</a></li>
           <li><span class="ico five"></span><a href="{}">Records</a></li>
@@ -43,12 +52,21 @@
 
       {% block content %}
       <section class="right">
+        <header style="background: #ffff7f; width: 100%; position: absolute; padding: 110px; z-index: -1;"></header>
         <h1 style="margin: 5% 0% 0% 5%; grid-row: 1;">Educator dashboard</h1>
         <div class="main-skills">
           <div class="card">
             <div class="scroll_information">
               <div class="scroll_information_words">
-                <h3>10</h3>
+                {% if exams %}
+                  {% for items in exams %}
+                    {% if forloop.last %}
+                      <h3>{{ forloop.counter }}</h3>
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  <h3>0</h3>
+                {% endif %}
                 <p>Exams Created</p>
               </div>
               <div class="scroll_information_img2"></div>
@@ -69,7 +87,7 @@
         </div>
 
 
-        <div style="grid-row: 2; z-index: 1; margin: 3% 0% 0% -60%;" class="calendar">
+        <div style="grid-row: 2; z-index: 1; margin: 3% 0% 0% -40%;" class="calendar">
           <div class="c-container">
             <div class="calendar_background">
             <div class="calendar-base">

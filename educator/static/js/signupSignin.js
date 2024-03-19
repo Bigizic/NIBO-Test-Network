@@ -120,7 +120,7 @@ $(document).ready(function() {
                 'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
             },
             success: function(response) {
-                window.location.replace(window.location.href);
+                return window.location.replace(`${URLS}/educator/login/`);
             },
             error: function(xhr, errmsg, err) {
                 console.log(err);
