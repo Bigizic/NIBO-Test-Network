@@ -43,7 +43,9 @@ class EducatorView():
         pass
 
     def check_logged_in_status(self, request) -> bool:
-        """Returns status of request.session.educator_logged_in
+        """Returns
+            - status of request.session.educator_logged_in
+            - redirect to login page with Cache key 'error'
         """
         status = request.session.get('educator_logged_in')
         e_id = request.session.get('educator_id')
@@ -51,7 +53,16 @@ class EducatorView():
             return True
         return False
 
-    def educator_exams(self, request) -> dict:
+    def teardown(self, request) -> render:
+        """Redirects to signInSignUp page if 
+        educator is not logged in
+        """
+        if not self.check_logged_in_status(request):
+            CACHE.put('error', "Login again")
+            return redirect('educator_signin_signup')
+        pass
+
+    def educator_exams(self, request) -> Union[bool, dict]:
         """fetch exams related to an educator
         """
         status = self.check_logged_in_status(request)
@@ -63,7 +74,7 @@ class EducatorView():
             fetch_exams = EXOP().get_exams(decrypt_id)
             return fetch_exams
 
-    def educator_details(self, request) -> dict:
+    def educator_details(self, request) -> Union[bool, dict]:
         """ Returns a dictionary of the logged in examiner """
         status = self.check_logged_in_status(request)
         tmp_educator_id = request.session.get('educator_id')
@@ -94,9 +105,6 @@ class EducatorView():
         if self.check_logged_in_status(request):
             tmp_educator_details = self.educator_details(request)
             tmp_exams_details = self.educator_exams(request)
-            if not tmp_educator_details:
-                CACHE.put('error', 'login again')
-                return redirect('educator_signin_signup')
             CACHE.get('redirect')
             context = {
                 'educator': tmp_educator_details,
@@ -104,7 +112,7 @@ class EducatorView():
                 'redirect': CACHE.get('redirect'),
             }
             return render(request, 'dashboard.html', context)
-        return render(request, 'signupSignin.html', context)
+        return self.teardown(request)
 
     def dashboard_helper(self, request):
         """Dashboard helper incase a user eneter
@@ -117,7 +125,7 @@ class EducatorView():
                 'educator_id': educator_id
             })
             return redirect(url)
-        return redirect('educator_signin_signup')
+        return self.teardown(request)
 
     def signin_signup(self, request, message: str = None) -> render:
         """Displays educator web page """
@@ -142,18 +150,15 @@ class EducatorView():
         """
         if request.method == 'GET':
             if self.check_logged_in_status(request):
-                tmp_educator_id = request.session.get('educator_id')
-            if not tmp_educator_id:
-                NOTIFICATION = "Login again"
-                return redirect('educator_signin_signup')
-            educator_details = self.educator_details(request)
-            educator_details['template_title'] = 'My Students'
-            CACHE.get('redirect')
-            context = {
-                'educator': educator_details,
-                'rediret': CACHE.get('redirect'),
-            }
-            return render(request, 'students.html', context)
+                educator_details = self.educator_details(request)
+                educator_details['template_title'] = 'My Students'
+                CACHE.get('redirect')
+                context = {
+                    'educator': educator_details,
+                    'rediret': CACHE.get('redirect'),
+                }
+                return render(request, 'students.html', context)
+            return self.teardown(request)
 
     def create_student(self, request, educator_id: str) -> HttpResponse:
         """ Creates a student account linked with logged in educator """
@@ -164,21 +169,18 @@ class EducatorView():
         """
         if request.method == 'GET':
             if self.check_logged_in_status(request):
-                tmp_educator_id = request.session.get('educator_id')
-            if not tmp_educator_id:
-                CACHE.put('error', "Login again")
-                return redirect('educator_signin_signup')
-            educator_details = self.educator_details(request)
-            educator_exams = self.educator_exams(request)
-            educator_details['template_title'] = 'Manage exams'
-            CACHE.get('redirect')
-            context = {
-                'warning': CACHE.get('warning'),
-                'educator': educator_details,
-                'rediret': CACHE.get('redirect'),
-                'exams': educator_exams,
-            }
-            return render(request, 'exams.html', context)
+                educator_details = self.educator_details(request)
+                educator_exams = self.educator_exams(request)
+                educator_details['template_title'] = 'Manage exams'
+                CACHE.get('redirect')
+                context = {
+                    'warning': CACHE.get('warning'),
+                    'educator': educator_details,
+                    'rediret': CACHE.get('redirect'),
+                    'exams': educator_exams,
+                }
+                return render(request, 'exams.html', context)
+            return self.teardown(request)
 
     def create_exam(self, request, educator_id: str) -> HttpResponse:
         """Creteas an exam linked with logged in examine """
@@ -243,6 +245,7 @@ class EducatorView():
                             'exams': educator_exams,
                         }
                         return render(request, 'exams.html', context)
+            return self.teardown(request)
 
     def create_account(self, request):
         """ Handles account creation for admin """
@@ -332,7 +335,7 @@ class EducatorView():
                 educator_id = request.session.get('educator_id')
                 url = reverse('educator_dashboard', kwargs={
                     'educator_id': educator_id
-                })  
+                })
                 return redirect(url)
 
             if request.body:
