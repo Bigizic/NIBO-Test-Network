@@ -54,7 +54,7 @@ class EducatorView():
         return False
 
     def teardown(self, request) -> render:
-        """Redirects to signInSignUp page if 
+        """Redirects to signInSignUp page if
         educator is not logged in
         """
         if not self.check_logged_in_status(request):
@@ -211,8 +211,10 @@ class EducatorView():
                             return self.exams(request, educator_details['id'])
                         if k in allowed_inputs:
                             data[k] = int(v)
-                    data['start_date'] = datetime.strptime(data['start_date'], "%Y-%m-%d")
-                    data['end_date'] = datetime.strptime(data['end_date'], '%Y-%m-%d')
+                    data['start_date'] = datetime.strptime(
+                                         data['start_date'], "%Y-%m-%d")
+                    data['end_date'] = datetime.strptime(
+                                        data['end_date'], '%Y-%m-%d')
                     tmp_e_id = request.session.get('educator_id')
                     new_data = {
                         'exam_title': data['title'],
@@ -254,7 +256,7 @@ class EducatorView():
                 educator_id = request.session.get('educator_id')
                 url = reverse('educator_dashboard', kwargs={
                     'educator_id': educator_id
-                })  
+                })
                 return redirect(url)
         if request.method == 'POST':
             if self.check_logged_in_status(request):
@@ -327,7 +329,7 @@ class EducatorView():
                 educator_id = request.session.get('educator_id')
                 url = reverse('educator_dashboard', kwargs={
                     'educator_id': educator_id
-                })  
+                })
                 return redirect(url)
 
         if request.method == 'POST':
