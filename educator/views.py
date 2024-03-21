@@ -72,7 +72,16 @@ class EducatorView():
                 return False
             decrypt_id = EducatorModel().id_decryption(tmp_educator_id)
             fetch_exams = EXOP().get_exams(decrypt_id)
-            return fetch_exams
+            if fetch_exams:
+                if isinstance(fetch_exams[-1], int):
+                    upcoming_exams_counter = fetch_exams[-1]
+                fetch_exams = fetch_exams[:-1]
+                new_fetch_exams = {
+                    'exams': fetch_exams,
+                    'upec': upcoming_exams_counter,
+                }
+                return new_fetch_exams
+            return None
 
     def educator_details(self, request) -> Union[bool, dict]:
         """ Returns a dictionary of the logged in examiner """
@@ -104,11 +113,11 @@ class EducatorView():
         """ Dashboard view for educator """
         if self.check_logged_in_status(request):
             tmp_educator_details = self.educator_details(request)
-            tmp_exams_details = self.educator_exams(request)
+            tmp_exam_d = self.educator_exams(request)
             CACHE.get('redirect')
             context = {
                 'educator': tmp_educator_details,
-                'exams': tmp_exams_details,
+                'exams': tmp_exam_d['exams'] if tmp_exam_d else None,
                 'redirect': CACHE.get('redirect'),
             }
             return render(request, 'dashboard.html', context)
@@ -170,14 +179,15 @@ class EducatorView():
         if request.method == 'GET':
             if self.check_logged_in_status(request):
                 educator_details = self.educator_details(request)
-                educator_exams = self.educator_exams(request)
+                edu_exams = self.educator_exams(request)
                 educator_details['template_title'] = 'Manage exams'
                 CACHE.get('redirect')
                 context = {
                     'warning': CACHE.get('warning'),
                     'educator': educator_details,
                     'rediret': CACHE.get('redirect'),
-                    'exams': educator_exams,
+                    'exams': edu_exams['exams'] if edu_exams else None,
+                    'upcoming_counter': edu_exams['upec'] if edu_exams else None,
                 }
                 return render(request, 'exams.html', context)
             return self.teardown(request)
@@ -244,7 +254,8 @@ class EducatorView():
                             'warning': CACHE.get('warning'),
                             'educator': educator_details,
                             'rediret': CACHE.get('redirect'),
-                            'exams': educator_exams,
+                            'exams': educator_exams['exams'],
+                            'upcoming_counter': educator_exams['upec'],
                         }
                         return render(request, 'exams.html', context)
             return self.teardown(request)

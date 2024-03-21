@@ -73,23 +73,26 @@ $(document).ready(function() {
   // get width for information box
   const scrollInformationWidth = $('.scroll_information').width();
   const scollInformationWordWidth = $('.scroll_information_words').width();
-  const gapWidth = (scrollInformationWidth - scollInformationWordWidth) / 1.5;
+  const gapWidth = (scrollInformationWidth - scollInformationWordWidth) / 2;
   $('.scroll_information').css('gap',  `${gapWidth}px`);
 
   // left side bar toogle
   $(document).on('click', '.menu-button', function () {
     const closeBUtton = $('<span class="close-button">&times;</span>');
-    $('.right, .exams_container').css('margin-left', '14%');
+    $('.right, .exams_container').css('margin-left', '12%');
+    $(this).animate({ width: "100%"}, 500, 'linear');
+    $(this).css('text-align', 'end');
     $('.first_ul a').css('display', 'block');
-    $('.second_ul a').css('display', 'block');
     $(this).replaceWith(closeBUtton);
   });
+
 
   $(document).on('click', '.close-button', function () {
     const menuBUtton = $('<button class="menu-button">&#9776;</button>');
     $('.right, .exams_container').css('margin-left', '5%');
+    $(this).animate({ width: "100%"}, 500, 'linear');
+    $(this).css('text-align', 'start');
     $('.first_ul a').css('display', 'none');
-    $('.second_ul a').css('display', 'none');
     $(this).replaceWith(menuBUtton);
   });
 
@@ -113,16 +116,24 @@ $(document).ready(function() {
 
   // exams.js
   function warningSlides(text) {
-    $('.warning').text(text);
-    $('.warning').slideDown();
-    setTimeout(function () {
-      $('.warning').slideUp();
-    }, 2000);
+    const className = Object.keys(text);
+    const classValue = Object.values(text);
+    $(`.${className}`).text(classValue);
+    $(`.${className}`).slideDown();
+    setNotificationTimeout(className);
+    function setNotificationTimeout(className) {
+      setTimeout(function () {
+        $(`.${className}`).slideUp();
+      }, 2000);
+    }
   }
+
   $('.input_number, .custom_option').bind('input propertychange', function() {
     let inputValue = $(this).val();
     if (/\D/.test(inputValue)) {
-      warningSlides('Input must be numbers only');
+      warningSlides({
+        warning: 'Input must be numbers only',
+      });
       inputValue = inputValue.replace(/\D/g, '');  // remove user entered input that doesn't match digits
       $(this).val(inputValue);
     } else { $('.warning').hide(); }
@@ -219,18 +230,23 @@ $(document).ready(function() {
       time_limit: allInputsDict.time_limit,
     };
     // check inputs
-    if (formData.duration.length <= 1 || formData.duration[0] == '0') {
-      warningSlides('Duration is too short, lets try a time greater than 9 mins');
-      return null;
-    }
     const formDataKeys = Object.keys(formData);
     for (let keys of formDataKeys) {
       if (keys !== 'duration') {
         if (formData[keys].length <= 0) {
-          warningSlides('You have empty fields');
+          warningSlides({
+            warning: 'You have empty fields',
+          });
           return null;
         }
       }
+    }
+
+    if (formData.duration.length <= 1 || formData.duration[0] == '0') {
+      warningSlides({
+        warning: 'Duration is too short, lets try a time greater than 9 mins',
+      });
+      return null;
     }
     return formData;
   }
@@ -260,9 +276,17 @@ $(document).ready(function() {
 
   // add questions
   $('.add_questions').click(function(e) {
-    $('#create_exam_form').css('display', 'none');
-    $('#create_questions_form').css('display', 'flex');
-    $('#create_questions_form').animate({ width: "90%" }, 500, 'linear');
+    const formData = fetchFormInputs();
+
+    if (formData) {
+      $('#create_exam_form').css('display', 'none');
+      $('#create_questions_form').css('display', 'flex');
+      $('#create_questions_form').animate({ width: "90%" }, 500, 'linear');
+    } else {
+      warningSlides({
+        warning: 'you have incomplete fields',
+      });
+    }
   })
 
   // Options custom field
@@ -275,8 +299,59 @@ $(document).ready(function() {
 
   $('.custom_option').bind('input propertychange', function(e) {
     if ($(this).val() < 5 && /\d/.test($(this).val())) {
-      $('.warning').text('Custom time limit must be greater than 5 mins');
-      warningSlides();
+      warningSlides({
+        warning: 'Custom time limit must be greater than 5 mins',
+      });
     }
   })
+})
+
+/**
+ * This section is meant to handle dynamic questions rendering in client side plus
+ * other dynamic exams rendering liike when a user clicks on more details for an exam
+ * dashboard calender rendering
+ */
+
+$(document).ready(function() {
+  'use strict';
+
+  // dashboard calendar rendering
+  function dashboardCalendar() {
+    const currentDate = new Date();
+    console.log(currentDate)
+    const dateString = currentDate.toDateString().split(' ');
+    const month = dateString[1];
+    const alphaDay = dateString[0];
+    $('.year').text(currentDate.getFullYear());
+    const daysOfTheWeek = {
+      MON: 'MONDAY',
+      TUE: 'TUESDAY',
+      WED: 'WEDNESDAY',
+      THU: 'THURSDAY',
+      FRI: 'FRIDAY',
+      SAT: 'SATURDAY',
+      SUN: 'SUNDAY',
+    };
+    if (daysOfTheWeek.hasOwnProperty(alphaDay.toUpperCase())) {
+      $('.day').text(daysOfTheWeek[alphaDay.toUpperCase()]).css('font-weight', '600');
+    };
+
+    if (currentDate.getDay() < 10) {
+      $('.num-date').text(`0${currentDate.getDay()}`);
+    }
+
+    $('.days_li').each(function() {
+      if ($(this).text().trim() === alphaDay.toUpperCase()) {
+        $(this).css('color', 'black').css('font-weight', '600');
+      }
+    })
+
+    $('.month-hover').each(function() {
+      if ($(this).text().trim() === month) {
+        $(this).css('color', 'black').css('font-weight', '600');
+      }
+    })
+  }
+  dashboardCalendar();
+
 })

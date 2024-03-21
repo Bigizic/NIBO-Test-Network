@@ -6,9 +6,9 @@
         <div class="loader-container">
             <div class="loader"></div>
     </div>
-    <header style="background: #ffff7f; width: 100%; position: absolute; padding: 110px; z-index: -1;"></header>
+    <header style="background: #191919; width: 100%; position: absolute; padding: 110px; z-index: -1;"></header>
     <section style="margin: 5%;" class="exams_left">
-    <h2>Create and manage your exams</h2>
+    <h2 style="color: #fff;">Create and manage your exams</h2>
 
     <div  style="position: relative; margin-top: 30px; width: fit-content" class="exams_search_container">
         <input placeholder="lookup exam by name" style="background: #fff; border: none; box-shadow: 1px 2px 5px #00000057; border-radius: 20px; padding: 15px 320px 15px 30px; font-size: 16px;" type="search">
@@ -66,22 +66,24 @@
         </div>
     </div>
 
-    <div style="margin-top: -20px; width: fit-content;" class="exams_upcoming">
-        <h3 style="margin-top: 100px;">Upcoming exams</h3>
-        <div style="box-shadow: 1px 2px 5px #00000057; border-radius: 10px; margin-top: 20px; padding: 20px 30px;">
-            {% if exams %}
-            <p style="font-size: small;"><strong>2</strong> Incoming</p>
-            <ul style="list-style-type: none;">
-                <li><span>1</span>Elementry Maths 20 questions Start-date: 12-02-2024 / End-date: 12-02-2024 <button>More Details</button></li>
-                <li><span>2</span>Social Science 30 Questions Start-date: 14-02-2024 / End-date: 14-02-2024 <button>More Details</button></li>
-            </ul>
-            {% else %}
-            <ul style="list-style-type: none;">
-                <li>You don't have any exam yet</li>
-            </ul>
-            {% endif %}
+    {% if exams %}
+    {% if upcoming_counter > 0 %}
+        <div style="margin-top: -20px; width: fit-content;" class="exams_upcoming">
+            <h3 style="margin-top: 100px;">Upcoming exams</h3>
+                    <div style="box-shadow: 1px 2px 5px #00000057; border-radius: 10px; margin-top: 20px; padding: 20px 30px;">
+                        <p style="font-size: small;"><strong>{{ upcoming_counter }}</strong> Upcoming</p>
+                        {% for items in exams %}
+                            {% if items.current_date %}
+                                <ul style="list-style-type: none;">
+                                    <li><span>{{ forloop.counter }}</span>{{ items.exam_title }} {{ items.number_of_questions }} questions Start-date: {{ items.start_date|date:"Y-m-d" }} / End-date: {{ items.end_date|date:"Y-m-d" }} <button>More Details</button></li>
+                                </ul>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
         </div>
-    </div>
+    {% endif %}
+    {% endif %}
+
     </div>
 </section>
 </div>

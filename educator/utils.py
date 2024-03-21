@@ -119,6 +119,7 @@ class EducatorOperations():
         someData = serialize('json', exam_obj)
         someData = json.loads(someData)
         new_list = []
+        upcoming_exam_count = 0
         for items in someData:
             ids = items['pk']
             fields = items['fields']
@@ -126,6 +127,11 @@ class EducatorOperations():
             fields['start_date'] = isoparse(fields['start_date'])
             fields['end_date'] = isoparse(fields['end_date'])
             fields['educator_name'] = self.get(fields['admin_id'])['fullname']
+            current_date = datetime.now(fields['start_date'].tzinfo).date()
+            if fields['start_date'].date() >= current_date:
+                fields['current_date'] = current_date
+                upcoming_exam_count += 1
             new_list.append({k: v for k, v in fields.items()})
+        new_list.append(upcoming_exam_count)
 
         return new_list if exam_obj else None

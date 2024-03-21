@@ -35,27 +35,26 @@
         <p class="redirect">{{ redirect }}</p>
         {% endif %}
         <ul style="list-style-type: none;" class="first_ul">
+          <li><button class="menu-button">&#9776;</button></li>
           <li><span class="ico one"></span><a href="{% url 'educator_dashboard' educator_id=educator.id %}">Dashboard</a></li>
+          <li><span class="ico three"></span><a style="margin-left: -3px;" href="{% url 'educator_students' educator_id=educator.id %}">Students</a></li>
+
           <li><span class="ico twoo"></span><a id="a_educator_id" href="{% url 'educator_exams' educator_id=educator.id %}">Exams</a></li>
-          <li><span class="ico three"></span><a href="{% url 'educator_students' educator_id=educator.id %}">Students</a></li>
           <li><span class="ico four"></span><a href="{}">Notifications</a></li>
           <li><span class="ico five"></span><a href="{}">Records</a></li>
-          <li><button class="menu-button">&#9776;</button></li>
-        </ul>
-
-        <ul style="list-style-type: none;" class="second_ul">
           <li><span class="ico six"></span><a href="{}">Settings</a></li>
           <li><span class="ico seven"></span><a href="{% url 'educator_logout' %}">Logout</a></li>
+        </ul>
         </ul>
       </section>
 
 
       {% block content %}
       <section class="right">
-        <header style="background: #ffff7f; width: 100%; position: absolute; padding: 110px; z-index: -1;"></header>
-        <h1 style="margin: 5% 0% 0% 5%; grid-row: 1;">Educator dashboard</h1>
+        <header style="background: #191919; width: 100%; position: absolute; padding: 110px; z-index: -1;"></header>
+        <h1 style="margin: 5% 0% 0% 5%; grid-row: 1; color: #fff;">Educator dashboard</h1>
         <div class="main-skills">
-          <div class="card">
+          <div style="background: yellow;" class="card">
             <div class="scroll_information">
               <div class="scroll_information_words">
                 {% if exams %}
@@ -71,10 +70,10 @@
               </div>
               <div class="scroll_information_img2"></div>
             </div>
-            <a type="button" href="{% url 'educator_exams' educator_id=educator.id %}">New exam</a>
+            <a style="background: black; color: #fff;" type="button" href="{% url 'educator_exams' educator_id=educator.id %}">New exam</a>
           </div>
 
-          <div class="card">
+          <div style="background: black; color: #fff;" class="card">
             <div class="scroll_information">
               <div class="scroll_information_words">
                 <h3>200</h3>
@@ -91,14 +90,12 @@
           <div class="c-container">
             <div class="calendar_background">
             <div class="calendar-base">
-              <div class="year">2017</div>
-              <div class="triangle-left"></div>
-              <div class="triangle-right"></div>
+              <div class="year"></div>
               <div class="months">
                 <span class="month-hover">Jan</span>
                 <span class="month-hover">Feb</span> 
                 <span class="month-hover">Mar</span> 
-                <strong class="month-color">Apr</strong>
+                <span class="month-hover">Apr</span>
                 <span class="month-hover">May</span>
                 <span class="month-hover">Jun</span>
                 <span class="month-hover">July</span> 
@@ -109,19 +106,89 @@
                 <span class="month-hover">Dec</span>
               </div>
           
-              <div class="days">SUN MON TUE WED THU FRI SAT</div>
+              <div class="days">
+                <ul style="list-style-type: none; display: block ruby;">
+                  <li class="days_li">SUN</li>
+                  <li class="days_li">MON</li>
+                  <li class="days_li">TUE</li>
+                  <li class="days_li">WED</li>
+                  <li class="days_li">THU</li>
+                  <li class="days_li">FRI</li>
+                  <li class="days_li">SAT</li>
+                </ul>
+                </div>
               <div class="num-dates">
-          
-                <div class="first-week"><span class="grey">26 27 28 29 30 31</span> 01</div>
-                <div class="second-week">02 03 04 05 06 07 08</div>
-                <div class="third-week"> 09 10 11 12 13 14 15</div>
-                <div class="fourth-week"> 16 17 18 19 20 21 22</div>
-                <div class="fifth-week"> 23 24 25 26 <strong class="white">27</strong> 28 29</div>
-                <div class="sixth-week"> 30 <span class="grey">01 02 03 04 05 06</span></div>
+                <div class="first-week">
+                    <ul style="list-style-type: none; display: block ruby;">
+                      <span class="grey">
+                      <li>26</li>
+                      <li>27</li>
+                      <li>28</li>
+                      <li>29</li>
+                      <li>30</li>
+                      <li>31</li></span>
+                      <li>01</li>
+                  </ul>
+                </div>
+                <div class="second-week">  
+                  <ul style="list-style-type: none; display: block ruby;">
+                    <li>02</li>
+                    <li>03</li>
+                    <li>04</li>
+                    <li>05</li>
+                    <li>06</li>
+                    <li>07</li>
+                    <li>08</li>
+                </ul>
+                </div>
+                <div class="third-week">
+                  <ul style="list-style-type: none; display: block ruby;">
+                    <li>09</li>
+                    <li>10</li>
+                    <li>11</li>
+                    <li>12</li>
+                    <li>13</li>
+                    <li>14</li>
+                    <li>15</li>
+                </ul>
+                </div>
+                <div class="fourth-week">
+                  <ul style="list-style-type: none; display: block ruby;">
+                    <li>16</li>
+                    <li>17</li>
+                    <li>18</li>
+                    <li>19</li>
+                    <li>20</li>
+                    <li>21</li>
+                    <li>22</li>
+                </ul>
+                </div>
+                <div class="fifth-week">
+                  <ul style="list-style-type: none; display: block ruby;">
+                    <li>23</li>
+                    <li>24</li>
+                    <li>25</li>
+                    <li>26</li>
+                    <li>27</li>
+                    <li>28</li>
+                    <li>29</li>
+                </ul>
+                </div>
+                <div class="sixth-week">
+                  <ul style="list-style-type: none; display: block ruby;">
+                    <li>30</li>
+                    <span class="grey">
+                    <li>01</li>
+                    <li>02</li>
+                    <li>03</li>
+                    <li>04</li>
+                    <li>05</li>
+                    <li>06</li></span>
+                </ul>
               </div>
-              <div class="active-day"></div>
           
             </div>
+          </div>
           </div>
             <div class="calendar-left">
           
@@ -130,7 +197,7 @@
               <div class="current-events">Current Events
                 <br/>
                 <ul>
-                  <li style="font-size: small; margin-left: 10%;">Day 09 Daily CSS Image</li>
+                  <li style="font-size: 10px; margin-left: 10%;">Day 09 Daily CSS Image</li>
                 </ul>
               </div>
             </div>
@@ -143,7 +210,7 @@
           <div class="exam-box">
             <ul>
               <li class="active"><div class="wrap_input"> <input value="In progress" type="button">
-              <li class="future"><div class="wrap_input"> <input value="Incoming" type="button">
+              <li class="future"><div class="wrap_input"> <input value="Upcoming" type="button">
               <li class="completed"><div class="wrap_input"> <input value="Finished" type="button">
               <li class="cancelled"><div class="wrap_input"> <input value="Cancelled" type="button">
             </ul>

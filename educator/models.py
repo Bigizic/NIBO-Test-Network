@@ -7,7 +7,7 @@ import uuid
 class EducatorModel(BaseModel, models.Model):
     """ Educator database
     """
-    fullname = models.CharField(max_length=500)
+    fullname = models.CharField(max_length=150)
     email = models.CharField(max_length=500)
     password = models.CharField(max_length=500)
     two_factor = models.CharField(max_length=300, default=None, null=True)

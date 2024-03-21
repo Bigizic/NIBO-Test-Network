@@ -27,6 +27,7 @@ body{
   position: relative;
   display: flex;
   flex-direction: column;
+  font-size: 13px;
 }
 .pp_cover {
   padding: 5px 0px 5px 15px;
@@ -129,7 +130,8 @@ a { color: black; }
   font-size: 10px;
 }
 .main-skills .card a[type=button] {
-  background: #ffff7f;
+  /*background: #ffff7f;*/
+  background: yellow;
   /*box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.43);*/
   color: black;
   padding: 5px 30px;
@@ -142,8 +144,8 @@ a { color: black; }
   border-radius: 10px;
 }
 .main-skills .card a[type=button]:hover{
-  background: #fff;
-  color: black;
+  background: #fff !important;
+  color: black !important;
 }
 
 .scroll_information {
@@ -157,7 +159,7 @@ a { color: black; }
 }
 
 .scroll_information_img {
-  background: url('../images/students.png');
+  background: url('../images/dark/students_dark.png');
 }
 .scroll_information_img2 {
   background: url('../images/exams.png');
@@ -168,6 +170,7 @@ a { color: black; }
   background-size: 100%;
   width: 40px;
   height: 40px;
+  margin-top: 10px;
 }
 
 .main-exam{
@@ -306,47 +309,20 @@ a { color: black; }
   font-size: 30px;
   float: right;
   position: relative;
-  right: 75px;
+  right: 135px;
   top: 20px;
   font-weight: bold;
 }
-
-.triangle-left {
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-right: 10px solid black;
-  border-bottom: 5px solid transparent;
-  float: right;
-  position: relative;
-  right: 90px;
-  top: 36px;
-}
-
-.triangle-right {
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-left: 10px solid black;
-  border-bottom: 5px solid transparent;
-  float: right;
-  position: relative;
-  left: 35px;
-  top: 36px;
-}
-.triangle-left:hover { border-right: 10px solid yellow; }
-.triangle-right:hover { border-left: 10px solid yellow !important; }
-
 .month-color { color: black; }
 .month-hover:hover{ color: #CADA48 !important; }
 
 .months {
-  color: #888;
+  color: #fff;
   position: relative;
-  left: 215px;
-  top: 90px;
+  left: 195px;
+  top: 85px;
   word-spacing: 8px;
-  font-size: 15px;
+  font-size: 13px;
   width: max-content;
   cursor: default;
 }
@@ -364,9 +340,9 @@ a { color: black; }
 .days {
   color: #888;
   position: relative;
-  font-size: 17px;
-  left: 210px;
-  top: 100px;
+  font-size: 12px;
+  left: 205px;
+  top: 110px;
   word-spacing: 28px;
   font-weight: 600;
   width: max-content;
@@ -375,42 +351,16 @@ a { color: black; }
 .num-dates {
   float: right;
   position: relative;
-  top: 110px;
-  right: 18px;
+  top: 120px;
+  right: 30px;
   z-index: 1;
   width: max-content;
 }
 
-.first-week {
+.first-week, .second-week, .third-week, .fourth-week, .fifth-week, .sixth-week {
   margin-bottom: 25px;
-  word-spacing: 48px;
+  word-spacing: 41px;
 }
-
-.second-week {
-  margin-bottom: 25px;
-  word-spacing: 48px;
-}
-
-.third-week {
-  margin-bottom: 25px;
-  word-spacing: 48px;
-}
-
-.fourth-week {
-  margin-bottom: 25px;
-  word-spacing: 48px;
-}
-
-.fifth-week {
-  margin-bottom: 25px;
-  word-spacing: 48px;
-}
-
-.sixth-week {
-  margin-bottom: 25px;
-  word-spacing: 48px;
-}
-
 .active-day {
   width: 35px;
   height: 35px;
@@ -444,20 +394,20 @@ a { color: black; }
 }
 
 .calendar-left {
-  width: 200px;
-  height: 412px;
+  width: 180px;
+  height: 376px;
   border-radius: 20px 0px 0px 20px;
   background-color: yellow;
   position: relative;
   z-index: -1;
   bottom: 0px;
   color: white;
-  right: 540px;
+  right: 500px;
   box-shadow: -8px 5px 10px 0px rgba(0, 0, 0, 0.17);
 }
 
 .num-date {
-  font-size: 90px;
+  font-size: 75px;
   width: 53%;
   margin: 0 auto;
   font-weight: 700;
@@ -468,7 +418,7 @@ a { color: black; }
 .day {
   width: 50%;
   margin: 0px auto;
-  font-size: 20px;
+  font-size: 17px;
   position: relative;
   bottom: 10px;
   color: black;
@@ -503,6 +453,9 @@ a { color: black; }
   border: none !important;
   padding: 2px 30px 2px 9px;
   background: #f9f9f9;
+  cursor: pointer;
+  width: 100%;
+  text-align: start;
 }
 .menu-button:hover, .close-button:hover {
   background: black;
@@ -516,19 +469,22 @@ a { color: black; }
   padding: 2px 30px 2px 5px;
   background: #f9f9f9;
   position: absolute;
-  right: -52px;
+  right: -12px;
   border-radius: 4px;
+  width: 100%;
+  text-align: end;
 }
 
 .calendar_background{
   background: #dadada88;
-  width: fit-content;
-  padding: 5px 0px 100px 0px;
+  width: 632px;
+  padding: 0px 0px 110px 0px;
   position: absolute;
   z-index: -1;
-  top: 100px;
+  top: 97px;
   right: 120px;
   border-radius: 20px;
+  font-size: 12px;
 }
 
 
@@ -656,7 +612,7 @@ a { color: black; }
   padding: 15px 10px;
   border: 1px solid red;
   border-radius: 10px;
-  z-index: 2;
+  z-index: 4;
 }
 
 .redirect {
