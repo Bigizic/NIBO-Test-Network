@@ -120,6 +120,8 @@ class EducatorOperations():
         someData = json.loads(someData)
         new_list = []
         upcoming_exam_count = 0
+        active_exam_count = 0
+        new_list_len = 0
         for items in someData:
             ids = items['pk']
             fields = items['fields']
@@ -131,7 +133,12 @@ class EducatorOperations():
             if fields['start_date'].date() >= current_date:
                 fields['current_date'] = current_date
                 upcoming_exam_count += 1
+            if fields['status'] == 'active':
+                active_exam_count += 1
             new_list.append({k: v for k, v in fields.items()})
+            new_list_len = len(new_list)
         new_list.append(upcoming_exam_count)
+        new_list.append({'active_exam_count': active_exam_count})
+        new_list.append({'f_exam_count': new_list_len - upcoming_exam_count})
 
         return new_list if exam_obj else None

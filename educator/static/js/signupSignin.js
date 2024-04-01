@@ -142,5 +142,4 @@ $(document).ready(function() {
         $('#news_in').attr('data-placeholder', 'Email or Unique Id');
         $('.welcome').text('Student Sign In');
     }
-
 });

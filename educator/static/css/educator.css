@@ -8,13 +8,14 @@
   font-family: "Poppins", sans-serif;
 }
 .success_notification {
-  position: absolute;
+  position: fixed;
   top: 5%;
-  left: 50%;
+  left: 45%;
   background: #b2f8b2;
   border: 2px solid #b2f8b2;
   padding: 10px 20px;
   color: #006400;
+  z-index: 3;
 }
 body{
   background: #dadada88;
@@ -24,7 +25,7 @@ body{
 }
 .left {
   margin: 3% 0.5% 0% 0%;
-  position: relative;
+  position: fixed;
   display: flex;
   flex-direction: column;
   font-size: 13px;
@@ -200,8 +201,14 @@ a { color: black; }
   position: relative;
 }
 
-.exams_wrap_input {
+.exams_wrap_input, .question_wrap_input {
+  margin-top: 100px;
+  border-bottom: 2px solid #adadad;
   position: relative;
+  width: 280px;
+  height: 50px;
+  margin-left: 50px;
+  left: -90px;
 }
 
 .active input, .future input, .completed input, .cancelled input {
@@ -233,7 +240,7 @@ a { color: black; }
   transition: width 1s ease;
 }
 .box{
-  width: 90%;
+  /*width: 90%;*/
   padding: 10px;
   margin: 10px;
   border-radius: 10px;
@@ -260,7 +267,7 @@ a { color: black; }
   font-size: 12px;
   margin-top: 5px;
   word-wrap: break-word;
-  white-space: break-spaces;
+  /*white-space: break-spaces;*/
 }
 .box button{
   background: #ffff7f;
@@ -338,29 +345,28 @@ a { color: black; }
 }
 
 .days {
-  color: #888;
+  /*color: #888;*/
+  color: yellow;
   position: relative;
   font-size: 12px;
   left: 205px;
   top: 110px;
-  word-spacing: 28px;
+  /*word-spacing: 28px;*/
   font-weight: 600;
   width: max-content;
+  display: flex;
+  gap: 33px;
 }
 
 .num-dates {
   float: right;
   position: relative;
   top: 120px;
-  right: 30px;
+  right: 17px;
   z-index: 1;
   width: max-content;
 }
 
-.first-week, .second-week, .third-week, .fourth-week, .fifth-week, .sixth-week {
-  margin-bottom: 25px;
-  word-spacing: 41px;
-}
 .active-day {
   width: 35px;
   height: 35px;
@@ -400,24 +406,19 @@ a { color: black; }
   background-color: yellow;
   position: relative;
   z-index: -1;
-  bottom: 0px;
+  bottom: 30px;
   color: white;
-  right: 500px;
+  right: 499px;
   box-shadow: -8px 5px 10px 0px rgba(0, 0, 0, 0.17);
 }
 
 .num-date {
   font-size: 75px;
-  width: 53%;
-  margin: 0 auto;
   font-weight: 700;
   color: black;
-  padding: 30px 0px 0px 0px;
 }
 
 .day {
-  width: 50%;
-  margin: 0px auto;
   font-size: 17px;
   position: relative;
   bottom: 10px;
@@ -481,10 +482,20 @@ a { color: black; }
   padding: 0px 0px 110px 0px;
   position: absolute;
   z-index: -1;
-  top: 97px;
+  top: 68px;
   right: 120px;
   border-radius: 20px;
   font-size: 12px;
+}
+
+.current_calender_date {
+  background: yellow;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -500,21 +511,12 @@ a { color: black; }
   cursor: pointer;
 }
 
-.exams_wrap_input {
-  margin-top: 100px;
-  border-bottom: 2px solid #adadad;
-  position: relative;
-  width: 280px;
-  height: 50px;
-  margin-left: 50px;
-  left: -90px;
-}
 .wrap_login {
   margin-top: 10%;
   margin-left: -50px;
 }
 
-.exams_wrap_input input {
+.exams_wrap_input input, .question_wrap_input input {
   outline: none;
   border: none;
 }
@@ -530,7 +532,7 @@ a { color: black; }
   margin: 50px 10px 0px 10px;
 }
 
-.exams_new_input {
+.exams_new_input, .question_new_input {
   font-family: Poppins-Regular;
   font-size: 15px;
   color: #555;
@@ -542,7 +544,7 @@ a { color: black; }
   padding: 0 5px;
 }
 
-.exams_new_input_span {
+.exams_new_input_span, .question_new_input_span {
   position: absolute;
   display: block;
   width: 100%;
@@ -552,7 +554,7 @@ a { color: black; }
   pointer-events: none;
 }
 
-.exams_new_input_span::before {
+.exams_new_input_span::before, .question_new_input_span::before {
   content: "";
   display: block;
   position: absolute;
@@ -570,7 +572,7 @@ a { color: black; }
   background: -moz-linear-gradient(left,yellow, yellow, #000000);
   background: linear-gradient(left,yellow, yellow, #000000);
 }
-.exams_new_input_span::after {
+.exams_new_input_span::after, .question_new_input_span::after {
   font-family: Poppins-Regular;
   font-size: 15px;
   /*color: #555;*/
@@ -588,20 +590,23 @@ a { color: black; }
   -moz-transition: all .4s;
   transition: all .4s;
 }
+.question_new_input_span::after {
+  font-size: 12px;
+}
 
-.exams_new_input:focus+.exams_new_input_span::after {
+.exams_new_input:focus+.exams_new_input_span::after, .question_new_input:focus+.question_new_input_span::after {
   top: -10px
 }
 
-.exams_new_input:focus+.exams_new_input_span::before {
+.exams_new_input:focus+.exams_new_input_span::before, .question_new_input:focus+.question_new_input_span::before {
   width: 100%
 }
 
-.has-val.exams_new_input+.exams_new_input_span::after {
+.has-val.exams_new_input+.exams_new_input_span::after, .has-val.question_new_input+.question_new_input_span::after {
   top: -10px
 }
 
-.has-val.exams_new_input+.exams_new_input_span::before {
+.has-val.exams_new_input+.exams_new_input_span::before, .has-val.question_new_input+.question_new_input_span::before {
   width: 100%
 }
 .warning, .warningg, .redirect {
@@ -633,30 +638,32 @@ a { color: black; }
   color: #fff;
 }
 
-.exams_my_exams div, .exams_upcoming div { background: yellow; }
+.exams_my_exams div, .exams_upcoming div { background: #fff; }
 
 .exams_my_exams li, .exams_upcoming li {
   margin: 20px 0px;
   font-size: small;
   box-shadow: 1px 2px 5px #00000057;
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
+  display: block ruby;
+  position: relative;
+  background: yellow;
+}
+.exams_my_exams input[type=button], .exams_upcoming input[type=button] {
+  cursor: pointer;
+  background: transparent;
+  font-weight: 900;
+  position: absolute;
+  right: 5px;
+  top: 10px;
+  font-size: large;
+}
+.exams_my_exams input[type=button]:hover, .exams_upcoming input[type=button]:hover {
+  color: #fff;
 }
 
-.exams_my_exams button, .exams_upcoming button {
-  background: black;
-  border-radius: 50px;
-  font-size: smaller;
-  padding: 2.5px 5px;
-  cursor: pointer;
-  color: #fff;
-  margin-left: 9px;
-}
-.exams_my_exams button:hover, .exams_upcoming button:hover {
-  background: yellow !important;
-  color: black;
-}
-.create_exam_btn:hover, .cancel_exam_create:hover, .add_questions:hover {
+.create_exam_btn:hover, .cancel_exam_create:hover, .add_questions:hover, .edit_exam_button:hover, .next_question:hover, .prev_question:hover {
   background: yellow !important;
   color: black !important;
 }
@@ -709,4 +716,52 @@ a { color: black; }
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.more_details_container div {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+  box-shadow: 1px 2px 5px #00000057;
+  border-radius: 10px;
+  padding: 5px 15px;
+}
+.more_details_container button, .more_details_edit {
+  position: relative !important;
+  font-size: 12px !important;
+  background: black !important;
+  color: #fff;
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 50px;
+  top: 0 !important;
+  right: 0 !important;
+  font-weight: 900 !important;
+}
+.more_details_container button:hover, .more_details_edit:hover {
+  background: yellow !important;
+  color: black !important;
+}
+
+
+/* exam dynamic question rendreing */
+.formatting-options {
+  margin-top: 10px;
+}
+
+#color-picker {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.formatting-options button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.formatting-options button:hover {
+  background-color: #0056b3;
 }

@@ -10,8 +10,11 @@
     
     <link rel="icon" type="image/png" href="{% static 'images/nibo_test_network.png' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/educator.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'js/jQuery-TE_v/jquery-te-Style.css' %}" charset="utf-8" />
+
     <script src="{% static 'js/jquery.3.7.1.js' %}" type="text/JavaScript"></script>
     <script src="{% static 'js/educator.js' %}" type="text/JavaScript"></script>
+    <script src="{% static 'js/jQuery-TE_v/jquery-te-Core.js' %}" type="text/JavaScript"></script>
     <!--<script src="https://unpkg.com/htmx.org@1.5.0/dist/htmx.js"></script>-->
   </head>
   <body>
@@ -20,6 +23,9 @@
         <!-- End warning -->
         {% if warning %}
         <p class="warningg">{{ warning }}</p>
+        {% endif %}
+        {% if success %}
+        <p class="success_notification">{{ success }}</p>
         {% endif %}
     <div class="container">
       <section class="left">
@@ -98,7 +104,7 @@
                 <span class="month-hover">Apr</span>
                 <span class="month-hover">May</span>
                 <span class="month-hover">Jun</span>
-                <span class="month-hover">July</span> 
+                <span class="month-hover">Jul</span> 
                 <span class="month-hover">Aug</span> 
                 <span class="month-hover">Sep</span> 
                 <span class="month-hover">Oct</span> 
@@ -107,93 +113,43 @@
               </div>
           
               <div class="days">
-                <ul style="list-style-type: none; display: block ruby;">
-                  <li class="days_li">SUN</li>
-                  <li class="days_li">MON</li>
-                  <li class="days_li">TUE</li>
-                  <li class="days_li">WED</li>
-                  <li class="days_li">THU</li>
-                  <li class="days_li">FRI</li>
-                  <li class="days_li">SAT</li>
-                </ul>
+                <div class="mon">
+                  <p>MON</p>
+                  <ul style="list-style-type: none; color: black; font-weight: lighter;"></ul>
                 </div>
-              <div class="num-dates">
-                <div class="first-week">
-                    <ul style="list-style-type: none; display: block ruby;">
-                      <span class="grey">
-                      <li>26</li>
-                      <li>27</li>
-                      <li>28</li>
-                      <li>29</li>
-                      <li>30</li>
-                      <li>31</li></span>
-                      <li>01</li>
-                  </ul>
+                <div class="tue">
+                  <p>TUE</p>
+                  <ul style="list-style-type: none; color: black; font-weight: lighter;"></ul>
                 </div>
-                <div class="second-week">  
-                  <ul style="list-style-type: none; display: block ruby;">
-                    <li>02</li>
-                    <li>03</li>
-                    <li>04</li>
-                    <li>05</li>
-                    <li>06</li>
-                    <li>07</li>
-                    <li>08</li>
-                </ul>
+                <div class="wed">
+                  <p>WED</p>
+                  <ul style="list-style-type: none; color: black; font-weight: lighter;"></ul>
                 </div>
-                <div class="third-week">
-                  <ul style="list-style-type: none; display: block ruby;">
-                    <li>09</li>
-                    <li>10</li>
-                    <li>11</li>
-                    <li>12</li>
-                    <li>13</li>
-                    <li>14</li>
-                    <li>15</li>
-                </ul>
+                <div class="thu">
+                  <p>THU</p>
+                  <ul style="list-style-type: none; color: black; font-weight: lighter;"></ul>
                 </div>
-                <div class="fourth-week">
-                  <ul style="list-style-type: none; display: block ruby;">
-                    <li>16</li>
-                    <li>17</li>
-                    <li>18</li>
-                    <li>19</li>
-                    <li>20</li>
-                    <li>21</li>
-                    <li>22</li>
-                </ul>
+                <div class="fri">
+                  <p>FRI</p>
+                  <ul style="list-style-type: none; color: black; font-weight: lighter;"></ul>
                 </div>
-                <div class="fifth-week">
-                  <ul style="list-style-type: none; display: block ruby;">
-                    <li>23</li>
-                    <li>24</li>
-                    <li>25</li>
-                    <li>26</li>
-                    <li>27</li>
-                    <li>28</li>
-                    <li>29</li>
-                </ul>
+                <div class="sat">
+                  <p>SAT</p>
+                  <ul style="list-style-type: none; color: black; font-weight: lighter;"></ul>
                 </div>
-                <div class="sixth-week">
-                  <ul style="list-style-type: none; display: block ruby;">
-                    <li>30</li>
-                    <span class="grey">
-                    <li>01</li>
-                    <li>02</li>
-                    <li>03</li>
-                    <li>04</li>
-                    <li>05</li>
-                    <li>06</li></span>
-                </ul>
+                <div class="sun">
+                  <p>SUN</p>
+                  <ul style="list-style-type: none; color: black; font-weight: lighter;"></ul>
+                </div>
               </div>
-          
-            </div>
           </div>
           </div>
             <div class="calendar-left">
-          
-              <div class="num-date">27</div>
-              <div class="day">THURSDAY</div>
+        
+              <div style="padding: 30px 0px 0px 0px; text-align: center;" class="num-date-and-day">
+              <div class="num-date"></div>
+              <div class="day"></div>
+            </div>
               <div class="current-events">Current Events
                 <br/>
                 <ul>
@@ -212,86 +168,76 @@
               <li class="active"><div class="wrap_input"> <input value="In progress" type="button">
               <li class="future"><div class="wrap_input"> <input value="Upcoming" type="button">
               <li class="completed"><div class="wrap_input"> <input value="Finished" type="button">
-              <li class="cancelled"><div class="wrap_input"> <input value="Cancelled" type="button">
             </ul>
             <div class="exam_progress_cover">
             <div class="active_exam">
+              {% if exams %}
+              {% if active_exam_count > 0 %}
+              {% for items in exams %}
+              {% if items.status == "active" %}
               <div class="box">
-                <h3>General Chemistry II</h3>
-                <p>This is a description about chemistry </p>
+                <h3>{{ items.exam_title }}</h3>
+                <p>{{ items.exam_description }}</p>
+                <span style="display: block; display: block; font-size: 11px; margin-top: 15px;">{{ items.status }}</span>
                 <button>More details</button>
               </div>
-              <div class="box">
-                <h3>Pratical Chemistry II</h3>
-                <p>This is a description about chemistry </p>
-                <button>More details</button>
-              </div>
-              <div class="box">
-                <h3>Pratical Chemistry II</h3>
-                <p>This is a description about chemistry </p>
-                <button>More details</button>
-              </div>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              <p style="margin: 20px">No active exams</p>
+              {% endif %}
+              {% else %}
+              <p style="margin: 20px;">You don't have any exam yet</p>
+              {% endif %}
             </div>
             </div>
 
             <div class="exam_progress_cover">
             <div class="future_exam" style="display: none;">
+              {% if exams %}
+              {% if upcoming_count > 0 %}
+              {% for items in exams %}
+              {% if items.current_date %}
               <div class="box">
-                <h3>Maths</h3>
-                <p>80% - progress</p>
+                <h3>{{ items.exam_title }}</h3>
+                <p>{{ items.exam_description }}</p>
+                <span style="display: block; font-size: 11px; margin-top: 15px;">{{ items.status }}</span>
                 <button>More details</button>
               </div>
-              <div class="box">
-                <h3>English</h3>
-                <p>50% - progress</p>
-                <button>More details</button>
-              </div>
-              <div class="box">
-                <h3>Pratical Chemistry II</h3>
-                <p>This is a description about chemistry </p>
-                <button>More details</button>
-              </div>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              <p style="margin: 20px;">No upcoming exams</p>
+              {% endif %}
+              {% else %}
+              <p style="margin: 20px;">You don't have any exam yet</p>
+              {% endif %}
             </div>
             </div>
 
             <div class="exam_progress_cover">
             <div class="completed_exam" style="display: none;">
+              {% if exams %}
+              {% if finished_count > 0 %}
+              {% for items in exams %}
+              {% if not items.current_date %}
               <div class="box">
-                <h3>Advanced Maths</h3>
-                <p>80% - progress</p>
+                <h3>{{ items.exam_title }}</h3>
+                <p>{{ items.exam_description }}</p>
+                <span style="display: block; font-size: 11px; margin-top: 15px;">{{ items.status }}</span>
                 <button>More details</button>
               </div>
-              <div class="box">
-                <h3>CSS</h3>
-                <p>50% - progress</p>
-                <button>More details</button>
-              </div>
-              <div class="box">
-                <h3>Pratical Chemistry II</h3>
-                <p>This is a description about chemistry </p>
-                <button>More details</button>
-              </div>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              <p style="margin: 20px;">No finished exams</p>
+              {% endif %}
+              {% else %}
+              <p style="margin: 20px;">You don't have any exam yet</p>
+              {% endif %}
             </div>
             </div>
 
-            <div class="exam_progress_cover">
-            <div class="cancelled_exam" style="display: none;">
-              <div class="box">
-                <h3>Chemistry</h3>
-                <p>80% - progress</p>
-                <button>More details</button>
-              </div>
-              <div class="box">
-                <h3>CSS</h3>
-                <p>50% - progress</p>
-                <button>More details</button>
-              </div>
-              <div class="box">
-                <h3>Pratical Chemistry II</h3>
-                <p>This is a description about chemistry </p>
-                <button>More details</button>
-              </div>
-            </div>
             </div>
           </div>
         </div>

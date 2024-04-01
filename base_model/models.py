@@ -1,14 +1,11 @@
 from django.db import models
 import uuid
 
-def random_uuid():
-    return uuid.uuid4()
-
 
 class BaseModel(models.Model):
     """ Base Model class
     """
-    id = models.UUIDField(default=random_uuid(), primary_key=True)
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

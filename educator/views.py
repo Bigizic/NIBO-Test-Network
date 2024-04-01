@@ -3,7 +3,7 @@ from .models import EducatorModel
 from base_model.models import BaseModel as BDM
 from base_model.caching import FIFO as CACHE
 import base64
-from datetime import datetime
+from datetime import datetime, timezone
 from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, JsonResponse
@@ -73,15 +73,36 @@ class EducatorView():
             decrypt_id = EducatorModel().id_decryption(tmp_educator_id)
             fetch_exams = EXOP().get_exams(decrypt_id)
             if fetch_exams:
-                if isinstance(fetch_exams[-1], int):
-                    upcoming_exams_counter = fetch_exams[-1]
-                fetch_exams = fetch_exams[:-1]
+                if isinstance(fetch_exams[-3], int):
+                    upcoming_exams_counter = fetch_exams[-3]
+                fetch_exam = fetch_exams[:-3]
                 new_fetch_exams = {
-                    'exams': fetch_exams,
+                    'exams': fetch_exam,
                     'upec': upcoming_exams_counter,
+                    'active_exam_count': fetch_exams[-2]['active_exam_count'],
+                    'fc': fetch_exams[-1].get('f_exam_count'),
                 }
                 return new_fetch_exams
-            return None
+            return False
+
+    def group_educator_exams(self, request, list_of_dict: list) -> list:
+        """iterates in the list of dicts and group the dicts
+        that has similar start and end dates in a list
+        """
+        if isinstance(list_of_dict, dict):
+            list_exams = list_of_dict['exams']
+            # this is a first pointer to the start date
+            start_dates = []
+            for dicts in list_exams:
+                first_s_date = dicts['start_date'].date()
+                if first_s_date not in start_dates:
+                    start_dates.append(first_s_date)
+
+            grouped_list = [[dicts for dicts in list_exams
+                            if dicts['start_date'].date() == std]
+                            for std in start_dates]
+            return grouped_list
+        return None
 
     def educator_details(self, request) -> Union[bool, dict]:
         """ Returns a dictionary of the logged in examiner """
@@ -114,11 +135,18 @@ class EducatorView():
         if self.check_logged_in_status(request):
             tmp_educator_details = self.educator_details(request)
             tmp_exam_d = self.educator_exams(request)
-            CACHE.get('redirect')
+            active_exam_count = None
+            if tmp_exam_d:
+                if tmp_exam_d.get('active_exam_count'):
+                    active_exam_count = tmp_exam_d.get('active_exam_count')
+                CACHE.get('redirect')
             context = {
                 'educator': tmp_educator_details,
                 'exams': tmp_exam_d['exams'] if tmp_exam_d else None,
                 'redirect': CACHE.get('redirect'),
+                'active_exam_count': active_exam_count,
+                'upcoming_count': tmp_exam_d['upec'] if tmp_exam_d else None,
+                'finished_count': tmp_exam_d.get('fc') if tmp_exam_d else None,
             }
             return render(request, 'dashboard.html', context)
         return self.teardown(request)
@@ -182,17 +210,93 @@ class EducatorView():
                 edu_exams = self.educator_exams(request)
                 educator_details['template_title'] = 'Manage exams'
                 CACHE.get('redirect')
+                # group dicts in a list with matching start-date and end-date
+                grouped_exams = self.group_educator_exams(request, edu_exams)
+
                 context = {
                     'warning': CACHE.get('warning'),
+                    'success': CACHE.get('success'),
                     'educator': educator_details,
                     'rediret': CACHE.get('redirect'),
                     'exams': edu_exams['exams'] if edu_exams else None,
+                    'grouped_exams': grouped_exams if grouped_exams else None,
                     'upcoming_counter': edu_exams['upec'] if edu_exams else None,
                 }
                 return render(request, 'exams.html', context)
             return self.teardown(request)
 
-    def create_exam(self, request, educator_id: str) -> HttpResponse:
+    def delete_exam(self, request, exam_id: str) -> Union[redirect, JsonResponse]:
+        """ Deletes an exam relating to logged in educator"""
+        if request.method == 'PUT':
+            educator_details = self.educator_details(request)
+            if not educator_details:
+                CACHE.put('error', 'login again')
+                return redirect('educator_signin_signup')
+            educator_details['template_title'] = 'Manage_exams'
+            if self.check_logged_in_status(request):
+                if EXMODOP().delete_exam(exam_id):
+                    return JsonResponse({'message': 'exam_deleted'}, status=204)
+                else:
+                    return JsonResponse({'message': 'exam_does_not_exist'}, status=404)
+            CACHE.put('error', 'login again')
+            return redirect('educator_signin_signup')
+
+    def edit_exam(self, request, educator_id: str, exam_id: str) -> render:
+        """ Edits an exam for logged in educator """
+        if request.method == 'POST':
+            educator_details = self.educator_details(request)
+            if not educator_details:
+                CACHE.put('error', "Login again")
+                return redirect('educator_signin_signup')
+            educator_details['template_title'] = 'Manage exams'
+
+            if self.check_logged_in_status(request):
+                if request.body:
+                    url_decoded_data = urllib.parse.unquote(
+                                       request.body.decode().split('EX')[1])
+                    bytes_data = base64.b64decode(url_decoded_data)
+                    data = json.loads(bytes_data.decode())
+                    allowed_inputs = ['duration', 'no_of_students',
+                                      'no_of_questions', 'grade',
+                                      'time_limit']
+                    for k, v in data.items():
+                        if len(v) > 650:
+                            request.method = 'GET'
+                            CACHE.put('warning', 'inputs too long'), timezone
+                            return self.exams(request, educator_details['id'])
+                        if len(v) < 1:
+                            request.method = 'GET', timezone
+                            CACHE.put('warning', 'Error missing fields')
+                            return self.exams(request, educator_details['id'])
+                        if k in allowed_inputs:
+                            data[k] = int(v)
+                    data['start_date'] = datetime.strptime(
+                                         data['start_date'],
+                                         "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                    data['end_date'] = datetime.strptime(
+                                        data['end_date'],
+                                        '%Y-%m-%d').replace(tzinfo=timezone.utc)
+                    tmp_e_id = request.session.get('educator_id')
+                    data['exam_title'] = data['title']
+                    data['exam_description'] = data['description']
+                    data['number_of_students'] = data['no_of_students']
+                    data['number_of_questions'] = data['no_of_questions']
+                    data.pop('title')
+                    data.pop('description')
+                    data.pop('no_of_students')
+                    data.pop('no_of_questions')
+                    edit_exam = EXMODOP().edit_exam(exam_id, data)
+                    if edit_exam:
+                        request.method = 'GET'
+                        CACHE.put('success', 'Successfully updated')
+                        return self.exams(request, educator_id)
+                    else:
+                        request.method = 'GET'
+                        CACHE.put('warning', 'Cannot update exam')
+                        return self.exams(request, educator_id)
+            return self.teardown(request)
+
+    def create_exam(self, request, educator_id: str) -> Union[redirect, render]:
         """Creteas an exam linked with logged in examine """
         if request.method == 'POST':
             educator_details = self.educator_details(request)
