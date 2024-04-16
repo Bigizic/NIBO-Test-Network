@@ -10,7 +10,7 @@
     <section style="margin: 5%;" class="exams_left">
     <h2 style="color: #fff;">Create and manage your exams</h2>
 
-    <div  style="position: relative; margin-top: 30px; width: fit-content" class="exams_search_container">
+    <div style="position: relative; margin-top: 30px; width: fit-content" class="exams_search_container">
         <input placeholder="lookup exam by name" style="background: #fff; border: none; box-shadow: 1px 2px 5px #00000057; border-radius: 20px; padding: 15px 320px 15px 30px; font-size: 16px;" type="search">
         <button style="position: absolute; right: 20px; top: 10px; "></button>
     </div>
@@ -28,7 +28,6 @@
             <li style="margin: 5px 0px 0px 18px; font-size: 13px;"><strong>Description: </strong>Instructions to be sent to students</li>
             <li style="margin: 5px 0px 0px 18px; font-size: 13px;"><strong>Start date: </strong> Day exam starts, could be a future date or current</li>
             <li style="margin: 5px 0px 0px 18px; font-size: 13px;"><strong>End date: </strong>Day exam ends, could be a future date or current</li>
-            <li style="margin: 5px 0px 0px 18px; font-size: 13px;"><strong>Overall duration of exam (in minutes): </strong>A time limit that automatically <br>makes exam inactive for all students</li>
             <li style="margin: 5px 0px 0px 18px; font-size: 13px;"><strong>Number of students: </strong>Number of students to take exam</li>
             <li style="margin: 5px 0px 0px 18px; font-size: 13px;"><strong>Number of questions: </strong>Number of exam questions<br>(can be extended/reduced when editing questions)</li>
             <li style="margin: 5px 0px 0px 18px; font-size: 13px;"><strong>Overall exam grade: </strong> Exam weight</li>
@@ -57,11 +56,11 @@
                 {% if forloop.first %}
                 <p id="start_date_" style="margin-top: 30px; font-size: 13px;"><strong>Start date:</strong> {{ items.start_date|date:"d b Y" }}</p>
                 {% endif %}
-                <li style="display: grid; grid-template-columns: 1.55fr 1.55fr 0fr;">
-                    <div style="display: grid; font-size: 10px; width: 111px; overflow: scroll; background: yellow;">
+                <li style="display: grid; grid-template-columns: 1.55fr 1.55fr 0fr;" class="all_exams_li">
+                    <div style="display: grid; font-size: 10px; width: 111px; overflow: scroll; background: inherit;">
                     <strong data-exam-title="{{ items.exam_title }}" style="font-size: 14px;">{{ items.exam_title }}</strong>
                     To end: {{ items.end_date|date:"d b Y" }}
-                    </div> 
+                    </div>
                     <strong data-exam-no-of-questions="{{ items.number_of_questions }}"
                     style="display: flex; width: 100px; overflow: scroll; font-size: 11px;">{{ items.number_of_questions }} questions</strong>
 
@@ -70,13 +69,12 @@
 
                     <input type="button" class="more_details" value="&vellip;">
                     <br>
-                    <div style="display: none; margin-left: -145px; margin-top: 30px; width: min-content; padding: 20px; border-radius: 20px;"
+                    <div style="color: initial; display: none; margin-left: -160px; margin-top: 30px; width: min-content; padding: 15px; border-radius: 20px;"
                     class="more_details_container">
                         <div><strong>Subject: </strong><p>{{ items.exam_title }}</p></div>
                         <div><strong data-exam-description="{{ items.exam_description }}">Description: </strong><textarea style="font-size: 12px;">{{ items.exam_description }}</textarea></div>
                         <div><strong>Number of students: </strong><p>{{ items.number_of_students }}</p></div>
                         <div><strong>Number of questions: </strong><p>{{ items.number_of_questions }}</p></div>
-                        <div><strong data-exam-duration="{{ items.duration }}">Overall duration: </strong><p>{{ items.duration }}</p></div>
                         <div><strong data-exam-time-limit="{{ items.time_limit }}">Time limit: </strong><p>{{ items.time_limit }}</p></div>
                         <div><strong data-exam-start-date="{{ items.start_date|date:'Y-m-d' }}">To start: {{ items.start_date|date:"d b Y" }}</strong></div>
                         <div><strong data-exam-end-date="{{ items.end_date|date:'Y-m-d' }}">To end: {{ items.end_date|date:"d b Y" }}</strong></div>
@@ -84,7 +82,7 @@
                         <div style="box-shadow: none; padding: 0;">
                             {% csrf_token %}
                             <button class="more_details_delete" data-exam-id="{{ items.id }}" style="cursor: pointer;">Delete</button>
-                            <input class="more_details_edit" type="button" value="Edit">
+                            <input class="more_details_edit" type="button" value="Edit" style="color: #fff;">
                         </div>
                     </div>
                 </li>
@@ -98,44 +96,6 @@
             {% endif %}
         </div>
     </div>
-
-    {% if exams %}
-    {% if upcoming_counter > 0 %}
-        <div style="margin-top: -20px; width: fit-content;" class="exams_upcoming">
-            <h3 style="margin-top: 100px;">Upcoming exams</h3>
-                    <div style="box-shadow: 1px 2px 5px #00000057; border-radius: 10px; margin-top: 20px; padding: 20px 30px;">
-                        <p style="font-size: 14px;"><strong>{{ upcoming_counter }}</strong> Upcoming</p>
-                        {% for items in exams %}
-                            {% if items.current_date %}
-                                <ul style="list-style-type: none;">
-                                    <li style="display: grid; grid-template-columns: 1.55fr 1.55fr 0fr;">
-                                        <div style="display: grid; font-size: 10px; width: 111px; overflow: scroll; background: yellow;">
-                                        <strong style="font-size: 14px;">{{ items.exam_title }}</strong>
-                                        To end: {{ items.end_date|date:"d b Y" }}
-                                        </div> 
-                                        <strong style="display: flex; width: 100px; overflow: scroll; font-size: 11px;">{{ items.number_of_questions }} questions</strong>
-                                        <strong style="display: flex; width: 100px; overflow: scroll; font-size: 11px;">{{  items.number_of_students  }} Students</strong>
-                                        <input type="button" class="more_details" value="&vellip;">
-                                        <br>
-                                        <div style="display: none; margin-left: -145px; margin-top: 30px; width: min-content; padding: 20px; border-radius: 20px;"
-                                        class="more_details_container">
-                                            <div><strong>Subject: </strong><p>{{ items.exam_title }}</p></div>
-                                            <div><strong>Description: </strong><textarea style="font-size: 12px;">{{ items.exam_description }}</textarea></div>
-                                            <div><strong>Number of students: </strong><p>{{ items.number_of_students }}</p></div>
-                                            <div><strong>Number of questions: </strong><p>{{ items.number_of_questions }}</p></div>
-                                            <div><strong>Overall duration: </strong><p>{{ items.duration }}</p></div>
-                                            <div><strong>Time limit: </strong><p>{{ items.time_limit }}</p></div>
-                                            <div><strong>To start: {{ items.start_date|date:"d b Y" }}</strong></div>
-                                            <div><strong>To end: {{ items.end_date|date:"d b Y" }}</strong></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-        </div>
-    {% endif %}
-    {% endif %}
 
     </div>
 </section>
@@ -163,7 +123,7 @@
                 </section>
               </div>
               
-              <div class="exams_wrap_input" style="margin-left: -70px;">
+              <div class="exams_wrap_input" style="margin-left: -43px;">
                     <input class="exams_new_input" minlength="6" type="text" name="title">
                     <span class="exams_new_input_span" data-placeholder="Title e.g Introduction to Chemistry"></span>
                 </div>
@@ -175,17 +135,9 @@
                     <input class="exams_new_input sstart_datee" type="date" name="start_date" style="padding-top: 20px;">
                     <span class="exams_new_input_span" data-placeholder="Start Date"></span>
                 </div>
-                <div style="margin-left: 100px;" class="exams_wrap_input">
+                <div style="margin-left: 120px;" class="exams_wrap_input">
                     <input class="exams_new_input eend_datee" type="date" name="end_date" style="padding-top: 20px;">
                     <span class="exams_new_input_span" data-placeholder="End Date"></span>
-                </div>
-                <div style="border: none;" class="exams_wrap_input authy_f">
-                    <input type="text" id="digit-1" class="input_number duration_1" name="duration_digit-1" data-next="digit-2"/>
-                    <input type="text" id="digit-2" class="input_number duration_2" name="duration_digit-2" data-next="digit-3" data-previous="digit-1" />
-                    <input type="text" id="digit-3" class="input_number duration_3" name="duration_digit-3" data-next="digit-4" data-previous="digit-2" />
-                    <input type="text" id="digit-4" class="input_number duration_4" name="duration_digit-4" data-next="digit-5" data-previous="digit-3" />
-                    <input type="text" id="digit-5" class="input_number duration_5" name="duration_digit-5" data-next="digit-6" data-previous="digit-4" />
-                    <span class="exams_new_input_span" data-placeholder="Overall duration of exam in mins"></span>
                 </div>
                 <div style="border: none;" class="exams_wrap_input authy_f">
                     <input type="text" id="digit-1" class="input_number student_1" name="students_no_digit-1" data-next="digit-2"/>
@@ -203,7 +155,7 @@
                     <input type="text" id="digit-5" class="input_number question_5" name="question_digit-5" data-next="digit-6" data-previous="digit-4" />
                     <span class="exams_new_input_span" data-placeholder="Number of questions"></span>
                 </div>
-                <div style="border: none;" class="exams_wrap_input authy_f">
+                <div style="border: none; margin-left: 120px;" class="exams_wrap_input authy_f">
                     <input type="text" id="digit-1" class="input_number grade_1" name="grade_digit-1" data-next="digit-2"/>
                     <input type="text" id="digit-2" class="input_number grade_2" name="grade_digit-2" data-next="digit-3" data-previous="digit-1" />
                     <input type="text" id="digit-3" class="input_number grade_3" name="grade_digit-3" data-next="digit-4" data-previous="digit-2" />
@@ -230,18 +182,15 @@
                 </div>
                 
                 <div class="wrap_login" style="text-align: center;">
-                <div class="wrap_login_2">
                 {% csrf_token %}
-                <button style="background: black; padding: 10px 35px; color: #fff; border-radius: 50px; cursor: pointer;" class="create_exam_btn"> Create exam now </button>
-                <input type="button" style="background: black; padding: 10px 35px; color: #fff; border-radius: 50px; cursor: pointer;" class="cancel_exam_create" value="Cancel">
-                <br>
-                <input type="button" style="background: black; padding: 10px 35px; color: #fff; border-radius: 50px; cursor: pointer; margin: 20px 0px 0px -110px;" class="add_questions" value="Add questions">
-                </div>
+                <button style="background: black; padding: 10px 25px; color: #fff; border-radius: 50px; cursor: pointer;" class="create_exam_btn"> Create exam now </button>
+                <input type="button" style="background: black; padding: 10px 25px; color: #fff; border-radius: 50px; cursor: pointer;" class="cancel_exam_create" value="Cancel">
+                <input type="button" style="background: black; padding: 10px 25px; color: #fff; border-radius: 50px; cursor: pointer;" class="add_questions" value="Add questions">
                 </div>
         </form>    
 
 
-
+    <div class="all_question_form">
         <form id="create_questions_form" style="position: fixed; top: 5%; background: #fff;
         flex-wrap: wrap; width: 90%; box-shadow: 1px 2px 5px #00000057;
         border-radius: 40px; margin-top: 20px; padding: 50px 0px 50px 30px;
@@ -249,22 +198,34 @@
             <div style="display: grid; grid-template-columns: 1fr 0.1fr; grid-template-rows: 1fr;" class="question_container">
 
                 <div class="question_text_box_container" style="grid-row: 1;">
-                    
+                    <div style="display: flex; gap: 15%; margin-top: 10px; position: relative;" class="question_buttons">
+                        <input class="cancel_exam_create" type="button" style="cursor: pointer; background: transparent; font-size: 15px; font-weight: 900; position: absolute; top: -33px;" value="X">
+                        <input class="go_back" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Back to exam">
+                        <input class="next_question" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Next question">
+                        <input class="next_and_save" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Save question">
+                        <h6 style="font-size: 10px; position: absolute; top: -40px; right: -5px; display: none; background: gainsboro;
+                        padding: 4px 9px;">&#9432;&nbsp; When this action is triggered, question is saved and it can not be edited in this section</h6>
+                    </div>
                     <textarea id="formatted-text-textarea" placeholder="Enter question" class="question_text_box" style="font-size: 14px; width: 720px; height: 320px; border: 1px solid black; padding: 20px 15px;"></textarea>
-                    <div class="word_counter" style="font-size: 12px;"></div>
-                    <div class="question_type_select" style="margin-top: 20px;">
-                        <div>
+                    <div class="word_counter" style="font-size: 12px; margin-top: -15px;"></div>
+                    <div class="question_type_select" style="margin-top: 20px; display: flex; gap: 100px;">
+                        <div id="qts1">
                             <h5>Select answer type</h5>
-                            <select style="padding: 5px 20px; border-radius: 30px; font-size: 12px; margin-top: 10px;">
-                                <option value="multiple">Multiple answers</option>
+                            <select id="select_answer_type" style="padding: 5px 20px; border-radius: 30px; font-size: 12px; margin-top: 10px;">
                                 <option value="single">Single answer</option>
+                                <option value="multiple">Multiple answers</option>
                             </select>
                         </div>
-                        <div>
-                            <h5>Enter answers</h5>
-
+                        <div id="qts2">
+                            <ul style="list-style-type: none;" id="add_more_question_ul">
+                                <li><h5>Enter answers</h5></li>
+                                <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">1</span> <input class="question_checked waschecked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio" checked="checked"/><textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea></li>
+                                <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">2</span> <input class="question_checked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio"/> <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea></li>
+                            </ul>
+                            <input id="add_more_question_button" style="box-shadow: 1px 2px 5px #00000057; margin-top: 15px; font-size: 10px; padding: 5px 20px; border-radius: 20px;" type="button" value="click to add more answer"/>
                         </div>
                     </div>
+
                 </div>
                 <div class="question_links_container" style="grid-column: 3; margin-top: -100px;">
                     <ul style="list-style-type: none; position: absolute; top: 0; margin-top: 12px; font-size: 13px;">
@@ -278,20 +239,18 @@
                                 <input class="question_new_input" type="url" name="link">
                                 <span class="question_new_input_span" data-placeholder=".png, .jpeg, .jpg, .gifs, .mp4 files are allowed"></span>
                                 <input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">
+                                <small style="display: flex; gap: 20px; margin-top: 15px;"><input class="media_link_to_question" style="font-size: 9.5px; font-weight: bolder; padding: 4px 10px; border-radius: 10px;" type="button" value="add media link to question"> <input class="media_link_to_answer" style="font-size: 9.5px; font-weight: bolder; padding: 4px 10px; border-radius: 10px;" type="button" value="add media link to answer 1"></small>
                                 <img style="height: 160px; position: absolute; right: -250px; top: -10px;" class="question_image_viewport"/>
                             </div>
                         </li>
                         <br>
                     </ul>
                     <input class="add_more_links" style="font-size: 11px; padding: 5px 10px; border-radius: 10px; background: yellow;
-                    font-weight: bold; cursor: pointer; margin: 20px 0px 0px 0px;" type="button" value="click to add more than one link">
-                </div>
-
-                <div style="align-self: end; display: flex; gap: 40%; margin-top: 50px; grid-row: 2;" class="question_buttons">
-                    <input class="prev_question" type="button" style="background: black; padding: 10px 35px; color: #fff; border-radius: 50px; cursor: pointer;" value="Prev question">
-                    <input class="cancel_exam_create" type="button" style="background: black; padding: 10px 35px; color: #fff; border-radius: 50px; cursor: pointer;" value="Cancel">
-                    <input class="next_question" type="button" style="background: black; padding: 10px 35px; color: #fff; border-radius: 50px; cursor: pointer;" value="Next question">
+                    font-weight: bold; cursor: pointer; margin: 30px 0px 0px 0px;" type="button" value="click to add more than one link">
                 </div>
             </div>
+
         </form>
+        
+    </div>
 {% endblock %}

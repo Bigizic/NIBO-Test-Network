@@ -180,7 +180,6 @@ a { color: black; }
   margin-left: 5%;
   grid-row: 3;
   width: max-content;
-  margin-bottom: 100px;
 }
 .exam-box{
   width: 100%;
@@ -512,8 +511,9 @@ a { color: black; }
 }
 
 .wrap_login {
-  margin-top: 10%;
-  margin-left: -50px;
+  margin-top: 145px;
+  margin-bottom: 30px;
+  margin-left: 45px;
 }
 
 .exams_wrap_input input, .question_wrap_input input {
@@ -658,14 +658,14 @@ a { color: black; }
   right: 5px;
   top: 10px;
   font-size: large;
-}
-.exams_my_exams input[type=button]:hover, .exams_upcoming input[type=button]:hover {
-  color: #fff;
+  color: inherit;
 }
 
-.create_exam_btn:hover, .cancel_exam_create:hover, .add_questions:hover, .edit_exam_button:hover, .next_question:hover, .prev_question:hover {
+.next_and_save:hover, .remove_li_questions:hover, .go_back:hover, .create_exam_btn:hover, .cancel_exam_create:hover, .add_questions:hover, .edit_exam_button:hover, .next_question:hover, .prev_question:hover {
   background: yellow !important;
   color: black !important;
+  height: fit-content;
+  width: fit-content;
 }
 
 .textarea {
@@ -687,36 +687,6 @@ a { color: black; }
 
 
 /* EXAMS QUESTIONS */
-
-.loader-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgb(19,20,24);
-  background: linear-gradient(180deg, rgba(19,20,24,1) 20%, rgba(0,100,0,1) 50%, rgba(19,20,24,1) 80%);
-  /*display: flex;*/
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid black;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 2s linear infinite;
-  display: none; /* Initially hidden */
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 
 .more_details_container div {
   display: flex;

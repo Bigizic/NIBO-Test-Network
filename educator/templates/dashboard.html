@@ -47,7 +47,7 @@
 
           <li><span class="ico twoo"></span><a id="a_educator_id" href="{% url 'educator_exams' educator_id=educator.id %}">Exams</a></li>
           <li><span class="ico four"></span><a href="{}">Notifications</a></li>
-          <li><span class="ico five"></span><a href="{}">Records</a></li>
+          <li><span class="ico five"></span><a href="{}">Reports</a></li>
           <li><span class="ico six"></span><a href="{}">Settings</a></li>
           <li><span class="ico seven"></span><a href="{% url 'educator_logout' %}">Logout</a></li>
         </ul>
@@ -240,6 +240,45 @@
 
             </div>
           </div>
+
+          {% if exams %}
+          {% if upcoming_count > 0 %}
+              <div style="margin-bottom: 80px; margin-top: -20px; width: fit-content; grid-row: 4; margin-left: 5%;" class="exams_upcoming">
+                  <h3 style="margin-top: 100px;">Upcoming exams</h3>
+                          <div style="box-shadow: 1px 2px 5px #00000057; border-radius: 10px; margin-top: 20px; padding: 20px 30px;">
+                              <p style="font-size: 14px;"><strong>{{ upcoming_count }}</strong> Upcoming</p>
+                              {% for items in exams %}
+                                  {% if items.current_date %}
+                                      <ul style="list-style-type: none;">
+                                          <li style="display: grid; grid-template-columns: 1.55fr 1.55fr 0fr;" class="all_exams_li">
+                                              <div style="display: grid; font-size: 10px; width: 111px; overflow: scroll; background: inherit;">
+                                              <strong style="font-size: 14px;">{{ items.exam_title }}</strong>
+                                              To end: {{ items.end_date|date:"d b Y" }}
+                                              </div> 
+                                              <strong style="display: flex; width: 100px; overflow: scroll; font-size: 11px;">{{ items.number_of_questions }} questions</strong>
+                                              <strong style="display: flex; width: 100px; overflow: scroll; font-size: 11px;">{{  items.number_of_students  }} Students</strong>
+                                              <input type="button" class="more_details" value="&vellip;">
+                                              <br>
+                                              <div style="color: initial; display: none; margin-left: -160px; margin-top: 30px; width: min-content; padding: 15px; border-radius: 20px;"
+                                              class="more_details_container">
+                                                  <div><strong>Subject: </strong><p>{{ items.exam_title }}</p></div>
+                                                  <div><strong>Description: </strong><textarea style="font-size: 12px;">{{ items.exam_description }}</textarea></div>
+                                                  <div><strong>Number of students: </strong><p>{{ items.number_of_students }}</p></div>
+                                                  <div><strong>Number of questions: </strong><p>{{ items.number_of_questions }}</p></div>
+                                                  <div><strong>Overall duration: </strong><p>{{ items.duration }} mins</p></div>
+                                                  <div><strong>Time limit: </strong><p>{{ items.time_limit }} mins</p></div>
+                                                  <div><strong>To start: {{ items.start_date|date:"d b Y" }}</strong></div>
+                                                  <div><strong>To end: {{ items.end_date|date:"d b Y" }}</strong></div>
+                                                  <div><strong>Grade: </strong><p>{{ items.grade }}</p></div>
+                                              </div>
+                                          </li>
+                                      </ul>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+              </div>
+          {% endif %}
+          {% endif %}
         </div>
       </section>
       {% endblock %}

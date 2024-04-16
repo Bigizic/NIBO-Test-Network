@@ -11,7 +11,7 @@ class ExamModel(BaseModel, models.Model):
     exam_description = models.CharField(max_length=700, null=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    duration = models.IntegerField()  # Duration in minutes
+    # duration = models.IntegerField()  # Duration in minutes
     number_of_students = models.IntegerField(default=0)
     number_of_questions = models.IntegerField(default=0)
     grade = models.IntegerField()  # Exam overall weight

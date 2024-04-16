@@ -59,5 +59,4 @@ class ExamOperations():
                         setattr(fetch, k, v)
                         updated = True
             fetch.save()
-            print(fetch)
         return updated

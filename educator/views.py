@@ -256,7 +256,7 @@ class EducatorView():
                                        request.body.decode().split('EX')[1])
                     bytes_data = base64.b64decode(url_decoded_data)
                     data = json.loads(bytes_data.decode())
-                    allowed_inputs = ['duration', 'no_of_students',
+                    allowed_inputs = ['no_of_students',
                                       'no_of_questions', 'grade',
                                       'time_limit']
                     for k, v in data.items():
@@ -311,7 +311,7 @@ class EducatorView():
                                        request.body.decode().split('EX')[1])
                     bytes_data = base64.b64decode(url_decoded_data)
                     data = json.loads(bytes_data.decode())
-                    allowed_inputs = ['durations', 'no_of_students',
+                    allowed_inputs = ['no_of_students',
                                       'no_of_questions', 'grade',
                                       'time_limit']
                     for k, v in data.items():
@@ -336,7 +336,6 @@ class EducatorView():
                         'exam_description': data['description'],
                         'start_date': data['start_date'],
                         'end_date': data['end_date'],
-                        'duration': data['duration'],
                         'number_of_students': data['no_of_students'],
                         'number_of_questions': data['no_of_questions'],
                         'grade': data['grade'],

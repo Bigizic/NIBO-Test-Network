@@ -15,6 +15,7 @@ db.sqlite3
 /homepage/__pycache__/*
 /report/__pycache__/*
 
+/base_model/migrations/*
 /Admin/migrations/*
 /exams/migrations/*
 /questions/migrations/*
