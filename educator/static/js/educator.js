@@ -115,13 +115,22 @@ function createNextQuestion() {
 function warningSlides (text) {
   const className = Object.keys(text);
   const classValue = Object.values(text);
-  $(`.${className}`).text(classValue);
+  if ($.inArray('warning', className) !== -1) {
+    $(`.${className}`).html(`<strong style="display: flex; margin-bottom: -10px;">Error</strong><br>${classValue}&nbsp; &nbsp; &nbsp; &nbsp; 
+    <strong style="border: 1px solid red; border-radius: 50%; font-size: 10px; padding: 4px 6px;"> X</strong>
+    <div style="background: red; width: 100%; position: relative; top: 14px; left: -9px;" class="warning-sliding-stroke"></div>
+    `);
+  }
+  else {
+    $(`.${className}`).text(classValue);
+  };
   $(`.${className}`).slideDown();
   setNotificationTimeout(className);
   function setNotificationTimeout (className) {
     setTimeout(function () {
       $(`.${className}`).slideUp();
     }, 3000);
+    $('.warning-sliding-stroke').animate({ width: 0 }, 3000, 'linear');
   }
 }
 
@@ -258,8 +267,11 @@ $(document).ready(function () {
   if ($('.warningg, .redirect').length) {
     setTimeout(function () {
       $('.warningg, .redirect').slideUp();
-    }, 2000);
+    }, 3000);
   }
+
+  // redirect sliding stroke
+  $('.redirect-sliding-stroke').animate({ width: 0 }, 3000, 'linear');
 
   // warning width desktop width
   const bodyWidth = $('body').width();
@@ -283,10 +295,11 @@ $(document).ready(function () {
     $('.toolkit-container h6').css('display', 'none');
   });
 
-  // rectangular sliding stroke
+  // important sliding stroke rectangular sliding stroke
   $('.sliding-stroke').animate({ width: 0 }, 30000, 'linear', function () {
     $('.exams_create_an_exam ul').slideUp();
   });
+
 
   // exams box toogle, for dashboard
   const examsDetailToogle = [$('.active'), $('.future'), $('.completed')];
@@ -1066,10 +1079,13 @@ $(document).ready(function () {
 
     $('.options_textarea').each(function(index, item) {
       if($(this).val !== '' && $(this).val().length > 1) {
-        options.push($(this).val());
+        let selectValue = $(this).siblings('select').val();
+        let itemSelectSibling = { [selectValue]: $(this).val() };
+        options.push(itemSelectSibling);
       }
       if ($(this).parent('li').children('.waschecked').siblings('.options_textarea').val()) {
-        correctAnswer.push($(this).parent('li').children('.waschecked').siblings('.options_textarea').val());
+        let correctAnswerSelectValue = $(this).parent('li').children('.waschecked').siblings('select').val();
+        correctAnswer.push( {[correctAnswerSelectValue]: $(this).parent('li').children('.waschecked').siblings('.options_textarea').val()});
       }
     })
 

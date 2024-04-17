@@ -615,14 +615,12 @@ a { color: black; }
   background: #ffc3c3;
   color: red;
   padding: 15px 10px;
-  border: 1px solid red;
-  border-radius: 10px;
-  z-index: 4;
+  z-index: 10;
+  font-size: 14px;
 }
 
 .redirect {
   color: black;
-  border: 1px solid black;
   background: #ffff98;
 }
 
@@ -679,7 +677,7 @@ a { color: black; }
   resize: vertical;
 }
 
-.sliding-stroke {
+.sliding-stroke, .warning-sliding-stroke, .redirect-sliding-stroke {
   width: 100%;
   height: 4px;
   background-color: black;

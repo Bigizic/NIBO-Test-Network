@@ -19,7 +19,16 @@
   </head>
   <body>
         <!-- Warning -->
-        <p class="warning" style="display: none;"></p>
+        <ul style="list-style-type: none;">
+          <li class="warning" style="display: none;"></li>
+          {% if redirect %}
+          <li class="redirect"><strong style="display: flex; margin-bottom: -10px;">Oops redirection</strong><br>
+            <div style="width: 100%; position: relative; top: 32px; left: -9px;" class="redirect-sliding-stroke"></div>
+            you're redirected &nbsp; &nbsp; &nbsp; &nbsp; 
+            <strong style="border: 1px solid black; border-radius: 50%; font-size: 10px; padding: 4px 6px;"> I</strong>
+          </li>
+          {% endif %}
+        </ul>
         <!-- End warning -->
         {% if warning %}
         <p class="warningg">{{ warning }}</p>
@@ -37,9 +46,6 @@
           {% endif %}
           <h5>{{ educator.fullname }}</h5>
         </div>
-        {% if redirect %}
-        <p class="redirect">{{ redirect }}</p>
-        {% endif %}
         <ul style="list-style-type: none;" class="first_ul">
           <li><button class="menu-button">&#9776;</button></li>
           <li><span class="ico one"></span><a href="{% url 'educator_dashboard' educator_id=educator.id %}">Dashboard</a></li>
