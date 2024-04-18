@@ -209,13 +209,35 @@ input {
 .form_wrapper button {
     margin-top: 5%;
     font-size: 15px;
-    background: #fff;
-    border: 1.5px solid black;
+    background: black;
     padding: 15px 30px;
     border-radius: 10px;
     font-weight: 550;
     cursor: pointer;
+    color: #fff;
+    border: none;
 }
 .form_wrapper button:hover {
     background: yellow;
+    color: black;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.17);
+
+}
+
+/* warning stroke and warning */
+
+.warning {
+    position: fixed;
+    top: 10px;
+    background: #ffc3c3;
+    color: red;
+    padding: 15px 10px;
+    z-index: 10;
+    font-size: 14px;
+}
+
+.warning-sliding-stroke {
+    width: 100%;
+    height: 4px;
+    background-color: red;
 }

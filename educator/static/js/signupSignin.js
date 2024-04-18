@@ -1,7 +1,40 @@
 const URLS = 'http://localhost:8000'
 
+
+/**
+  * warningSlides - function that display a notification for 2 seconds
+  * @param {dict} text - dict containing text and notification type
+  */
+function warningSlides (text) {
+  const className = Object.keys(text);
+  const classValue = Object.values(text);
+  if ($.inArray('warning', className) !== -1) {
+    $(`.${className}`).html(`<strong style="display: flex; margin-bottom: -10px;">Error</strong><br>${classValue}&nbsp; &nbsp; &nbsp; &nbsp; 
+    <strong style="border: 1px solid red; border-radius: 50%; font-size: 10px; padding: 4px 6px;"> X</strong>
+    <div style="background: red; width: 100%; position: relative; top: 14px; left: -9px;" class="warning-sliding-stroke"></div>
+    `);
+  }
+  else {
+    $(`.${className}`).text(classValue);
+  };
+  $(`.${className}`).slideDown();
+  setNotificationTimeout(className);
+  function setNotificationTimeout (className) {
+    setTimeout(function () {
+      $(`.${className}`).slideUp();
+    }, 3000);
+    $('.warning-sliding-stroke').animate({ width: 0 }, 3000, 'linear');
+  }
+}
+
 $(document).ready(function() {
     'use strict';
+
+    // notification body width
+    const bodyWidth = $('body').width();
+    $('.warning, .warningg, .redirect').css('left', `${bodyWidth / 2.5}px`);
+
+
     // Input Fields span slide
     $('.new_input').val('');
 
@@ -63,16 +96,19 @@ $(document).ready(function() {
             password: $('input[name=signupPassword]').val(),
         };
         if (formData.fullname.length < 6) {
-            alert("fullname must be greater than 6");
-            return;
+            return warningSlides({
+              warning: "fullname is too short"
+            });
         }
         if (formData.email.length < 5) {
-            alert("Username is too short and must be greater than 3");
-            return;
+            return warningSlides({
+                warning: "Email is too short"
+            });
         }
         if (formData.password.length < 8) {
-            alert("Password is too short and must be greater than 8");
-            return;
+            return warningSlides({
+                warning: "Pick a password greater than 8 characters"
+            });
         }
 
         const encodedData = btoa(JSON.stringify(formData));
@@ -102,12 +138,14 @@ $(document).ready(function() {
             password: $('input[name=signinPassword]').val(),
         };
         if (formData.email.length < 5) {
-            alert("Username is too short");
-            return;
+            return warningSlides({
+                warning: "Username is too short"
+            });
         }
         if (formData.password.length < 8) {
-            alert("Password is too short");
-            return;
+            return warningSlides({
+                warning: "Password is too short"
+            });
         }
 
         const encodedData = btoa(JSON.stringify(formData));

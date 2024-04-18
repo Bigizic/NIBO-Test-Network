@@ -18,7 +18,7 @@ function createNextQuestion() {
 
           <div class="question_text_box_container" style="grid-row: 1;">
               <div style="display: flex; gap: 10%; margin-top: 10px; position: relative;" class="question_buttons">
-                  <input class="cancel_exam_create" type="button" style="cursor: pointer; background: transparent; font-size: 15px; font-weight: 900; position: absolute; top: -33px;" value="X">
+                  <input class="cancel_questions_create" type="button" style="cursor: pointer; background: transparent; font-size: 15px; font-weight: 900; position: absolute; top: -33px;" value="X">
                   <input class="prev_question" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Prev question">
                   <input class="go_back" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Back to exam">
                   <input class="next_question" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Next question">
@@ -80,7 +80,7 @@ function createNextQuestion() {
                   <br>
               </ul>
               <input class="add_more_links" style="font-size: 11px; padding: 5px 10px; border-radius: 10px; background: yellow;
-              font-weight: bold; cursor: pointer; margin: 30px 0px 0px 0px;" type="button" value="click to add more than one link">
+              font-weight: bold; cursor: pointer; margin: 30px 0px 0px -10px;" type="button" value="click to add more than one link">
             </div>
       </div>
 
@@ -999,8 +999,8 @@ $(document).ready(function () {
 });
 
 
-// cancel exam form create
-$(document).on('click', '.cancel_exam_create', function() {
+// cancel question form create
+$(document).on('click', '.cancel_questions_create', function() {
   let forCounter = $(this).parent('div').parent('div').parent('div').parent('form').attr('id');
   let lastCharCounter = forCounter.toString().split('_')[2].split('m')[1];
   if(/\d/.test(lastCharCounter)) {
@@ -1013,6 +1013,13 @@ $(document).on('click', '.cancel_exam_create', function() {
     $('.exams_container').css('filter', 'blur(0px)');
   }
 });
+
+
+// cancel exam create
+$(document).on('click', '.cancel_exam_create', function() {
+  $('#create_exam_form').slideUp();
+  $('.exams_container').css('filter', 'blur(0px)');
+})
 
 
 /**
