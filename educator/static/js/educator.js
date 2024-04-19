@@ -5,9 +5,9 @@ let prevFormCounter = null;
 
 
 /**
- * uploadFile - 
- * @param {str} file 
- * @param {str} progressBar 
+ * uploadFile - handles dynamic upload file logic
+ * @param {str} file
+ * @param {str} progressBar
  */
 function uploadFile(file, progressBar) {
   let progress = 0;
@@ -56,10 +56,10 @@ function createNextQuestion() {
                           <option value="multiple">Multiple answers</option>
                       </select>
 
-                      <div style="margin-top: 20px; width: 200px; font-size: 11px;" id="upload_media_files">
-                                <input style="margin-bottom: 20px;" type="file" id="fileInput" multiple accept=".png, .jpg, .jpeg, .mp4, .gif">
+                      <div style="margin-top: 30px; width: 200px; font-size: 11px;" id="upload_media_files">
+                      <h3>Upload local media files</h3>
+                                <input style="width: 210px; margin-bottom: 20px; margin-top: 12px;" type="file" id="fileInput" multiple accept=".png, .jpg, .jpeg, .mp4, .gif">
                                 <div class="mediaList"></div>
-                                <input style="padding: 5px 18px; margin-top: 10px; background: yellow; border: 1px solid; font-size: 11px; border-radius: 5%;" type="button" id="saveMediaButton" value="Save"/>
                       </div>
                   </div>
                   <div id="qts2">
@@ -99,7 +99,7 @@ function createNextQuestion() {
                           <input class="question_new_input" type="url" name="link">
                           <span class="question_new_input_span" data-placeholder=".png, .jpeg, .jpg, .gifs, .mp4 files are allowed"></span>
                           <input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">
-                          <small style="display: flex; gap: 20px; margin-top: 15px;"><input class="media_link_to_question" style="font-size: 9.5px; font-weight: bolder; padding: 4px 10px; border-radius: 10px;" type="button" value="add media link to question"></small>
+                          <small style="display: flex; gap: 20px; margin-top: 15px;"></small>
                           <img style="height: 160px; position: absolute; right: -250px; top: -10px;" class="question_image_viewport"/>
                       </div>
                   </li>
@@ -568,7 +568,7 @@ $(document).ready(function () {
         <input class="question_new_input" type="url" name="link">
         <span class="question_new_input_span" data-placeholder=".png, .jpeg, .jpg, .gifs, .mp4 files are allowed"></span>
         <input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">
-        <small style="display: flex; gap: 20px; margin-top: 15px;"><input class="media_link_to_question" style="font-size: 9.5px; font-weight: bolder; padding: 4px 10px; border-radius: 10px;" type="button" value="add media link to question"></small>
+        <small style="display: flex; gap: 20px; margin-top: 15px;"></small>
         <img style="height: 160px; position: absolute; right: -250px; top: -10px;" class="question_image_viewport"/>
         </div>
         </li><br>`);
@@ -818,6 +818,9 @@ $(document).on('click', '.question_new_input_check_mark', function () {
   let appendVideoTag = $(this).closest('.question_wrap_input');
   let inputValue = input.val().trim();
   let embededYoutubeLink = null;
+  let addMediaLinkToQuestion = `<input class="media_link_to_question"
+    style="font-size: 9.5px; font-weight: bolder; padding: 4px 10px; border-radius: 10px;"
+    type="button" value="add media link to question">`
 
   if (!isValidUrl(inputValue) && inputValue !== '') {
     embededYoutubeLink = input.val().trim().split('src="')[1].split(' ')[0].replace('"', '');
@@ -833,6 +836,7 @@ $(document).on('click', '.question_new_input_check_mark', function () {
     });
   }
   if ((inputValue !== '' && isValidUrl(inputValue)) || isValidUrl(embededYoutubeLink)) {
+    $(this).siblings('small').html(addMediaLinkToQuestion)
     input.addClass('has-val');
     input.prop('readonly', true);
     $(this).replaceWith('<input class="question_new_input_clear" type="button" value="&#x2715" style="color: red; position: absolute; right: -20px; top: 35px;">');
@@ -1134,18 +1138,36 @@ $(document).ready(function () {
    * section for dynamic file uploading
   */
   $(document).on('change', '#fileInput', function() {
+    let files = $(this)[0].files;
+    let mediaListLen = $(this).siblings('.mediaList').children('.media-container').length;
 
-    if ($(this).siblings('.mediaList').children('.media-container').length === 5) {
+    if (files.length === 0) { return warningSlides({ warning: 'select a file' })} ;
+    if (files.length + mediaListLen > 5) {
       return warningSlides({
         warning: 'you can only select 5 media files',
       })
     }
 
-    let files = $(this)[0].files;
-    if (files.length === 0) { return warningSlides({ warning: 'select a file' })} ;
-
     for (let i = 0; i < files.length; i++) {
       let file = files[i];
+      if (file) {
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'video/mp4', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+          return warningSlides({
+            warning: 'Invalid file type. Only PNG, JPEG, JPG, MP4, and GIF files are allowed.'
+          });
+        }
+        
+        // File size validation
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (file.size > maxSize) {
+          return warningSlides({
+            warning: 'File size exceeds the limit of 5MB.'
+          });
+        }
+      }
+
+
       let mediaContainer = $('<div class="media-container"></div>');
       let progressBar = $('<div class="progress"><div class="progress-bar"></div></div>');
       let fileName = $('<p>' + file.name + '</p>');
@@ -1153,10 +1175,21 @@ $(document).ready(function () {
       mediaContainer.append(fileName, progressBar);
       let mediaList = $(this).siblings('.mediaList');
       mediaList.prepend(mediaContainer);
-      $(this).val('');
       
       uploadFile(file, progressBar);
     }
+    $(this).val('');
+  })
+
+
+  /**
+   * media link to question click
+   */
+
+  $(document).on('click', '.media_link_to_question', function() {
+    let linkValue = $(this).parent('small').parent('div').children('.question_new_input').val();
+
+
   })
 
 })
