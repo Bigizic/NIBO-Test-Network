@@ -5,6 +5,26 @@ let prevFormCounter = null;
 
 
 /**
+ * uploadFile - 
+ * @param {str} file 
+ * @param {str} progressBar 
+ */
+function uploadFile(file, progressBar) {
+  let progress = 0;
+
+  let interval = setInterval(function() { 
+    progress += Math.random() * 10;
+    if (progress >= 100) {
+      clearInterval(interval);
+      progressBar.children('.progress-bar').css('width', '100%');
+      return;
+    }
+    progressBar.children('.progress-bar').css('width', progress + '%');
+  }, 500);
+}
+
+
+/**
  * createNextQuestion - clones the create_question_form form and displays it when next button gets clicked
  */
 function createNextQuestion() {
@@ -35,6 +55,12 @@ function createNextQuestion() {
                           <option value="single">Single answer</option>
                           <option value="multiple">Multiple answers</option>
                       </select>
+
+                      <div style="margin-top: 20px; width: 200px; font-size: 11px;" id="upload_media_files">
+                                <input style="margin-bottom: 20px;" type="file" id="fileInput" multiple accept=".png, .jpg, .jpeg, .mp4, .gif">
+                                <div class="mediaList"></div>
+                                <input style="padding: 5px 18px; margin-top: 10px; background: yellow; border: 1px solid; font-size: 11px; border-radius: 5%;" type="button" id="saveMediaButton" value="Save"/>
+                      </div>
                   </div>
                   <div id="qts2">
                       <ul style="list-style-type: none;" id="add_more_question_ul">
@@ -1102,4 +1128,35 @@ $(document).ready(function () {
       })
     }
   })
+
+
+  /** 
+   * section for dynamic file uploading
+  */
+  $(document).on('change', '#fileInput', function() {
+
+    if ($(this).siblings('.mediaList').children('.media-container').length === 5) {
+      return warningSlides({
+        warning: 'you can only select 5 media files',
+      })
+    }
+
+    let files = $(this)[0].files;
+    if (files.length === 0) { return warningSlides({ warning: 'select a file' })} ;
+
+    for (let i = 0; i < files.length; i++) {
+      let file = files[i];
+      let mediaContainer = $('<div class="media-container"></div>');
+      let progressBar = $('<div class="progress"><div class="progress-bar"></div></div>');
+      let fileName = $('<p>' + file.name + '</p>');
+      
+      mediaContainer.append(fileName, progressBar);
+      let mediaList = $(this).siblings('.mediaList');
+      mediaList.prepend(mediaContainer);
+      $(this).val('');
+      
+      uploadFile(file, progressBar);
+    }
+  })
+
 })
