@@ -2,6 +2,7 @@ const URLS = 'http://localhost:8000';
 const $ = window.$;
 let formCounter = 0;
 let prevFormCounter = null;
+var jqteQuestion, jqteOptions, jqteAddMediaLinkToQuestion, jqteAnswers = {};
 
 
 /**
@@ -1188,7 +1189,7 @@ $(document).ready(function () {
 
   $(document).on('click', '.media_link_to_question', function() {
     let linkValue = $(this).parent('small').parent('div').children('.question_new_input').val();
-
+    // add link
 
   })
 
