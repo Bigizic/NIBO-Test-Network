@@ -191,9 +191,9 @@
 
 
     <div class="all_question_form">
-        <form id="create_questions_form" style="position: fixed; top: 5%; background: #fff;
+        <form id="create_questions_form" style="position: fixed; top: 2%; background: #fff;
         flex-wrap: wrap; width: 90%; box-shadow: 1px 2px 5px #00000057;
-        border-radius: 40px; margin-top: 20px; padding: 50px 0px 50px 30px;
+        border-radius: 5px; margin-top: 20px; padding: 50px 0px 50px 30px;
         display: none; z-index: 3; right: 2%; width: 0; height: 90%; overflow-y: scroll;">
             <div style="display: grid; grid-template-columns: 1fr 0.1fr; grid-template-rows: 1fr;" class="question_container">
 
@@ -202,9 +202,9 @@
                         <input class="cancel_questions_create" type="button" style="cursor: pointer; background: transparent; font-size: 15px; font-weight: 900; position: absolute; top: -33px;" value="X">
                         <input class="go_back" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Back to exam">
                         <input class="next_question" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Next question">
-                        <input class="next_and_save" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Save question">
-                        <h6 style="font-size: 10px; position: absolute; top: -40px; right: -5px; display: none; background: gainsboro;
-                        padding: 4px 9px;">&#9432;&nbsp; When this action is triggered, question is saved and it can not be edited in this section</h6>
+                        <input class="save_all" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Save question">
+                        <h5 style="font-size: 10px; position: absolute; top: -40px; right: -5px; display: none; background: gainsboro;
+                        padding: 4px 9px;">&#9432;&nbsp; When this action is triggered, question is saved and it can not be edited in this section</h5>
                     </div>
                     <textarea id="formatted-text-textarea" placeholder="Enter question" class="question_text_box" style="font-size: 14px; width: 720px; height: 320px; border: 1px solid black; padding: 20px 15px;"></textarea>
                     <div class="word_counter" style="font-size: 12px; margin-top: -15px;"></div>
@@ -225,20 +225,22 @@
                             <ul style="list-style-type: none;" id="add_more_question_ul">
                                 <li><h5>Enter answers &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Answer type</h5></li>
                                 <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">1</span> <input class="question_checked waschecked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio" checked="checked"/>
-                                <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
-                                <select style="padding: 5px 15px; height: fit-content; border-radius: 10px; font-size: 10px; margin-top: 20px; margin-left: 10px;">
-                                    <option value="text">Text</option>
-                                    <option value="imgurl">Image url</option>
-                                    <option value="vidurl">Video url</option>
-                                    <option value="youturl">Youtube embed</option>
-                                </select></li>
-                                <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">2</span> <input class="question_checked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio"/> <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
-                                <select style="padding: 5px 15px; height: fit-content; border-radius: 10px; font-size: 10px; margin-top: 20px; margin-left: 10px;">
-                                    <option value="text">Text</option>
-                                    <option value="imgurl">Image url</option>
-                                    <option value="vidurl">Video url</option>
-                                    <option value="youturl">Youtube embed</option>
-                                </select>
+                                    <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
+                                        <select style="padding: 5px 15px; height: fit-content; border-radius: 10px; font-size: 10px; margin-top: 20px; margin-left: 10px;">
+                                            <option value="text">Text</option>
+                                            <option value="imgurl">Image url</option>
+                                            <option value="vidurl">Video url</option>
+                                            <option value="youturl">Youtube embed</option>
+                                        </select>
+                                </li>
+                                <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">2</span> <input class="question_checked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio"/>
+                                    <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
+                                        <select style="padding: 5px 15px; height: fit-content; border-radius: 10px; font-size: 10px; margin-top: 20px; margin-left: 10px;">
+                                            <option value="text">Text</option>
+                                            <option value="imgurl">Image url</option>
+                                            <option value="vidurl">Video url</option>
+                                            <option value="youturl">Youtube embed</option>
+                                        </select>
                                 </li>
                             </ul>
                             <input id="add_more_question_button" style="box-shadow: 1px 2px 5px #00000057; margin-top: 15px; font-size: 10px; padding: 5px 20px; border-radius: 20px;" type="button" value="click to add more answer"/>

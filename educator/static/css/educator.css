@@ -659,7 +659,7 @@ a { color: black; }
   color: inherit;
 }
 
-.next_and_save:hover, .remove_li_questions:hover, .go_back:hover, .create_exam_btn:hover, .cancel_exam_create:hover, .add_questions:hover, .edit_exam_button:hover, .next_question:hover, .prev_question:hover {
+.save_all:hover, .remove_li_questions:hover, .go_back:hover, .create_exam_btn:hover, .cancel_exam_create:hover, .add_questions:hover, .edit_exam_button:hover, .next_question:hover, .prev_question:hover {
   background: yellow !important;
   color: black !important;
   height: fit-content;

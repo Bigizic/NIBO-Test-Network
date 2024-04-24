@@ -2,7 +2,6 @@ const URLS = 'http://localhost:8000';
 const $ = window.$;
 let formCounter = 0;
 let prevFormCounter = null;
-var jqteQuestion, jqteOptions, jqteAddMediaLinkToQuestion, jqteAnswers = {};
 
 
 /**
@@ -31,9 +30,9 @@ function uploadFile(file, progressBar) {
 function createNextQuestion() {
   formCounter++;
 
-  const newForm = `<form id="create_questions_form${formCounter}" style="position: fixed; top: 5%; background: #fff;
+  const newForm = `<form id="create_questions_form${formCounter}" style="position: fixed; top: 2%; background: #fff;
   flex-wrap: wrap; width: 90%; box-shadow: 1px 2px 5px #00000057;
-  border-radius: 40px; margin-top: 20px; padding: 50px 0px 50px 30px;
+  border-radius: 5px; margin-top: 20px; padding: 50px 0px 50px 30px;
   display: none; z-index: 3; right: 2%; width: 0; height: 90%; overflow-y: scroll;">
       <div style="display: grid; grid-template-columns: 1fr 0.1fr; grid-template-rows: 1fr;" class="question_container">
 
@@ -43,9 +42,9 @@ function createNextQuestion() {
                   <input class="prev_question" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Prev question">
                   <input class="go_back" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Back to exam">
                   <input class="next_question" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Next question">
-                  <input class="next_and_save" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Save question">
-                  <h6 style="font-size: 10px; position: absolute; top: -40px; right: -5px; display: none; background: gainsboro;
-                  padding: 4px 9px;">&#9432;&nbsp; When this action is triggered, question is saved and it can not be edited in this section</h6>
+                  <input class="save_all" type="button" style="font-size: 11px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Save all">
+                  <h5 style="font-size: 10px; position: absolute; top: -40px; right: -5px; display: none; background: gainsboro;
+                  padding: 4px 9px;">&#9432;&nbsp; When this button is clicked, all questions are saved including previous ones</h5>
               </div>
               <textarea id="formatted-text-textarea" placeholder="Enter question" class="question_text_box" style="font-size: 14px; width: 720px; height: 320px; border: 1px solid black; padding: 20px 15px;"></textarea>
               <div class="word_counter" style="font-size: 12px; margin-top: -15px;"></div>
@@ -66,7 +65,8 @@ function createNextQuestion() {
                   <div id="qts2">
                       <ul style="list-style-type: none;" id="add_more_question_ul">
                       <li><h5>Enter answers &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Answer type</h5></li>
-                      <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">1</span> <input class="question_checked waschecked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio" checked="checked"/><textarea id="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
+                      <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">1</span> <input class="question_checked waschecked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio" checked="checked"/>
+                      <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
                           <select style="padding: 5px 15px; height: fit-content; border-radius: 10px; font-size: 10px; margin-top: 20px; margin-left: 10px;">
                                     <option value="text">Text</option>
                                     <option value="imgurl">Image url</option>
@@ -74,7 +74,8 @@ function createNextQuestion() {
                                     <option value="youturl">Youtube embed</option>
                                 </select>
                           </li>
-                          <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">2</span> <input class="question_checked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio"/> <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
+                          <li style="display: flex; position: relative;"><span style="font-size: 15px; align-self: center; margin: 15px 10px 0px 0px;">2</span> <input class="question_checked" style="color: yellow; position: absolute; top: 30px; left: -25px;" type="radio"/>
+                          <textarea class="options_textarea" style="margin-top: 15px; border: 1px solid black; padding: 5px 10px; border-radius: 10px; font-size: 12px;" placeholder="Enter answer"></textarea>
                           <select style="padding: 5px 15px; height: fit-content; border-radius: 10px; font-size: 10px; margin-top: 18px; margin-left: 10px;">
                                     <option value="text">Text</option>
                                     <option value="imgurl">Image url</option>
@@ -539,10 +540,12 @@ $(document).ready(function () {
 
   // go back to exam when add question is clicked
   $(document).on('click', '.go_back', function () {
-    if (formCounter > 0) {
-      $(`#create_questions_form${formCounter}`).animate({ width: '0%' }, 500, 'linear');
+    let forCounter = $(this).parent('div').parent('div').parent('div').parent('form').attr('id');
+    let lastCharCounter = forCounter.toString().split('_')[2].split('m')[1];
+    if(/\d/.test(lastCharCounter)) {
+      $(`#create_questions_form${lastCharCounter}`).animate({ width: '0%' }, 500, 'linear');
       setTimeout(function () {
-        $(`#create_questions_form${formCounter}`).css('display', 'none');
+        $(`#create_questions_form${lastCharCounter}`).css('display', 'none');
       }, 500);
     } else {
       $('#create_questions_form').animate({ width: '0%' }, 500, 'linear');
@@ -866,11 +869,11 @@ $(document).on('click', '.question_new_input_check_mark', function () {
 });
 
 // question new input clear
-$(document).on('click', '.question_new_input_clear', function (e) {
+$(document).on('click', '.question_new_input_clear', function () {
   const input = $(this).closest('.question_wrap_input').find('.question_new_input');
   input.prop('readonly', false);
   $(this).replaceWith('<input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">');
-  input.bind('input propertychange', function (e) {
+  input.bind('input propertychange', function () {
     if ($(this).val() === '') {
       input.removeClass('has-val');
     }
@@ -1096,42 +1099,76 @@ $(document).ready(function () {
 
 $(document).ready(function () {
 
-  // warning message when "save question button" is hovered
+  // warning message when "save all" button is hovered
   $(document).on({
     mouseenter: function () {
-      $('.question_buttons h6').css('display', 'block');
+      $('.question_buttons h5').css('display', 'block');
     },
     mouseleave: function () {
-      $('.question_buttons h6').css('display', 'none');
+      $('.question_buttons h5').css('display', 'none');
     }
-  }, '.next_and_save');
+  }, '.save_all')
+
 
   /**
-   * handles logic when one question is saved after creating instead
+   * action: (onclick) button
+   * details: gets all questions and details for all question form and saves all questions
    */
-  $(document).on('click', '.next_and_save', function () {
-    let question = $(this).parent('div').parent('.question_text_box_container').children('.jqte').children('.jqte_source').children('#formatted-text-textarea').val();
+  $(document).on('click', '.save_all', function () {
+    let qQuestion = null, questionsList = [], options = [], correctAnswer = [], count = 0, optionsTextarea;
 
-    let options = [];
-    let correctAnswer = [];
+    $('.save_all').each(function() {
+      let mainQuestionContainer = $(this).parent('div').parent('div').parent('.question_container');
 
-    $('.options_textarea').each(function(index, item) {
-      if($(this).val !== '' && $(this).val().length > 1) {
-        let selectValue = $(this).siblings('select').val();
-        let itemSelectSibling = { [selectValue]: $(this).val() };
-        options.push(itemSelectSibling);
-      }
-      if ($(this).parent('li').children('.waschecked').siblings('.options_textarea').val()) {
-        let correctAnswerSelectValue = $(this).parent('li').children('.waschecked').siblings('select').val();
-        correctAnswer.push( {[correctAnswerSelectValue]: $(this).parent('li').children('.waschecked').siblings('.options_textarea').val()});
-      }
-    })
+      qQuestion = mainQuestionContainer.children('.question_text_box_container').children('.jqte').children('.jqte_source').children('#formatted-text-textarea').val();
 
-    if (options.length < 1) {
-      return warningSlides({
-        warning: 'incomplete answer fileds',
+      optionsTextarea = $(this).parent('div').parent('div').children('.question_type_select').children('#qts2').children('ul').children('li').children('.options_textarea');
+
+      optionsTextarea.each(function() {
+        if ($(this).val() !== '' && $(this).val().length > 1) {
+          options.push({ [$(this).siblings('select').val()]: $(this).val() })
+        }
+        if ($(this).parent('li').children('.waschecked').siblings('.options_textarea').val()) {
+          let correctAnswerSelectValue = $(this).parent('li').children('.waschecked').siblings('select').val();
+          correctAnswer.push( {[correctAnswerSelectValue]: $(this).parent('li').children('.waschecked').siblings('.options_textarea').val()});
+        }
       })
-    }
+
+      if (options.length < 1) {
+        return warningSlides({
+          warning: 'incomplete answer fileds',
+        })
+      }
+
+      questionsList.push({
+        [`question_${count}`]: [
+          { question: qQuestion },
+          { options: options },
+          { correctAnswer: correctAnswer },
+        ]
+      });
+      options = [];  // reset options list
+      correctAnswer = [];  // reset correct answer list
+      count++;
+    });
+    console.log(questionsList)
+
+    $.ajax({
+      url: `${URLS}/question/create_question/`,
+      type: 'POST',
+      data: { EX: btoa(JSON.stringify(questionsList)) },
+      headers: {
+        'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+      },
+      success: function (response) {
+        window.location.replace(window.location.href);
+      },
+      error: function (xhr, errmsg, err) {
+        console.log(err);
+      }
+    });
+    return;
+
   })
 
 
@@ -1184,7 +1221,8 @@ $(document).ready(function () {
 
 
   /**
-   * media link to question click
+   * action: {onclick} buttons
+   * details: add media link to question 
    */
 
   $(document).on('click', '.media_link_to_question', function() {
