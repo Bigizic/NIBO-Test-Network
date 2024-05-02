@@ -2,6 +2,7 @@ const URLS = 'http://localhost:8000';
 const $ = window.$;
 let formCounter = 0;
 let prevFormCounter = null;
+var questionExamId;
 
 
 /**
@@ -33,8 +34,8 @@ function createNextQuestion() {
   const newForm = `<form id="create_questions_form${formCounter}" style="position: fixed; top: 2%; background: #fff;
   flex-wrap: wrap; width: 90%; box-shadow: 1px 2px 5px #00000057;
   border-radius: 5px; margin-top: 20px; padding: 50px 0px 50px 30px;
-  display: none; z-index: 3; right: 2%; width: 0; height: 90%; overflow-y: scroll;">
-      <div style="display: grid; grid-template-columns: 1fr 0.1fr; grid-template-rows: 1fr;" class="question_container">
+  display: none; z-index: 3; right: 2%; width: 0; height: 92%; overflow-y: scroll;">
+      <div style="display: grid; grid-template-columns: 1fr 0.1fr; grid-template-rows: 1fr; margin-top: 30px;" class="question_container">
 
           <div class="question_text_box_container" style="grid-row: 1;">
               <div style="display: flex; gap: 10%; margin-top: 10px; position: relative;" class="question_buttons">
@@ -51,7 +52,7 @@ function createNextQuestion() {
               <div class="question_type_select" style="margin-top: 20px; display: flex; gap: 100px;">
                   <div id="qts1">
                       <h5>Select answer type</h5>
-                      <select id="select_answer_type" style="padding: 5px 20px; border-radius: 30px; font-size: 12px; margin-top: 10px;">
+                      <select class="select_answer_type" style="padding: 5px 20px; border-radius: 30px; font-size: 12px; margin-top: 10px;">
                           <option value="single">Single answer</option>
                           <option value="multiple">Multiple answers</option>
                       </select>
@@ -90,7 +91,7 @@ function createNextQuestion() {
 
           </div>
           <div class="question_links_container" style="grid-column: 3; margin-top: -100px;">
-              <ul style="list-style-type: none; position: absolute; top: 0; margin-top: 12px; font-size: 13px;">
+              <ul style="list-style-type: none; position: absolute; top: 0; margin-top: 35px; font-size: 13px;">
                   <li style="list-style-type: disc;"><h4>Add links to question</h4></li>
                   <li style="list-style: disclosure-closed; font-size: 12px;">Images, gifs and videos are allowed</li>
                   <li style="list-style: disclosure-closed; font-size: 12px;">for Youtube videos paste the embeded link</li>
@@ -102,7 +103,7 @@ function createNextQuestion() {
                           <span class="question_new_input_span" data-placeholder=".png, .jpeg, .jpg, .gifs, .mp4 files are allowed"></span>
                           <input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">
                           <small style="display: flex; gap: 20px; margin-top: 15px;"></small>
-                          <img style="height: 160px; position: absolute; right: -250px; top: -10px;" class="question_image_viewport"/>
+                          <img style="height: 160px; position: absolute; right: -250px; top: -6px;" class="question_image_viewport"/>
                       </div>
                   </li>
                   <br>
@@ -573,7 +574,7 @@ $(document).ready(function () {
         <span class="question_new_input_span" data-placeholder=".png, .jpeg, .jpg, .gifs, .mp4 files are allowed"></span>
         <input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">
         <small style="display: flex; gap: 20px; margin-top: 15px;"></small>
-        <img style="height: 160px; position: absolute; right: -250px; top: -10px;" class="question_image_viewport"/>
+        <img style="height: 160px; position: absolute; right: -250px; top: -6px;" class="question_image_viewport"/>
         </div>
         </li><br>`);
     }
@@ -737,6 +738,7 @@ $(document).ready(function () {
     const grade = listItem.find('[data-exam-grade]').data('exam-grade');
     const timeLimit = listItem.find('[data-exam-time-limit]').data('exam-time-limit');
     const editExamId = listItem.find('[data-exam-id]').data('exam-id');
+    questionExamId = editExamId;
 
     const retrieveExamDetails = {
       title,
@@ -855,7 +857,7 @@ $(document).on('click', '.question_new_input_check_mark', function () {
 
   // mp4 video
   if (getFileExtensionType(inputValue) === 'video') {
-    appendVideoTag.append(`<video controls style="width: 200px; height: 160px; position: absolute; right: -250px; top: -10px;" class="question_video_viewport">
+    appendVideoTag.append(`<video controls style="width: 200px; height: 160px; position: absolute; right: -250px; top: -6px;" class="question_video_viewport">
     <source src="${inputValue}" type="video/mp4">
     Your browser does not support the video tag.
     </video>`);
@@ -918,7 +920,7 @@ $(document).on('click', '#add_more_question_button', function () {
 });
 
 // answer type click, single and multiple i.e select and option tags
-$(document).on('click', '#select_answer_type', function () {
+$(document).on('click', '.select_answer_type', function () {
   // answer type select dynamic rendering
   let qChecked = $(this).parent('#qts1').parent('div').children('#qts2').children('ul').children('li').children('input')
   if ($(this).val() === 'single') {
@@ -1115,60 +1117,73 @@ $(document).ready(function () {
    * details: gets all questions and details for all question form and saves all questions
    */
   $(document).on('click', '.save_all', function () {
-    let qQuestion = null, questionsList = [], options = [], correctAnswer = [], count = 0, optionsTextarea;
+    let questionsList = [], options = [], correctAnswer = [], count = 0, questionsLength;
 
-    $('.save_all').each(function() {
-      let mainQuestionContainer = $(this).parent('div').parent('div').parent('.question_container');
+  $('.question_container').each(function() {
+    let qQuestion = $(this).find('.jqte_source').children('#formatted-text-textarea').val();
 
-      qQuestion = mainQuestionContainer.children('.question_text_box_container').children('.jqte').children('.jqte_source').children('#formatted-text-textarea').val();
 
-      optionsTextarea = $(this).parent('div').parent('div').children('.question_type_select').children('#qts2').children('ul').children('li').children('.options_textarea');
-
-      optionsTextarea.each(function() {
-        if ($(this).val() !== '' && $(this).val().length > 1) {
-          options.push({ [$(this).siblings('select').val()]: $(this).val() })
+    $(this).find('.options_textarea').each(function() {
+      let optionValue = $(this).val();
+      if (optionValue.length > 1) {
+        options.push(
+          {[optionValue]: $(this).siblings('select').val()
+        });
+        if ($(this).parent('li').children('.waschecked').length > 0) {
+          correctAnswer.push(
+            {[optionValue]: $(this).siblings('select').val()
+          });
         }
-        if ($(this).parent('li').children('.waschecked').siblings('.options_textarea').val()) {
-          let correctAnswerSelectValue = $(this).parent('li').children('.waschecked').siblings('select').val();
-          correctAnswer.push( {[correctAnswerSelectValue]: $(this).parent('li').children('.waschecked').siblings('.options_textarea').val()});
-        }
-      })
-
-      if (options.length < 1) {
-        return warningSlides({
-          warning: 'incomplete answer fileds',
-        })
-      }
-
-      questionsList.push({
-        [`question_${count}`]: [
-          { question: qQuestion },
-          { options: options },
-          { correctAnswer: correctAnswer },
-        ]
-      });
-      options = [];  // reset options list
-      correctAnswer = [];  // reset correct answer list
-      count++;
-    });
-    console.log(questionsList)
-
-    $.ajax({
-      url: `${URLS}/question/create_question/`,
-      type: 'POST',
-      data: { EX: btoa(JSON.stringify(questionsList)) },
-      headers: {
-        'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-      },
-      success: function (response) {
-        window.location.replace(window.location.href);
-      },
-      error: function (xhr, errmsg, err) {
-        console.log(err);
       }
     });
-    return;
 
+    let correctAnswerType = $(this).find('.waschecked').attr('type');
+    console.log(correctAnswerType)
+
+    if (!qQuestion || options.length < 2 || !correctAnswer || !correctAnswerType) {
+      return warningSlides({ warning: `current form has incomplete fields` });
+    }
+
+    questionsList.push({
+      [`question_${count}`]: [
+        { examId: questionExamId },
+        { question: qQuestion },
+        { options: options },
+        { correctAnswer: correctAnswer },
+        { answerType: correctAnswerType },
+      ]
+    });
+    optionsLength = options.length;
+    options = [];  // reset options list
+    correctAnswer = [];  // reset correct answer list
+    count++;
+    questionsLength = qQuestion.length;
+  });
+  console.log(questionsList)
+  return;
+
+  if (optionsLength < 2) {
+    return warningSlides({ warning: 'you have incomplete fields' })
+  }
+  if (questionsLength < 5) {
+    return warningSlides({ warning: 'question is too short' })
+  }
+
+  $.ajax({
+    url: `${URLS}/question/create_question/`,
+    type: 'POST',
+    data: { EX: btoa(JSON.stringify(questionsList)) },
+    headers: {
+      'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+    },
+    success: function () {
+      window.location.replace(window.location.href);
+    },
+    error: function (xhr, errmsg, err) {
+      console.log(err);
+    }
+  });
+  return;
   })
 
 

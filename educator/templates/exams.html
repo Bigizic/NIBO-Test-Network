@@ -101,10 +101,10 @@
 </section>
 </div>
 
-<form id="create_exam_form" style="position: fixed; top: 9%; background: #fff;
+<form id="create_exam_form" style="position: fixed; top: 5%; background: #fff;
         flex-wrap: wrap; width: 90%; box-shadow: 1px 2px 5px #00000057;
-        border-radius: 40px; margin-top: 20px; padding: 50px 0px 50px 30px;
-        display: none; z-index: 3; right: 2%;">
+        border-radius: 10px; margin-top: 20px; padding: 50px 0px 50px 30px;
+        display: none; z-index: 3; right: 2%; height: 90%;">
             <div style="padding: 0; height: 50px;" class="pp_cover">
                 {% if educator.profile_pic %}
                 <div><img src="{}"></div>
@@ -194,8 +194,8 @@
         <form id="create_questions_form" style="position: fixed; top: 2%; background: #fff;
         flex-wrap: wrap; width: 90%; box-shadow: 1px 2px 5px #00000057;
         border-radius: 5px; margin-top: 20px; padding: 50px 0px 50px 30px;
-        display: none; z-index: 3; right: 2%; width: 0; height: 90%; overflow-y: scroll;">
-            <div style="display: grid; grid-template-columns: 1fr 0.1fr; grid-template-rows: 1fr;" class="question_container">
+        display: none; z-index: 3; right: 2%; width: 0; height: 92%; overflow-y: scroll;">
+            <div style="display: grid; grid-template-columns: 1fr 0.1fr; grid-template-rows: 1fr; margin-top: 30px;" class="question_container">
 
                 <div class="question_text_box_container" style="grid-row: 1;">
                     <div style="display: flex; gap: 15%; margin-top: 10px; position: relative;" class="question_buttons">
@@ -211,7 +211,7 @@
                     <div class="question_type_select" style="margin-top: 20px; display: flex; gap: 100px;">
                         <div id="qts1">
                             <h5>Select answer type</h5>
-                            <select id="select_answer_type" style="padding: 5px 20px; border-radius: 30px; font-size: 12px; margin-top: 10px;">
+                            <select class="select_answer_type" style="padding: 5px 20px; border-radius: 30px; font-size: 12px; margin-top: 10px;">
                                 <option value="single">Single answer</option>
                                 <option value="multiple">Multiple answers</option>
                             </select>
@@ -249,7 +249,7 @@
 
                 </div>
                 <div class="question_links_container" style="grid-column: 3; margin-top: -100px;">
-                    <ul style="list-style-type: none; position: absolute; top: 0; margin-top: 12px; font-size: 13px;">
+                    <ul style="list-style-type: none; position: absolute; top: 0; margin-top: 35px; font-size: 13px;">
                         <li style="list-style-type: disc;"><h4>Add links to question</h4></li>
                         <li style="list-style: disclosure-closed; font-size: 12px;">Images, gifs and videos are allowed</li>
                         <li style="list-style: disclosure-closed; font-size: 12px;">for Youtube videos paste the embeded link</li>
