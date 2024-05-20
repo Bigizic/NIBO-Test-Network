@@ -65,7 +65,11 @@ class EducatorOperations():
         return True
 
     def update_records(self, model, command):
-        """Update certain records """
+        """update_records - Update certain records like the logout
+           and login time of an educator
+
+           model: 
+        """
         pk = model['id']
         try:
             ins = EducatorModel.objects.get(pk=pk)

@@ -1118,7 +1118,7 @@ $(document).ready(function () {
   * details: gets all questions and details for all question form and saves all questions
   */
 $(document).on('click', '.save_all', function () {
-  let questionsList = [], options = [], correctAnswer = [], count = 0, questionsLength;
+  let questionsList = [], options = [], correctAnswer = [], count = 0, questionsLength, optionsLength;
 
   $('.question_container').each(function() {
     let qQuestion = $(this).find('.jqte_source').children('#formatted-text-textarea').val();
@@ -1140,6 +1140,10 @@ $(document).on('click', '.save_all', function () {
     let correctAnswerType = $(this).find('.waschecked').attr('type');
 
     if (!qQuestion || options.length < 2 || !correctAnswer || !correctAnswerType) {
+      console.log(qQuestion)
+      console.log(options.length)
+      console.log(correctAnswer)
+      console.log(correctAnswerType)
       return warningSlides({ warning: `current form has incomplete fields` });
     }
 
