@@ -202,6 +202,7 @@
                         <input class="cancel_questions_create" type="button" style="cursor: pointer; background: transparent; font-size: 15px; font-weight: 900; position: absolute; top: -33px;" value="X">
                         <input class="go_back" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Back to exam">
                         <input class="next_question" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Next question">
+                        {% csrf_token %}
                         <input class="save_all" type="button" style="font-size: 13px; background: black; padding: 10px 20px; color: #fff; border-radius: 50px; cursor: pointer;" value="Save question">
                         <h5 style="font-size: 10px; position: absolute; top: -40px; right: -5px; display: none; background: gainsboro;
                         padding: 4px 9px;">&#9432;&nbsp; When this action is triggered, question is saved and it can not be edited in this section</h5>

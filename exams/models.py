@@ -37,7 +37,6 @@ class ExamModel(BaseModel, models.Model):
             'description': self.exam_description,
             'exam_overall_weight': self.grade,
             'date_created': self.created_at.strftime('%d %b %Y at %H:%M'),
-            'exam duration': f'{self.duration} mins',
             'status': self.status,
             'date_interval': f'starts {start_format} to end {end_format}',
             'student_allowed_time': self.time_limit,

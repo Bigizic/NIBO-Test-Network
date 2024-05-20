@@ -926,9 +926,10 @@ $(document).on('click', '.select_answer_type', function () {
   if ($(this).val() === 'single') {
     qChecked.attr('type', 'radio');
     // if more than one answer has been checked uncheck all of them, once the input type is radio
-    if ($('.waschecked').length > 1) {
-      $('.waschecked').prop('checked', false);
-      $('.question_checked').removeClass('waschecked');
+    let addMoreQuestionUl = $(this).parent('div').parent('div').children('#qts2').children('ul').children('li');
+    if (addMoreQuestionUl.children('.waschecked').length > 1) {
+      addMoreQuestionUl.children('.waschecked').prop('checked', false);
+      addMoreQuestionUl.children('.question_checked').removeClass('waschecked');
     }
   } else {
     qChecked.attr('type', 'checkbox');
@@ -1112,16 +1113,15 @@ $(document).ready(function () {
   }, '.save_all')
 
 
-  /**
-   * action: (onclick) button
-   * details: gets all questions and details for all question form and saves all questions
-   */
-  $(document).on('click', '.save_all', function () {
-    let questionsList = [], options = [], correctAnswer = [], count = 0, questionsLength;
+/**
+  * action: (onclick) button
+  * details: gets all questions and details for all question form and saves all questions
+  */
+$(document).on('click', '.save_all', function () {
+  let questionsList = [], options = [], correctAnswer = [], count = 0, questionsLength;
 
   $('.question_container').each(function() {
     let qQuestion = $(this).find('.jqte_source').children('#formatted-text-textarea').val();
-
 
     $(this).find('.options_textarea').each(function() {
       let optionValue = $(this).val();
@@ -1138,7 +1138,6 @@ $(document).ready(function () {
     });
 
     let correctAnswerType = $(this).find('.waschecked').attr('type');
-    console.log(correctAnswerType)
 
     if (!qQuestion || options.length < 2 || !correctAnswer || !correctAnswerType) {
       return warningSlides({ warning: `current form has incomplete fields` });
@@ -1159,8 +1158,6 @@ $(document).ready(function () {
     count++;
     questionsLength = qQuestion.length;
   });
-  console.log(questionsList)
-  return;
 
   if (optionsLength < 2) {
     return warningSlides({ warning: 'you have incomplete fields' })

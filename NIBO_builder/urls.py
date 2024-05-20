@@ -26,7 +26,7 @@ else:
 
 urlpatterns = [
     path('', include('homepage.urls')),
-    path('django_admin/', admin.site.urls),
+    path('django_admin', admin.site.urls),
     path(ADMIN_ROUTE, include('educator.urls')),
     path('student/', include('students.urls')),
     path('question/', include('questions.urls')),
