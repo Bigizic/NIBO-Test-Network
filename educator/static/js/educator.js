@@ -3,6 +3,7 @@ const $ = window.$;
 let formCounter = 0;
 let prevFormCounter = null;
 var questionExamId;
+var mediaQuestion = [];
 
 
 /**
@@ -101,9 +102,10 @@ function createNextQuestion() {
                       <div class="question_wrap_input" style="position: relative;">
                           <input class="question_new_input" type="url" name="link">
                           <span class="question_new_input_span" data-placeholder=".png, .jpeg, .jpg, .gifs, .mp4 files are allowed"></span>
-                          <input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">
-                          <small style="display: flex; gap: 20px; margin-top: 15px;"></small>
-                          <img style="height: 160px; position: absolute; right: -250px; top: -6px;" class="question_image_viewport"/>
+                          <input class="question_new_input_check_mark" type="button" value="add media to question"
+                          style="color: green; position: absolute; right: -115px; top: 35px;
+                          font-size: 8px; padding: 4px 10px; border-radius: 15px;">
+                          <img style="height: 160px; position: absolute; right: -325px; top: -6px;" class="question_image_viewport"/>
                       </div>
                   </li>
                   <br>
@@ -225,8 +227,26 @@ function checkLink (link) {
  * @returns true if valid else false
  */
 function isValidUrl (url) {
-  const urlPattern = /^(?:(?:ftp|http|https):\/\/)?(?:www\.)?[^ "]+$/;
-  return urlPattern.test(url);
+  // const urlPattern = /^(?:(?:ftp|http|https):\/\/)?(?:www\.)?[^ "]+$/;
+  let regex = new RegExp(
+    '^(?:http|ftp)s?://' +  // http:// or https:// or ftp://
+    '(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\\.)+(?:[A-Z]{2,6}\\.?|[A-Z0-9-]{2,}\\.?)|' +  // domain...
+    'localhost|' +  // localhost...
+    '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|' +  // ...or ipv4
+    '\\[?[A-F0-9]*:[A-F0-9:]+\\]?)' +  // ...or ipv6
+    '(?::\\d+)?' +  // optional port
+    '(?:/?|[/?]\\S+)$', 'i');  // case-insensitive
+    
+    if (!regex.test(url)) {
+      return false;
+    }
+
+    try {
+      let parsedUrl = new URL(url);
+      return parsedUrl.protocol && parsedUrl.hostname;
+    } catch (e) {
+      return false;
+    }
 }
 
 /**
@@ -403,6 +423,7 @@ $(document).ready(function () {
     });
   });
 
+
   // exams.js
   $('.input_number, .custom_option').bind('input propertychange', function () {
     let inputValue = $(this).val();
@@ -485,7 +506,7 @@ $(document).ready(function () {
   $('#description, .question_text_box').bind('input propertychange', function () {
     const charCount = $(this).val().length;
     if (charCount <= 650) {
-      $('.word_counter').text(`${650 - charCount} remaining`);
+      $('.word_counter').text(`${650 - charCount} characters remaining`);
     }
     if (charCount > 650) {
       $(this).val($(this).val().substring(0, 650));
@@ -572,9 +593,10 @@ $(document).ready(function () {
         <div class="question_wrap_input" style="position: relative;">
         <input class="question_new_input" type="url" name="link">
         <span class="question_new_input_span" data-placeholder=".png, .jpeg, .jpg, .gifs, .mp4 files are allowed"></span>
-        <input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">
-        <small style="display: flex; gap: 20px; margin-top: 15px;"></small>
-        <img style="height: 160px; position: absolute; right: -250px; top: -6px;" class="question_image_viewport"/>
+        <input class="question_new_input_check_mark" type="button" value="add media to question"
+        style="color: green; position: absolute; right: -115px; top: 35px;
+        font-size: 8px; padding: 4px 10px; border-radius: 15px;">
+        <img style="height: 160px; position: absolute; right: -325px; top: -6px;" class="question_image_viewport"/>
         </div>
         </li><br>`);
     }
@@ -817,7 +839,7 @@ $(document).ready(function () {
   });
 });
 
-// check mark to lock link input
+// check mark to lock link input and add input value to question
 $(document).on('click', '.question_new_input_check_mark', function () {
   let input = $(this).closest('.question_wrap_input').find('.question_new_input');
   let imgTag = $(this).closest('.question_wrap_input').find('.question_image_viewport');
@@ -829,7 +851,9 @@ $(document).on('click', '.question_new_input_check_mark', function () {
     type="button" value="add media link to question">`
 
   if (!isValidUrl(inputValue) && inputValue !== '') {
-    embededYoutubeLink = input.val().trim().split('src="')[1].split(' ')[0].replace('"', '');
+    if (input.val().trim().split('src="').length > 1) {
+      embededYoutubeLink = input.val().trim().split('src="')[1].split(' ')[0].replace('"', '');
+    }
   }
 
   if (inputValue === '') {
@@ -845,7 +869,8 @@ $(document).on('click', '.question_new_input_check_mark', function () {
     $(this).siblings('small').html(addMediaLinkToQuestion)
     input.addClass('has-val');
     input.prop('readonly', true);
-    $(this).replaceWith('<input class="question_new_input_clear" type="button" value="&#x2715" style="color: red; position: absolute; right: -20px; top: 35px;">');
+    $(this).replaceWith(`<input class="question_new_input_clear" type="button" value="remove media"
+    style="color: red; position: absolute; right: -100px; top: 35px; padding: 5px 10px; border-radius: 10px; font-size: 10px;">`);
   }
 
   // images
@@ -857,24 +882,37 @@ $(document).on('click', '.question_new_input_check_mark', function () {
 
   // mp4 video
   if (getFileExtensionType(inputValue) === 'video') {
-    appendVideoTag.append(`<video controls style="width: 200px; height: 160px; position: absolute; right: -250px; top: -6px;" class="question_video_viewport">
+    appendVideoTag.append(`<video controls style="width: 200px; height: 160px; position: absolute; right: -325px; top: -6px;" class="question_video_viewport">
     <source src="${inputValue}" type="video/mp4">
     Your browser does not support the video tag.
     </video>`);
   }
 
   // youtube video
-  if (getFileExtensionType(embededYoutubeLink) === 'youtube') {
-    appendVideoTag.append(`<iframe style="width: 200px; height: 160px; position: absolute; right: -250px; top: -10px;" src="${embededYoutubeLink}"
+  if (embededYoutubeLink && getFileExtensionType(embededYoutubeLink) === 'youtube') {
+    appendVideoTag.append(`<iframe style="width: 200px; height: 160px; position: absolute; right: -325px; top: -10px;" src="${embededYoutubeLink}"
     title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`);
   }
+
+  // add media to question
+  mediaQuestion.push(inputValue);
 });
+
 
 // question new input clear
 $(document).on('click', '.question_new_input_clear', function () {
-  const input = $(this).closest('.question_wrap_input').find('.question_new_input');
+  const input = $(this).parent('.question_wrap_input').find('.question_new_input');
   input.prop('readonly', false);
-  $(this).replaceWith('<input class="question_new_input_check_mark" type="button" value="&#x2713" style="color: green; position: absolute; right: -20px; top: 35px;">');
+  $(this).replaceWith(`<input class="question_new_input_check_mark" type="button" value="add media to question"
+  style="color: green; position: absolute; right: -115px; top: 35px;
+  font-size: 8px; padding: 4px 10px; border-radius: 15px;">`);
+  for(let c = 0; c < mediaQuestion.length; c++) {
+    if (input.val().trim() === mediaQuestion[c]) {
+      mediaQuestion.splice(c, 1);
+      break;
+    }
+  }
+  input.val('')
   input.bind('input propertychange', function () {
     if ($(this).val() === '') {
       input.removeClass('has-val');
@@ -980,7 +1018,7 @@ $(document).on('input propertychange', '.jqte_editor', function () {
   const $this = $(this);
   const charCount = $this.text().length;
   if (charCount <= 650) {
-    $('.word_counter').text(`${650 - charCount} remaining`);
+    $(this).parent('.jqte').parent('.question_text_box_container').children('.word_counter').text(`${650 - charCount} characters remaining`);
   }
   if (charCount > 650) {
     $this.prop('contenteditable', false);
@@ -1118,12 +1156,20 @@ $(document).ready(function () {
   * details: gets all questions and details for all question form and saves all questions
   */
 $(document).on('click', '.save_all', function () {
-  let questionsList = [], options = [], correctAnswer = [], count = 0, questionsLength, optionsLength;
+  let questionsList = [], options = [], correctAnswer = [], count = 0, optionsLength, sm;
 
   $('.question_container').each(function() {
     let qQuestion = $(this).find('.jqte_source').children('#formatted-text-textarea').val();
+    let mediaQuestionDict = {};
 
-    $(this).find('.options_textarea').each(function() {
+    if (mediaQuestion.length > 0) {
+      $.each(mediaQuestion, function(index, item) {
+        mediaQuestionDict[index] = ''
+        mediaQuestionDict[index] += item
+      })
+    }
+
+    $(this).find('.options_textarea').each(function(index, item) {
       let optionValue = $(this).val();
       if (optionValue.length > 1) {
         options.push(
@@ -1139,35 +1185,28 @@ $(document).on('click', '.save_all', function () {
 
     let correctAnswerType = $(this).find('.waschecked').attr('type');
 
-    if (!qQuestion || options.length < 2 || !correctAnswer || !correctAnswerType) {
-      console.log(qQuestion)
-      console.log(options.length)
-      console.log(correctAnswer)
-      console.log(correctAnswerType)
+    if (!qQuestion || options.length < 1 || !correctAnswer || !correctAnswerType) {
       return warningSlides({ warning: `current form has incomplete fields` });
     }
 
     questionsList.push({
       [`question_${count}`]: [
         { examId: questionExamId },
-        { question: qQuestion },
+        { question: mediaQuestion.length > 0 ? {questionMedia: mediaQuestionDict, question: qQuestion } : qQuestion },
         { options: options },
         { correctAnswer: correctAnswer },
         { answerType: correctAnswerType },
       ]
     });
     optionsLength = options.length;
+    sm = options;
     options = [];  // reset options list
     correctAnswer = [];  // reset correct answer list
     count++;
-    questionsLength = qQuestion.length;
   });
 
   if (optionsLength < 2) {
     return warningSlides({ warning: 'you have incomplete fields' })
-  }
-  if (questionsLength < 5) {
-    return warningSlides({ warning: 'question is too short' })
   }
 
   $.ajax({

@@ -20,6 +20,7 @@ class QuestionView():
                     request.body.decode().split('EX')[1])
                 bytes_data = base64.b64decode(url_decoded_data)
                 data = json.loads(bytes_data.decode())
+
                 for question in data:
                     exam_id = [y.get('examId') for x in question.values() for y in x if y.get('examId')]
                     question_text = [y.get('question') for x in question.values() for y in x if y.get('question')]
