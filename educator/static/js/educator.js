@@ -822,7 +822,7 @@ $(document).ready(function () {
       e.preventDefault();
       const newFormData = fetchFormInputs();
       if (newFormData === null) { return; }
-      const educatorId = $('#a_educator_id').attr('href').split('/')[3];
+      const educatorId = $('#a_educator_id').attr('href').split('/')[2];
       const examId = editExamId;
       const encodedData = btoa(JSON.stringify(newFormData));
       $.ajax({
