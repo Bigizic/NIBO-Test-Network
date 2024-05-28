@@ -497,7 +497,9 @@ $(document).ready(function () {
         $(`input[name=students_no_digit-${c}]`).val('');
         $(`input[name=grade_digit-${c}]`).val('');
       }
-      $('#create_exam_form').slideDown();
+      const newCreateExamButton = $('<button style="background: black; padding: 10px 25px; color: #fff; border-radius: 50px; cursor: pointer;" class="create_exam_btn"> Create exam now </button>');
+      $('.edit_exam_button').replaceWith(newCreateExamButton);
+      $('.add_questions').css('display', 'none');
       $('#create_exam_form').css('display', 'flex').css('filter', 'blur(0px)');
     }
   });
@@ -521,10 +523,11 @@ $(document).ready(function () {
     e.preventDefault();
     const formData = fetchFormInputs();
     if (formData === null) { return; }
-    const educatorId = $('#a_educator_id').attr('href').split('/')[3];
+    const educatorId = $('#a_educator_id').attr('href').split('/')[2];
+    console.log(educatorId)
     const encodedData = btoa(JSON.stringify(formData));
     $.ajax({
-      url: `${URLS}/educator/create_exam/${educatorId}/`,
+      url: `${URLS}/exam/create_exam/${educatorId}/`,
       type: 'POST',
       data: { EX: encodedData },
       headers: {
@@ -718,7 +721,7 @@ $(document).ready(function () {
 
     if (confirm('Are you sure you want to delete this exam?')) {
       $.ajax({
-        url: `${URLS}/educator/delete_exam/${examId}/`,
+        url: `${URLS}/exam/delete_exam/${examId}/`,
         type: 'PUT',
         headers: {
           'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
@@ -811,6 +814,7 @@ $(document).ready(function () {
       $('#create_exam_form').css('display', 'flex').css('filter', 'blur(0px)');
       const newEditExamButton = $('<button class="edit_exam_button" style="background: black;padding: 10px 35px; color: #fff; border-radius: 50px; cursor: pointer;">Save changes</button>');
       $('.create_exam_btn').replaceWith(newEditExamButton);
+      $('.add_questions').css('display', 'inline');
     }
 
     // ajax request
@@ -822,7 +826,7 @@ $(document).ready(function () {
       const examId = editExamId;
       const encodedData = btoa(JSON.stringify(newFormData));
       $.ajax({
-        url: `${URLS}/educator/${educatorId}/edit_exam/${examId}/`,
+        url: `${URLS}/exam/${educatorId}/edit_exam/${examId}/`,
         type: 'POST',
         data: { EX: encodedData },
         headers: {

@@ -25,19 +25,5 @@ urlpatterns = [
     path('student/<educator_id>/', EducatorView().students,
          name="educator_students"),
 
-    path('create_student/<educator_id>/', EducatorView().create_student,
-         name="educator_create_student"),
-
-    path('exam/<educator_id>/', EducatorView().exams, name="educator_exams"),
-
-    path('create_exam/<educator_id>/', EducatorView().create_exam,
-         name="educator_create_exam"),
-
-     path('delete_exam/<exam_id>/', EducatorView().delete_exam,
-          name="educator_delete_exam"),
-
-     path('<educator_id>/edit_exam/<exam_id>/', EducatorView().edit_exam,
-          name="educator_edit_exam"),
-
     path('logout', EducatorView().logout, name="educator_logout"),
 ]

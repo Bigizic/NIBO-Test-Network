@@ -2,6 +2,7 @@ from .models import QuestionModel as QM
 import base64
 from base_model.caching import FIFO as CACHE
 from django.shortcuts import render, redirect, reverse
+from exams.utils import ExamOperations
 import json
 import urllib.parse
 
@@ -35,6 +36,9 @@ class QuestionView():
                         correct_answers=correct_answers,
                         answers_type=answers_type,
                     )
+                    tmp_exam_id = exam_id
+                # update exam "has question" field where id matches
+                ExamOperations().edit_exam(tmp_exam_id, {'has_question': True})
                 CACHE.put('success', 'successfully created')
                 url = reverse('educator_exams', kwargs={
                     'educator_id': educator_id,

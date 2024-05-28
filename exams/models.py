@@ -17,7 +17,8 @@ class ExamModel(BaseModel, models.Model):
     grade = models.IntegerField()  # Exam overall weight
     # active, inactive
     status = models.CharField(default='inactive', max_length=20)
-    time_limit = models.IntegerField(null=True)  # 20mins 
+    time_limit = models.IntegerField(null=True)  # 20mins
+    has_question = models.CharField(max_length=10, default=False)
 
     class Meta:
         db_table = 'exams'

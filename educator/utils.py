@@ -17,7 +17,7 @@ class EducatorOperations():
     def __init__(self):
         pass
 
-    def get(self, educator_id: str) -> EducatorModel:
+    def get(self, educator_id: str) -> dict:
         """gets an educator via id from the educator database
         Returns:
             - educator object

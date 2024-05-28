@@ -57,29 +57,15 @@ class QuestionModel(BaseModel, models.Model):
         """ Constructor """
         super().__init__(*args, **kwargs)
 
-    def __str__(self) -> dict:
+    def __str__(self) -> str:
         """String representation of question model
         Return:
-            - A string representation like this:
-                - Question: a question\n
-                    - Exam name: Mathematics 103\n
-                    - Admin name: Badmus\n
-                    - no of answers: 4\n
-                    - no of correct answer: 1\n    upload_path = models.TextField(null=True)
-
-                    - answers type: radio or checkbox\n
-                    - has local storage: no\n
+            - A string representation of all class attributes
         """
         admin_name = EducatorOperations().get(self.admin_id.split("'")[0])
         exam_name = ExamOperations().fetch_exam_by_id(
                     self.exam_id.split("'")[1]).to_dict()
-        
-        return {
-            'Question': self.question_text,
-            'Exam_name': exam_name['exam_title'],
-            'Admin_name': admin_name['fullname'],
-            'No_of_answers': change_str_to_list(self.question_answers[1:-1]),
-            'No_of_correct_answer': change_str_to_list(self.correct_answers[1:-1]),
-            'Answer_type': self.answers_type,
-            'Has_local_storage': True if self.upload_path else False,
-        }
+
+        mm = self.__dict__.copy()
+        del mm['_state']
+        return str(mm)

@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('homepage.urls')),
     path('django_admin', admin.site.urls),
     path(ADMIN_ROUTE, include('educator.urls')),
+    path('exam/', include('exams.urls')),
     path('student/', include('students.urls')),
     path('question/', include('questions.urls')),
 ]
