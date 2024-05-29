@@ -47,7 +47,6 @@ class QuestionModel(BaseModel, models.Model):
     correct_answers = models.TextField(null=False)
     answers_type = models.CharField(max_length=9, null=False)
     # points = models.IntegerField(default=0, null=False)    upload_path = models.TextField(null=True)
-
     upload_path = models.TextField(null=True)
 
     class Meta:
@@ -63,8 +62,6 @@ class QuestionModel(BaseModel, models.Model):
             - A string representation of all class attributes
         """
         admin_name = EducatorOperations().get(self.admin_id.split("'")[0])
-        exam_name = ExamOperations().fetch_exam_by_id(
-                    self.exam_id.split("'")[1]).to_dict()
 
         mm = self.__dict__.copy()
         del mm['_state']

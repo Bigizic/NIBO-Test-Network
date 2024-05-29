@@ -25,3 +25,17 @@ class QuestionOperations():
             - Questions relating to an educator else None
         """
         return QuestionModel.objects.filter(admin_id=educator_id)
+
+    def fetch_all_question_by_exam_id_and_educator_id(self, exam_id: str,
+        educator_id: str) -> dict:
+        """Fetches question relating to an educator and exam
+        -@Params:
+            - exam_id: id to identify exam
+            - educator_id: id to identify educator
+        - Return:
+            - Questions relating to an educator
+        """
+        if exam_id and educator_id:
+            return QuestionModel.objects.filter(exam_id=f"['{exam_id}']",
+                    admin_id=educator_id)
+        return None

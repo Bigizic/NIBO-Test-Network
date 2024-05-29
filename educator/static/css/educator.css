@@ -717,7 +717,7 @@ a { color: black; }
   border-radius: 10px;
   padding: 5px 15px;
 }
-.more_details_container button, .more_details_edit {
+.more_details_container button, .more_details_edit, .go_to_questions {
   position: relative !important;
   font-size: 12px !important;
   background: black !important;
@@ -729,7 +729,7 @@ a { color: black; }
   right: 0 !important;
   font-weight: 900 !important;
 }
-.more_details_container button:hover, .more_details_edit:hover {
+.more_details_container button:hover, .more_details_edit:hover, .go_to_questions:hover {
   background: yellow !important;
   color: black !important;
 }

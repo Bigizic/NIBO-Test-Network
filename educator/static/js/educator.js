@@ -781,7 +781,13 @@ $(document).ready(function () {
     $('.textarea').val(retrieveExamDetails.description);
     $('.sstart_datee').val(retrieveExamDetails.start_date);
     $('.eend_datee').val(retrieveExamDetails.end_date);
-    $('#time_limit_select').val(retrieveExamDetails.time_limit);
+    if (![5, 10, 15, 20, 30, 40, 50, 60, 90, 120].includes(timeLimit)) {
+      $('#time_limit_select').val($('#time_limit_select option:last').val());
+      $('.custom_option').val(retrieveExamDetails.time_limit);
+      $('.custom_option').css('display', 'block');
+    } else {
+      $('#time_limit_select').val(retrieveExamDetails.time_limit);
+    }
 
     /*$('.duration_1').val(retrieveExamDetails.duration[0]);
     $('.duration_2').val(retrieveExamDetails.duration[1]);
@@ -1277,17 +1283,33 @@ $(document).on('click', '.save_all', function () {
     }
     $(this).val('');
   })
+})
 
 
-  /**
-   * action: {onclick} buttons
-   * details: add media link to question 
-   */
+/**
+ * this setion handles question rendering for exams that has questions
+*/
+$(document).on('click', '.go_to_questions', function() {
+  const listItem = $(this).closest('li');
+  const examId = listItem.find('[data-exam-id]').data('exam-id');
+  const educatorId = $('#a_educator_id').attr('href').split('/')[2];
+  let data = null;
 
-  $(document).on('click', '.media_link_to_question', function() {
-    let linkValue = $(this).parent('small').parent('div').children('.question_new_input').val();
-    // add link
+  // ==== fetch exams based on exam id ====
+  $.ajax( {
+    url: `${URLS}/question/fetch_question/${examId}/${educatorId}`,
+    type: 'FETCH',
+    headers: {
+      'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+    },
+    success: function (xhr, errmsg, err) {
+      data = xhr;
 
+    },
+    error: function (xhr, errmsg, err) {
+      console.log(err);
+    }
   })
 
 })
+
