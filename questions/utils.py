@@ -17,7 +17,7 @@ class QuestionOperations():
         obj = QuestionModel.objects.get(pk=question_id)
         return obj.to_dict() if obj else None
 
-    def fetch_all_exam_by_educator_id(self, educator_id) -> dict:
+    def fetch_all_question_by_educator_id(self, educator_id) -> dict:
         """Retrives questions relating to an educator
         - @params:
             -   educator_id: id of the educator being searched
@@ -26,14 +26,27 @@ class QuestionOperations():
         """
         return QuestionModel.objects.filter(admin_id=educator_id)
 
+    def fetch_all_question_by_exam_id(self, exam_id: str) -> QuestionModel:
+        """Fetches question relating to an exam
+        - @Params:
+            - exam_id: id to identify exam
+        - Return:
+            - Question relating to exam
+        """
+        if exam_id:
+            res = QuestionModel.objects.filter(exam_id=f"['{exam_id}']")
+            if len(res) > 0:
+                return res
+        return None
+
     def fetch_all_question_by_exam_id_and_educator_id(self, exam_id: str,
         educator_id: str) -> dict:
         """Fetches question relating to an educator and exam
-        -@Params:
+        - @Params:
             - exam_id: id to identify exam
             - educator_id: id to identify educator
         - Return:
-            - Questions relating to an educator
+            - Questions relating to an educator and exam
         """
         if exam_id and educator_id:
             return QuestionModel.objects.filter(exam_id=f"['{exam_id}']",

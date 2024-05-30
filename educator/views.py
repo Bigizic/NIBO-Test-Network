@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, JsonResponse
 from django.http import Http404
 from exams.models import ExamModel as EXMOD
-from exams.utils import ExamOperations as EXMODOP
+from exams.utils import ExamOperations
 from io import BytesIO
 import json
 import pyotp
@@ -72,7 +72,7 @@ class EducatorView():
             if not tmp_educator_id:
                 return False
             decrypt_id = EducatorModel().id_decryption(tmp_educator_id)
-            fetch_exams = EXOP().get_exams(decrypt_id)
+            fetch_exams = ExamOperations().get_exams(decrypt_id)
             if fetch_exams:
                 if isinstance(fetch_exams[-3], int):
                     upcoming_exams_counter = fetch_exams[-3]
