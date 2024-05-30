@@ -1,8 +1,10 @@
 from .models import QuestionModel as QM
+import asyncio
 import base64
 from base_model.caching import FIFO as CACHE
 from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse, JsonResponse
+from django.http import StreamingHttpResponse
+from django.template.loader import render_to_string
 from exams.utils import ExamOperations
 import json
 import urllib.parse
@@ -48,30 +50,28 @@ class QuestionView():
                 return redirect(url)
 
     def fetch_question(self, request, exam_id: str,
-        educator_id: str) -> JsonResponse:
-        """fetches question from database and sends json response as response
+        educator_id: str) -> StreamingHttpResponse:
+        """fetches question from database and sends fetched data as a stream to
+        html
         Return:
             - fetched question in json format
         """
-        result = {}
-        count = 0
-        data = []
         educator_ID = QM().id_decryption(educator_id)
-        fetch = QOP().fetch_all_question_by_exam_id_and_educator_id(exam_id,
-                 educator_ID)
-        if fetch:
-            for i in fetch:
-                result['id'] = i.id
-                result['created_at'] = i.created_at
-                result['updated_at'] = i.updated_at
-                result['admin_id'] = i.admin_id
-                result['exam_id'] = i.exam_id
-                result['question_text'] = i.question_text
-                result['question_answers'] = i.question_answers
-                result['correct_answers'] = i.correct_answers
-                result['answers_type'] = i.answers_type
-                result['upload_path'] = i.upload_path
-                data.append({f'question_{count}': result})
-                count += 1
-            return HttpResponse(data)
-        return JsonResponse(404)
+        fetch = QOP().fetch_all_question_by_exam_id_and_educator_id(exam_id, educator_ID)
+        chunk_size = 1  # Number of items to send in each chunk
+
+        def get_chunk(fetch, start, chunk_size):
+            chunk = fetch[start:start + chunk_size]
+            return chunk
+
+        start = int(request.GET.get('start', 0))
+        chunk = get_chunk(fetch, start, chunk_size)
+
+        if chunk:
+            data = {
+                'questions': chunk,
+                'next_start': start + chunk_size
+            }
+            return StreamingHttpResponse(data)
+        else:
+            return StreamingHttpResponse({'questions': [], 'next_start': None})

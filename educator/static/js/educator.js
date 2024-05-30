@@ -1294,20 +1294,29 @@ $(document).on('click', '.go_to_questions', function() {
   const examId = listItem.find('[data-exam-id]').data('exam-id');
   const educatorId = $('#a_educator_id').attr('href').split('/')[2];
   let data = null;
+  const background = listItem.css('background');
+  const fontColor = listItem.css('color');
+  let start = 0;
 
   // ==== fetch exams based on exam id ====
-  $.ajax( {
+  $.ajax({
     url: `${URLS}/question/fetch_question/${examId}/${educatorId}`,
-    type: 'FETCH',
+    type: 'GET',
+    data: {
+      start: start
+    },
     headers: {
       'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
     },
-    success: function (xhr, errmsg, err) {
-      data = xhr;
-
+    success: function (response, errmsg, err) {
+      console.log(response)
+      data = response;
+      $('.go_to_questions_container ul').append(data)
+      $('.go_to_questions_container').css('background', background);
+      $('.go_to_questions_container').css('color', fontColor);
     },
     error: function (xhr, errmsg, err) {
-      console.log(err);
+      console.log(err)
     }
   })
 

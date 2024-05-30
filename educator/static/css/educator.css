@@ -783,3 +783,21 @@ a { color: black; }
   background-color: black;
   border: 1px solid yellow;
 }
+
+
+.go_to_questions_container {
+  position: fixed;
+  top: 10%;
+  right: 4%;
+  z-index: 1000;
+  padding: 60px 40px;
+  width: 45%;
+  border-radius: 40px;
+}
+
+.go_to_questions_container ul {
+  width: 95%;
+  font-size: 14px;
+  overflow-y: scroll;
+  height: 50vh;
+}
