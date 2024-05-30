@@ -1296,27 +1296,71 @@ $(document).on('click', '.go_to_questions', function() {
   let data = null;
   const background = listItem.css('background');
   const fontColor = listItem.css('color');
+  const examName = listItem.find('[data-exam-title]').data('exam-title');
+  let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px;" class="questions_container_exam_title"><strong>${examName}</strong></div>`
 
   // ==== fetch exams based on exam id ====
-  $.ajax({
-    url: `${URLS}/question/fetch_question/${examId}/${educatorId}`,
-    type: 'GET',
-    headers: {
-      'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-    },
-    success: function (response, errmsg, err) {
-      console.log(response)
-      console.log(response.length)
-      data = response;
-      $('.go_to_questions_container ul').append(data)
-      $('.go_to_questions_container').css('background', background);
-      $('.go_to_questions_container').css('color', fontColor);
-      $('.go_to_questions_container').css('display', 'block');
-    },
-    error: function (xhr, errmsg, err) {
-      console.log(err)
-    }
-  })
+  function fetchChunk() {
+    $.ajax({
+      url: `${URLS}/question/fetch_question/${examId}/${educatorId}`,
+      type: 'GET',
+      headers: {
+        'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+      },
+      success: function (response, errmsg, err) {
+        data = response;
+        if (data.length > 0) {
 
+          for (let i = 0; i < data.length; i++) {
+            let answersType = data[i].answers_type.substring(1, data[i].answers_type.length - 1);
+
+            const answersList = (answers=data[i].question_answers) => {
+              // ==== parse answers and create a list from answers string ====
+              const delimeter = "'}, {'";
+              const readyAnswersList = [];
+
+              for (let chars = 0; chars < answers.length; chars++) {
+                if (answers.substring(chars, chars + 6) === delimeter) {
+                  let charsDict = 
+                  console.log(answers.substring(chars, chars + 6));
+                  break;
+                }
+              }
+            }
+            answersList();
+
+            li += `<li style="background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            list-style-type: none;">
+              <div class="questions_container_questions_text">
+                <div>
+                  <strong>Question ${i + 1}</strong><br>
+                  <p style="margin-top: 10px;">${data[i].question_text.substring(1, data[i].question_text.length - 1)}</p>
+                </div>
+              </div>
+
+              <div style="margin-top: 30px;" class="question_container_question_answers">
+                <div>
+                  <p>${data[i].question_answers}</p>
+                </div>
+              </div>
+            </li>`
+          }
+          $('.go_to_questions_container ul').append(li);
+        }
+        //$('.go_to_questions_container ul').append(data)
+        $('.go_to_questions_container').css('background', background);
+        $('.go_to_questions_container').css('color', fontColor);
+        $('.go_to_questions_container').css('display', 'block');
+      },
+      error: function (xhr, errmsg, err) {
+        console.log(err)
+      }
+    })
+  }
+
+  fetchChunk();
 })
 
