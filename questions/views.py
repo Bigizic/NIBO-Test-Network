@@ -1,10 +1,8 @@
 from .models import QuestionModel as QM
-import asyncio
 import base64
 from base_model.caching import FIFO as CACHE
 from django.shortcuts import render, redirect, reverse
-from django.http import StreamingHttpResponse
-from django.template.loader import render_to_string
+from django.http import HttpResponse, JsonResponse
 from exams.utils import ExamOperations
 import json
 import urllib.parse
@@ -50,28 +48,31 @@ class QuestionView():
                 return redirect(url)
 
     def fetch_question(self, request, exam_id: str,
-        educator_id: str) -> StreamingHttpResponse:
-        """fetches question from database and sends fetched data as a stream to
-        html
+        educator_id: str) -> HttpResponse:
+        """fetches question from database and sends json response as response
         Return:
             - fetched question in json format
         """
+        count = 0
+        data = []
         educator_ID = QM().id_decryption(educator_id)
-        fetch = QOP().fetch_all_question_by_exam_id_and_educator_id(exam_id, educator_ID)
-        chunk_size = 1  # Number of items to send in each chunk
-
-        def get_chunk(fetch, start, chunk_size):
-            chunk = fetch[start:start + chunk_size]
-            return chunk
-
-        start = int(request.GET.get('start', 0))
-        chunk = get_chunk(fetch, start, chunk_size)
-
-        if chunk:
-            data = {
-                'questions': chunk,
-                'next_start': start + chunk_size
-            }
-            return StreamingHttpResponse(data)
-        else:
-            return StreamingHttpResponse({'questions': [], 'next_start': None})
+        fetch = QOP().fetch_all_question_by_exam_id_and_educator_id(exam_id,
+                 educator_ID)
+        if fetch:
+            for i in fetch:
+                result = {
+                    'id': str(i.id),
+                    'created_at': str(i.created_at),
+                    'updated_at': str(i.updated_at),
+                    'admin_id': str(i.admin_id),
+                    'exam_id': str(i.exam_id[2:-2]),
+                    'question_text': str(i.question_text[1:-1]),
+                    'question_answers': str(i.question_answers[2:-2]),
+                    'correct_answers': str(i.correct_answers[2:-2]),
+                    'answers_type': str(i.answers_type[1:-1]),
+                    'upload_path': str(i.upload_path),
+                }
+                data.append(result)
+            print(data)
+            return JsonResponse(data, safe=False)
+        return Http404

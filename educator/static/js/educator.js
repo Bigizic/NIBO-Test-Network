@@ -1296,24 +1296,22 @@ $(document).on('click', '.go_to_questions', function() {
   let data = null;
   const background = listItem.css('background');
   const fontColor = listItem.css('color');
-  let start = 0;
 
   // ==== fetch exams based on exam id ====
   $.ajax({
     url: `${URLS}/question/fetch_question/${examId}/${educatorId}`,
     type: 'GET',
-    data: {
-      start: start
-    },
     headers: {
       'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
     },
     success: function (response, errmsg, err) {
       console.log(response)
+      console.log(response.length)
       data = response;
       $('.go_to_questions_container ul').append(data)
       $('.go_to_questions_container').css('background', background);
       $('.go_to_questions_container').css('color', fontColor);
+      $('.go_to_questions_container').css('display', 'block');
     },
     error: function (xhr, errmsg, err) {
       console.log(err)

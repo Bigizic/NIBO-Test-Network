@@ -793,6 +793,7 @@ a { color: black; }
   padding: 60px 40px;
   width: 45%;
   border-radius: 40px;
+  display: none;
 }
 
 .go_to_questions_container ul {
