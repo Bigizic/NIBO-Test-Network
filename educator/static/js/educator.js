@@ -1297,7 +1297,7 @@ $(document).on('click', '.go_to_questions', function() {
   const background = listItem.css('background');
   const fontColor = listItem.css('color');
   const examName = listItem.find('[data-exam-title]').data('exam-title');
-  let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px; position: absolute; background: yellow;
+  let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px; position: absolute; background: inherit;
   width: -moz-available;" class="questions_container_exam_title"><strong style="font-size: 22px;">${examName}</strong></div>`
 
   // ==== fetch exams based on exam id ====
@@ -1340,7 +1340,7 @@ $(document).on('click', '.go_to_questions', function() {
               })
               // ==== end ====
 
-              li += `<li style="margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
+              li += `<li style="color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
                 <div class="questions_container_questions_text">
                   <div>
                     <strong>Question ${i + 1}</strong>
@@ -1380,7 +1380,7 @@ $(document).on('click', '.go_to_questions', function() {
 
 
             } else {
-              li += `<li style="margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
+              li += `<li style="color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
                 <div class="questions_container_questions_text">
                   <div>
                     <strong>Question ${i + 1}</strong><br>

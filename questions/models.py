@@ -45,7 +45,7 @@ class QuestionModel(BaseModel, models.Model):
     question_text = models.TextField(null=False)
     question_answers = models.TextField(null=False)
     correct_answers = models.TextField(null=False)
-    answers_type = models.CharField(max_length=9, null=False)
+    answers_type = models.CharField(max_length=20, null=False)
     # points = models.IntegerField(default=0, null=False)    upload_path = models.TextField(null=True)
     upload_path = models.TextField(null=True)
 
