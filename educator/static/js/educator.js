@@ -1428,3 +1428,19 @@ $(document).on('click', '.go_to_questions', function() {
   fetchChunk();
 })
 
+
+/**
+ * this section allows to add more question while viewing all questions
+ */
+
+$(document).on('click', '.go_to_questions_add_more_question', function() {
+  // ==== loads up question form ====
+  $('.go_to_questions_contaner').css('display', 'none');
+  $('#create_questions_form').css('display', 'flex');
+  $('#create_questions_form').animate({ width: '90%' }, 500, 'linear');
+
+  // ==== reset all fields for question form before continuing ====
+  
+
+})
+
