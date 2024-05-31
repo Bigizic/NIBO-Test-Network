@@ -30,12 +30,10 @@ class QuestionView():
                     options = [y.get('options') for x in question.values() for y in x if y.get('options')]
                     correct_answers = [y.get('correctAnswer') for x in question.values() for y in x if y.get('correctAnswer')]
                     answers_type = [y.get('answerType') for x in question.values() for y in x if y.get('answerType')]
-                    print(options)
-                    print(type(options))
                     new_question = QM.objects.create(
                         admin_id=QM().id_decryption(educator_id),
                         exam_id=exam_id,
-                        question_text=question_text,
+                        question_text=json.dumps(question_text),
                         question_answers=json.dumps(options),
                         correct_answers=json.dumps(correct_answers),
                         answers_type=answers_type,
@@ -68,13 +66,12 @@ class QuestionView():
                     'updated_at': str(i.updated_at),
                     'admin_id': str(i.admin_id),
                     'exam_id': str(i.exam_id[2:-2]),
-                    'question_text': str(i.question_text[1:-1]),
-                    'question_answers': str(i.question_answers[2:-2]),
-                    'correct_answers': str(i.correct_answers[2:-2]),
+                    'question_text': json.loads(i.question_text[1:-1]),
+                    'question_answers': json.loads(i.question_answers),
+                    'correct_answers': json.loads(i.correct_answers),
                     'answers_type': str(i.answers_type[1:-1]),
                     'upload_path': str(i.upload_path),
                 }
                 data.append(result)
-            print(data)
             return JsonResponse(data, safe=False)
         raise Http404

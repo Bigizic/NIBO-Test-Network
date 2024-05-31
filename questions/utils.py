@@ -52,3 +52,39 @@ class QuestionOperations():
             return QuestionModel.objects.filter(exam_id=f"['{exam_id}']",
                     admin_id=educator_id)
         return None
+
+    def edit_question(self, question_id: str, new_data: dict) -> bool:
+        """Edits a question given it's id and key-word parameter to udpate
+        - @params:
+            - question_id: id to identify question
+            - new_data: dictcontaining question attribute and
+                new value to be edited
+        - Return:
+            - True if sucessful otherwise False
+        """
+        if question_id and kwargs:
+            # ==== get question by id ====
+            fetch_question = QuestionModel.objects.get(pk=question_id)
+            fetched = fetch_question.to_dict()
+            updated = False
+            if fetched:
+                for k, v in new_data.items():
+                    for keys, vals in fetched.items():
+                        if k == keys and v != vals:
+                            setattr(fetch_question, k, v)
+                            updated = True
+                fetch_question.save()
+        return updated
+
+    def delete_question(self, question_id) -> bool:
+        """Deletes a question given it's id
+        - @params:
+            - question_Id: id to identify the question
+        - Return:
+            - True if deleted otherwise False
+        """
+        fetch_question = QuestionModel.objects.get(pk=question_id)
+        if fetch_question:
+            fetch_question.delete()
+            return True
+        return False

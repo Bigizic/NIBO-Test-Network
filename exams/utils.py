@@ -93,8 +93,7 @@ class ExamOperations():
             # a particular exam has been deleted ====
             if (fields['has_question'] == '1' and not
                 QOP().fetch_all_question_by_exam_id(ids)):
-                up = self.edit_exam(ids, {'has_question': 0})
-                print(up)
+                self.edit_exam(ids, {'has_question': 0})
             # ==== end ====
 
             if fields['start_date'].date() >= current_date:

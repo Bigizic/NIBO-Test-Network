@@ -1297,7 +1297,8 @@ $(document).on('click', '.go_to_questions', function() {
   const background = listItem.css('background');
   const fontColor = listItem.css('color');
   const examName = listItem.find('[data-exam-title]').data('exam-title');
-  let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px;" class="questions_container_exam_title"><strong>${examName}</strong></div>`
+  let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px; position: absolute; background: yellow;
+  width: -moz-available;" class="questions_container_exam_title"><strong style="font-size: 22px;">${examName}</strong></div>`
 
   // ==== fetch exams based on exam id ====
   function fetchChunk() {
@@ -1313,47 +1314,110 @@ $(document).on('click', '.go_to_questions', function() {
 
           for (let i = 0; i < data.length; i++) {
             let answersType = data[i].answers_type.substring(1, data[i].answers_type.length - 1);
+            answersType = answersType === 'radio' ? 'disc': answersType;
+            console.log(data[i])
 
-            const answersList = (answers=data[i].question_answers) => {
-              // ==== parse answers and create a list from answers string ====
-              const delimeter = "'}, {'";
-              const readyAnswersList = [];
+            if (typeof(data[i].question_text) === 'object') {
+              const dataQuestion = data[i].question_text;
 
-              for (let chars = 0; chars < answers.length; chars++) {
-                if (answers.substring(chars, chars + 6) === delimeter) {
-                  let charsDict = 
-                  console.log(answers.substring(chars, chars + 6));
-                  break;
+              // ==== verify questionMedia type ====
+              let mediaView = '';
+              $.each(Object.values(dataQuestion.questionMedia), function(index, item) {
+                let mediaExtensionType = getFileExtensionType(item);
+                if (mediaExtensionType === 'image') {
+                  mediaView += `<br><img src="${item}" style="width: 200px; height: 180px;"/>`
                 }
-              }
+                if (mediaExtensionType === 'video') {
+                  mediaView += `<br><video controls style="width: 200px; height: 160px; position: absolute; right: -325px; top: -6px;" class="question_video_viewport">
+                  <source src="${item}" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>`
+                }
+                if (mediaExtensionType === 'youtube') {
+                  mediaView += `<br><iframe style="width: 200px; height: 160px; position: absolute; right: -325px; top: -10px;" src="${item}"
+                  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+                }
+              })
+              // ==== end ====
+
+              li += `<li style="margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
+                <div class="questions_container_questions_text">
+                  <div>
+                    <strong>Question ${i + 1}</strong>
+                    <div style="display: flex; gap: 10px;">
+                    <span style="align-content: center; font-size: 5px;">&#11044;</span>
+                    <p style="font-size: 15px; margin-top: 10px;">${dataQuestion.question}</p>
+                    </div>
+                    <div>
+                      ${mediaView}
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr;" class="question_container_question_answers">
+                  <div>
+                    <strong style="font-size: 20px;">Options</strong>
+                    <ul style="list-style-type: ${answersType}; padding: 10px 20px; font-size: 13px;">
+              `
+              // ==== creating options view ====
+              $.each(data[i].question_answers, function(index, item) {
+                for (let y = 0; y < item.length; y++) {
+                  li +=`<li>${Object.keys(item[y]).toString()}</li>`
+                }
+              })
+              // ==== end ====
+              li += `</ul></div>
+              <div> <strong style="font-size: 20px;">Correct Options</strong>
+              <ul style="list-style-type: ${answersType}; padding: 10px 20px; font-size: 13px;">
+              `
+              // ==== creating correct answer view ====
+              $.each(data[i].correct_answers, function(index, item) {
+                for (let y = 0; y < item.length; y++) {
+                  li += `<li>${Object.keys(item[y]).toString()}</li>`
+                }
+              })
+              // ==== end ====
+              li += `</ul></div></div></li>`
+
+
+            } else {
+              li += `<li style="margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
+                <div class="questions_container_questions_text">
+                  <div>
+                    <strong>Question ${i + 1}</strong><br>
+                    <p style="font-size: 15px; margin-top: 10px;">${data[i].question_text}</p>
+                  </div>
+                </div>
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr;" class="question_container_question_answers">
+                <div>
+                  <strong style="font-size: 20px;">Options</strong>
+                  <ul style="list-style-type: ${answersType}; padding: 10px 20px; font-size: 13px;">`
+              // ==== creating options view ====
+              $.each(data[i].question_answers, function(index, item) {
+                for (let y = 0; y < item.length; y++) {
+                  li +=`<li>${Object.keys(item[y]).toString()}</li>`
+                }
+              })
+              // ==== end ====
+              li += `</ul></div>
+              <div> <strong style="font-size: 20px;">Correct Options</strong>
+              <ul style="list-style-type: ${answersType}; padding: 10px 20px; font-size: 13px;">
+              `
+              // ==== creating correct answer view ====
+              $.each(data[i].correct_answers, function(index, item) {
+                for (let y = 0; y < item.length; y++) {
+                  li += `<li>${Object.keys(item[y]).toString()}</li>`
+                }
+              })
+              // ==== end ====
+              li += `</ul></div></div></li>`
             }
-            answersList();
-
-            li += `<li style="background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 40px;
-            list-style-type: none;">
-              <div class="questions_container_questions_text">
-                <div>
-                  <strong>Question ${i + 1}</strong><br>
-                  <p style="margin-top: 10px;">${data[i].question_text.substring(1, data[i].question_text.length - 1)}</p>
-                </div>
-              </div>
-
-              <div style="margin-top: 30px;" class="question_container_question_answers">
-                <div>
-                  <p>${data[i].question_answers}</p>
-                </div>
-              </div>
-            </li>`
-          }
-          $('.go_to_questions_container ul').append(li);
-        }
-        //$('.go_to_questions_container ul').append(data)
-        $('.go_to_questions_container').css('background', background);
-        $('.go_to_questions_container').css('color', fontColor);
-        $('.go_to_questions_container').css('display', 'block');
+            $('.go_to_ul').append(li);
+          };
+          //$('.go_to_questions_container ul').append(data)
+          $('.go_to_questions_container').css('background', background);
+          $('.go_to_questions_container').css('color', fontColor);
+          $('.go_to_questions_container').css('display', 'block');
+        };
       },
       error: function (xhr, errmsg, err) {
         console.log(err)

@@ -796,10 +796,18 @@ a { color: black; }
   display: none;
 }
 
-.go_to_questions_container ul {
+.go_to_ul {
   width: 95%;
   font-size: 14px;
   overflow-y: scroll;
   height: 70vh;
   margin-top: -15px;
+}
+
+.go_to_questions_add_more_question {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: cadetblue;
+  color: #fff;
+  cursor: pointer;
 }
