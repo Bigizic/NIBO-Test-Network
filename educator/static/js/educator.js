@@ -1295,10 +1295,19 @@ $(document).on('click', '.go_to_questions', function() {
   const educatorId = $('#a_educator_id').attr('href').split('/')[2];
   let data = null;
   const background = listItem.css('background');
+  // ==== spinner ====
+  setTimeout(function() {
+    $('.loading-overlay').css('display', 'flex');
+    $('.go_to_questions_container').fadeIn(1000);
+    $('.loading-overlay').fadeOut(1000); 
+  }, 500)
+
   const fontColor = listItem.css('color');
   const examName = listItem.find('[data-exam-title]').data('exam-title');
   let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px; position: absolute; background: inherit;
   width: -moz-available;" class="questions_container_exam_title"><strong style="font-size: 22px;">${examName}</strong></div>`
+
+  $('.exams_container').css('filter', 'blur(2.5px)');
 
   // ==== fetch exams based on exam id ====
   function fetchChunk() {
@@ -1416,7 +1425,7 @@ $(document).on('click', '.go_to_questions', function() {
           //$('.go_to_questions_container ul').append(data)
           $('.go_to_questions_container').css('background', background);
           $('.go_to_questions_container').css('color', fontColor);
-          $('.go_to_questions_container').css('display', 'block');
+          //$('.go_to_questions_container').css('display', 'block');
         };
       },
       error: function (xhr, errmsg, err) {
@@ -1435,12 +1444,12 @@ $(document).on('click', '.go_to_questions', function() {
 
 $(document).on('click', '.go_to_questions_add_more_question', function() {
   // ==== loads up question form ====
-  $('.go_to_questions_contaner').css('display', 'none');
+  $('.go_to_questions_container').css('display', 'none');
   $('#create_questions_form').css('display', 'flex');
   $('#create_questions_form').animate({ width: '90%' }, 500, 'linear');
 
   // ==== reset all fields for question form before continuing ====
-  
+
 
 })
 
