@@ -1298,8 +1298,8 @@ $(document).on('click', '.go_to_questions', function() {
   // ==== spinner ====
   setTimeout(function() {
     $('.loading-overlay').css('display', 'flex');
-    $('.go_to_questions_container').fadeIn(1000);
-    $('.loading-overlay').fadeOut(1000); 
+    $('.go_to_questions_container').fadeIn(2000);
+    $('.loading-overlay').fadeOut(2000); 
   }, 500)
 
   const fontColor = listItem.css('color');
@@ -1308,6 +1308,7 @@ $(document).on('click', '.go_to_questions', function() {
   width: -moz-available;" class="questions_container_exam_title"><strong style="font-size: 22px;">${examName}</strong></div>`
 
   $('.exams_container').css('filter', 'blur(2.5px)');
+  $('.exams_container').css('pointer-events', 'none')
 
   // ==== fetch exams based on exam id ====
   function fetchChunk() {
@@ -1349,7 +1350,7 @@ $(document).on('click', '.go_to_questions', function() {
               })
               // ==== end ====
 
-              li += `<li style="color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
+              li += `<li style="box-shadow: 0px 6px 10px -3px rgba(0, 0, 0, 0.17); color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
                 <div class="questions_container_questions_text">
                   <div>
                     <strong>Question ${i + 1}</strong>
@@ -1389,7 +1390,7 @@ $(document).on('click', '.go_to_questions', function() {
 
 
             } else {
-              li += `<li style="color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
+              li += `<li style="box-shadow: 0px 6px 10px -3px rgba(0, 0, 0, 0.17); color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
                 <div class="questions_container_questions_text">
                   <div>
                     <strong>Question ${i + 1}</strong><br>
@@ -1425,7 +1426,7 @@ $(document).on('click', '.go_to_questions', function() {
           //$('.go_to_questions_container ul').append(data)
           $('.go_to_questions_container').css('background', background);
           $('.go_to_questions_container').css('color', fontColor);
-          //$('.go_to_questions_container').css('display', 'block');
+          // $('.go_to_questions_container').css('display', 'block');
         };
       },
       error: function (xhr, errmsg, err) {
