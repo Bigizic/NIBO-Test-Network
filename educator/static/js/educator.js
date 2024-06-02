@@ -1295,6 +1295,7 @@ $(document).on('click', '.go_to_questions', function() {
   const educatorId = $('#a_educator_id').attr('href').split('/')[2];
   let data = null;
   const background = listItem.css('background');
+
   // ==== spinner ====
   setTimeout(function() {
     $('.loading-overlay').css('display', 'flex');
@@ -1304,11 +1305,11 @@ $(document).on('click', '.go_to_questions', function() {
 
   const fontColor = listItem.css('color');
   const examName = listItem.find('[data-exam-title]').data('exam-title');
-  let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px; position: absolute; background: inherit;
-  width: -moz-available;" class="questions_container_exam_title"><strong style="font-size: 22px;">${examName}</strong></div>`
+  let li = `<div style="padding: 0px 0px 30px 0px; font-size: 18px; position: absolute; width: -moz-available;"
+  class="questions_container_exam_title"><strong style="font-size: 22px;">${examName}</strong></div>`;
 
   $('.exams_container').css('filter', 'blur(2.5px)');
-  $('.exams_container').css('pointer-events', 'none')
+  $('.exams_container').css('pointer-events', 'none');
 
   // ==== fetch exams based on exam id ====
   function fetchChunk() {
@@ -1320,11 +1321,12 @@ $(document).on('click', '.go_to_questions', function() {
       },
       success: function (response, errmsg, err) {
         data = response;
+        console.log(data.length)
         if (data.length > 0) {
 
           for (let i = 0; i < data.length; i++) {
             let answersType = data[i].answers_type.substring(1, data[i].answers_type.length - 1);
-            answersType = answersType === 'radio' ? 'disc': answersType;
+            answersType = answersType === 'radio' ? 'disc': 'square';
             console.log(data[i])
 
             if (typeof(data[i].question_text) === 'object') {
@@ -1353,7 +1355,7 @@ $(document).on('click', '.go_to_questions', function() {
               li += `<li style="box-shadow: 0px 6px 10px -3px rgba(0, 0, 0, 0.17); color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
                 <div class="questions_container_questions_text">
                   <div>
-                    <strong>Question ${i + 1}</strong>
+                    <strong style="font-size: 20px;">Question ${i + 1}</strong>
                     <div style="display: flex; gap: 10px;">
                     <span style="align-content: center; font-size: 5px;">&#11044;</span>
                     <p style="font-size: 15px; margin-top: 10px;">${dataQuestion.question}</p>
@@ -1390,10 +1392,10 @@ $(document).on('click', '.go_to_questions', function() {
 
 
             } else {
-              li += `<li style="box-shadow: 0px 6px 10px -3px rgba(0, 0, 0, 0.17); color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
+              li += `<li style="box-shadow: 0px 10px 15px -5px rgba(0, 0, 0, 0.17); color: black; margin-top: 70px;background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 40px; list-style-type: none;">
                 <div class="questions_container_questions_text">
                   <div>
-                    <strong>Question ${i + 1}</strong><br>
+                    <strong style="font-size: 20px;">Question ${i + 1}</strong><br>
                     <p style="font-size: 15px; margin-top: 10px;">${data[i].question_text}</p>
                   </div>
                 </div>
@@ -1421,8 +1423,9 @@ $(document).on('click', '.go_to_questions', function() {
               // ==== end ====
               li += `</ul></div></div></li>`
             }
-            $('.go_to_ul').append(li);
           };
+          $('.go_to_ul').append(li);
+          $('.questions_container_exam_title').css('background', background);
           //$('.go_to_questions_container ul').append(data)
           $('.go_to_questions_container').css('background', background);
           $('.go_to_questions_container').css('color', fontColor);
@@ -1451,6 +1454,32 @@ $(document).on('click', '.go_to_questions_add_more_question', function() {
 
   // ==== reset all fields for question form before continuing ====
 
+
+})
+
+
+/**
+ * this section closes the current question view
+ */
+$(document).on('click', '.go_to_questions_close', function() {
+  let currentQuestion = $(this).parent('div').parent('.go_to_questions_container');
+  $('.loading-text').html('Closing..');
+
+  // ==== spinner ====
+  setTimeout(function() {
+    $('.loading-overlay').css('display', 'flex');
+    $('.loading-overlay').fadeIn(2000);
+    $(currentQuestion).fadeOut(2000);
+  }, 500);
+  setTimeout(function() {
+    $('.loading-overlay').css('display', 'none');
+    $('.exams_container').css('filter', 'blur(0px)');
+    $('.exams_container').css('pointer-events', 'all');
+    $('.loading-text').html('Please wait, fetching data...');
+  }, 2500)
+
+  // ==== clear go_to_ul content ====
+  $('.go_to_ul').empty();
 
 })
 
